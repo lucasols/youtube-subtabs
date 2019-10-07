@@ -1,0 +1,27 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        "@babel/typescript",
+        ["@babel/preset-react", { "development": true }],
+        "@emotion/babel-preset-css-prop"
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-class-properties",
+        ["emotion", { "sourceMap": true }]
+      ]
+    },
+    "production": {
+  	  "presets": [
+        "@babel/typescript",
+  	    "@babel/preset-react",
+        "@emotion/babel-preset-css-prop"
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "emotion"
+      ]
+    }
+  }
+}
