@@ -1,10 +1,10 @@
-// @ts-check
 const path = require('path');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonsConfig = require('./webpack.common');
 const ReactRefreshPlugin = require('react-refresh-webpack-plugin');
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
 module.exports = /** @type { import('webpack').Configuration } */ {
   ...commonsConfig,
@@ -14,7 +14,7 @@ module.exports = /** @type { import('webpack').Configuration } */ {
   devtool: 'cheap-module-source-map',
 
   entry: [
-    require.resolve('react-dev-utils/webpackHotDevClient'),
+    // require.resolve('react-dev-utils/webpackHotDevClient'),
     './src/settings/index',
   ],
 
@@ -24,8 +24,8 @@ module.exports = /** @type { import('webpack').Configuration } */ {
     chunkFilename: '[name].chunk.js',
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
-    devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+    // devtoolModuleFilenameTemplate: info =>
+    //   path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
 
   module: {
@@ -52,6 +52,7 @@ module.exports = /** @type { import('webpack').Configuration } */ {
 
   plugins: [
     new ReactRefreshPlugin(),
+    new ErrorOverlayPlugin(),
     new FriendlyErrorsWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({

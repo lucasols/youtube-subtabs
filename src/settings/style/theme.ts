@@ -12,8 +12,8 @@ export const colorWarning = '#FDD13A';
 export const colorGradient = (
   alpha = 1,
   deg = 45,
-) => `linear-gradient(${deg}deg, ${rgba('#027C7A', alpha)} 0%, ${rgba(
-  '#38B762',
+) => `linear-gradient(${deg}deg, ${rgba('#FF1744', alpha)} 0%, ${rgba(
+  '#d12765',
   alpha,
 )} 100%);
 `;
@@ -31,7 +31,7 @@ export const textGradient = css`
 
 /* fonts */
 export const fontPrimary = 'Open Sans, sans-serif';
-export const fontDecorative = 'Roboto Condensed, sans-serif';
+export const fontCondensed = 'Roboto Condensed, sans-serif';
 export const fontSecondary = 'Source Sans Pro, sans-serif';
 
 export const easeInOut = 'cubic-bezier(0.4, 0, 0.2, 1)';

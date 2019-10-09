@@ -36,12 +36,12 @@ const options = {
       express.static(path.join(__dirname, `../${staticDir}`)),
     );
   },
-  before(app, server) {
-    // This lets us fetch source contents from webpack for the error overlay
-    app.use(evalSourceMapMiddleware(server));
-    // This lets us open files from the runtime error overlay.
-    app.use(errorOverlayMiddleware());
-  },
+  // before(app, server) {
+  //   // This lets us fetch source contents from webpack for the error overlay
+  //   app.use(evalSourceMapMiddleware(server));
+  //   // This lets us open files from the runtime error overlay.
+  //   app.use(errorOverlayMiddleware());
+  // },
 };
 
 WebpackDevServer.addDevServerEntrypoints(config, options);

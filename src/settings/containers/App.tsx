@@ -2,6 +2,11 @@ import styled from '@emotion/styled';
 import React, { useEffect } from 'react';
 import { fillContainer, centerContent } from 'style/modifiers';
 import { colorBg, fontPrimary } from 'style/theme';
+import Home from 'containers/Home';
+import EditTab from 'containers/EditTab';
+import { ContentWrapper } from 'components/ContentWrapper';
+import DeleteTabModal from 'containers/DeleteTabModal';
+import EditFilter from 'containers/EditFilter';
 
 const AppContainer = styled.div`
   ${fillContainer};
@@ -9,14 +14,7 @@ const AppContainer = styled.div`
   align-items: flex-start;
 
   background: ${colorBg};
-  font-family: ${fontPrimary};
   overflow: hidden;
-  color: #fff;
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  max-width: 600px;
 `;
 
 const App = () => {
@@ -26,11 +24,10 @@ const App = () => {
 
   return (
     <AppContainer>
-      <ContentWrapper>
-        {/* TODO: home */}
-        {/* TODO: add/edit tab page */}
-        {/* TODO: add/edit filter page */}
-      </ContentWrapper>
+      <Home />
+      <EditTab />
+      <EditFilter />
+      <DeleteTabModal />
     </AppContainer>
   );
 };

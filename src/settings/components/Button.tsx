@@ -25,6 +25,7 @@ const Container = styled.a<{ as?: string; disabled?: boolean }>`
   padding: 0 24px;
   height: 36px;
   margin: 4px;
+  z-index: 0;
   display: inline-flex;
   font-weight: 400;
   cursor: ${p => (p.disabled ? 'auto' : 'pointer')};
@@ -37,10 +38,11 @@ const Container = styled.a<{ as?: string; disabled?: boolean }>`
   &::before {
     ${fillContainer};
     content: '';
-    background: ${colorGradient()};
+    background: ${colorPrimary};
     opacity: 0.85;
     transition: 160ms;
-    border-radius: 12px;
+    z-index: -1;
+    border-radius: 1000px;
   }
 
   &:hover::before {
@@ -56,11 +58,12 @@ const Label = styled.span`
 const smallStyle = css`
   height: 24px;
   padding: 0 16px;
-  font-size: 12px;
+  font-size: 11px;
+`;
 
-  &::before {
-    border-radius: 8px;
-  }
+const iconOnlyStyle = css`
+  padding: 4px;
+  height: auto;
 `;
 
 const Button = ({
@@ -71,7 +74,7 @@ const Button = ({
   icon,
   disabled,
   noNewTab,
-  iconSize,
+  iconSize = 20,
   small,
 }: Props) => (
   <Container
@@ -81,15 +84,15 @@ const Button = ({
     href={href}
     onClick={onClick}
     disabled={disabled}
-    css={small && smallStyle}
+    css={[small && smallStyle]}
     target={!href || noNewTab ? undefined : '_blank'}
   >
     {icon && (
       <Icon
         size={iconSize}
-        css={label && { marginRight: 16 }}
+        css={label && { marginRight: small ? 4 : 16, marginLeft: small ? -5 : undefined }}
         name={icon}
-        color={colorPrimary}
+        color="#fff"
       />
     )}
     {label && <Label>{label}</Label>}

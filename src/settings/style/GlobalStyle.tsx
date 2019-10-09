@@ -20,6 +20,11 @@ const reset = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html {
+    font-family: ${fontPrimary};
+    color: #fff;
+  }
+
   a {
     color: inherit;
     text-decoration: inherit;

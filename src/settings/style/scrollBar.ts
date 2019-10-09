@@ -1,14 +1,14 @@
 import { css } from '@emotion/core';
 import { rgba } from '@lucasols/utils';
 import { lighten } from 'polished';
-import { colorPrimary } from 'style/theme';
+import { colorPrimary, colorBg } from 'style/theme';
 
-const background = '#eee';
+const background = colorBg;
 const thumb = colorPrimary;
 
 export default css`
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     height: 8px;
   }
 

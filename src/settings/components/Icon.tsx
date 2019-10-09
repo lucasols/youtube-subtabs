@@ -1,13 +1,12 @@
 import iconsSet from 'data/icons.ts';
 import * as React from 'react';
 import { colorPrimary } from 'style/theme';
-import { obj } from 'typings/utils';
+import { obj } from 'src/typings/utils';
 
 export type JsonIcon = {
   viewBox?: string;
   paths?: (obj | string)[];
 };
-
 
 export type Icons = keyof typeof iconsSet;
 

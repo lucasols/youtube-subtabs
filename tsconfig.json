@@ -6,7 +6,7 @@
     "jsx": "preserve",
     "allowJs": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    // "skipLibCheck": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "noEmit": true,
