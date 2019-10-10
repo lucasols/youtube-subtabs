@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { centerContent } from 'style/modifiers';
 import { colorPrimary, fontSecondary } from 'style/theme';
 import { rgba } from '@lucasols/utils';
 import { css } from '@emotion/core';

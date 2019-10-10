@@ -165,7 +165,6 @@ function checkIfIsInvalid(item: Props['item']) {
 
 const CardListItem = ({
   item,
-  index,
   handler,
   collapseIcon,
   maxDepth,
@@ -192,8 +191,7 @@ const CardListItem = ({
           onClick={() =>
             (item.tab
               ? appState.setKey('filterToDelete', item.id as number)
-              : appState.setKey('tabToDelete', item.id as number))
-          }
+              : appState.setKey('tabToDelete', item.id as number))}
         >
           <Icon name="delete" size={20} />
         </IconButton>

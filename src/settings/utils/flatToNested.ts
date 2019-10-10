@@ -1,13 +1,14 @@
 import { NestableItemBaseProps } from 'lib/react-nestable';
 import { anyObject } from 'hookstated/dist/types';
+import { TabProps, ExclusiveTabProps } from 'state/tabsState';
 
-export function flatToNested<T extends anyObject>(
-  flat: Omit<NestableItemBaseProps<T>, 'children'>[],
+export function flatToNested<T extends ExclusiveTabProps>(
+  flat: (Omit<NestableItemBaseProps<T>, 'children'>)[],
 ) {
   return flat
     .filter(item => !item.parent)
     .map(({ id, name, parent, ...rest }) => ({
-      id: id as NestableItemBaseProps<{}>['id'],
+      id,
       name,
       children: flat
         .filter(child => child.parent === id)
@@ -17,21 +18,17 @@ export function flatToNested<T extends anyObject>(
     }));
 }
 
-export function nestedToFlat<T extends anyObject>(
+export function nestedToFlat<T extends ExclusiveTabProps>(
   nested: NestableItemBaseProps<T>[],
 ) {
-  const flat: NestableItemBaseProps<T>[] = [];
-
-  flat.forEach(item => {
-    type test = typeof item['id'];
-  });
+  const flat: NestableItemBaseProps<ExclusiveTabProps>[] = [];
 
   nested.forEach(({ id, children, ...rest }) => {
     flat.push({
       ...rest,
       id,
       parent: null,
-    } as typeof flat[0]);
+    });
 
     if (children && children.length > 0) {
       children.forEach(child => {

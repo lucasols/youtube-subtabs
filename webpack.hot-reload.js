@@ -4,7 +4,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonsConfig = require('./webpack.common');
 const ReactRefreshPlugin = require('react-refresh-webpack-plugin');
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
 module.exports = /** @type { import('webpack').Configuration } */ {
   ...commonsConfig,
@@ -51,10 +51,10 @@ module.exports = /** @type { import('webpack').Configuration } */ {
   },
 
   plugins: [
-    new ReactRefreshPlugin(),
-    new ErrorOverlayPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
+    new ReactRefreshPlugin(),
+    // new ErrorOverlayPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/settings/index.html',
     }),

@@ -21,7 +21,7 @@ const DeleteTabModal = () => {
   }
 
   function onConfirm() {
-    if (itemToDeleteId) {
+    if (itemToDeleteId && itemToDeleteId !== 'all') {
       deleteTabs([itemToDeleteId]);
       onCloseModal();
     }

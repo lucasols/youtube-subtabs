@@ -10,8 +10,8 @@ export type NestableItemBaseProps<T extends anyObj, I = number | 'all'> = {
   children?: NestableItemBaseProps<T>[];
 } & T;
 
-export type NestableProps = {
-  items: NestableItemBaseProps<{}>[];
+export type NestableProps<T> = {
+  items: NestableItemBaseProps<T>[];
   threshold?: number;
   maxDepth?: number;
   collapsed?: boolean;
@@ -47,7 +47,7 @@ export type NestableProps = {
   onClick?: (item: NestableItemBaseProps<T>) => any;
 };
 
-declare class Nestable extends React.Component {
+declare class Nestable<T> extends React.Component<NestableProps<T>> {
   collapse(value: 'ALL' | 'NONE'): void;
 }
 

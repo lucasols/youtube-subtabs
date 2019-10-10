@@ -5,7 +5,7 @@ import HeaderStyle from 'components/HeaderStyle';
 import { NestableItemBaseProps } from 'lib/react-nestable';
 import React, { useState } from 'react';
 import appState from 'state/appState';
-import tabsState, { ExclusiveTabProps, TabProps } from 'state/tabsState';
+import tabsState, { ExclusiveTabProps, TabProps, addTab } from 'state/tabsState';
 import { flatToNested, nestedToFlat } from 'utils/flatToNested';
 
 const Home = () => {
@@ -40,7 +40,7 @@ const Home = () => {
         <Button
           label="Add Tab"
           small
-          onClick={() => appState.setKey('editTab', 'new')}
+          onClick={() => addTab(null)}
         />
         <Button label="Expand" small onClick={() => setCollapse('NONE')} />
         <Button label="Collapse" small onClick={() => setCollapse('ALL')} />

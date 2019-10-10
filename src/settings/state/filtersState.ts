@@ -1,6 +1,8 @@
 import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'lib/react-nestable';
 import { TabProps } from 'state/tabsState';
+import { getUniqueId } from 'utils/getUniqueId';
+import appState from 'state/appState';
 
 export type ExclusiveFilterProps = {
   tab: TabProps['id'];
@@ -69,6 +71,22 @@ export function changeFilterName(filterId: number, newName: string) {
   if (newName) {
     setFilterProp(filterId, 'name', newName);
   }
+}
+
+export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
+  const id = getUniqueId(filtersState.getState().filters);
+
+  filtersState.dispatch('addFilters', [{
+    id,
+    name: 'New filter',
+    tab,
+    type,
+    userRegex: '',
+    videoNameRegex: '',
+    daysOfWeek: [],
+  }]);
+
+  appState.setKey('editFilter', id);
 }
 
 export default filtersState;

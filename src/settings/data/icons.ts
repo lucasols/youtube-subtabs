@@ -34,6 +34,15 @@ const iconSet = {
     viewBox: '0 0 32 32',
     paths: ['M16 20.4L9 13.4L10.4 12L16 17.6L21.6 12L23 13.4L16 20.4Z'],
   },
+  warn: {
+    viewBox: '0 0 24 24',
+    paths: [
+      {
+        evenodd: 'evenodd',
+        d: 'M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z',
+      },
+    ],
+  },
 };
 
 if (__DEV__) {

@@ -2,6 +2,7 @@ import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'lib/react-nestable';
 import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'state/appState';
+import filtersState from 'state/filtersState';
 
 export type ExclusiveTabProps = {
   includeChildsFilter: boolean;
@@ -59,8 +60,9 @@ export function getTabById(id: TabProps['id'], tabs: TabProps[] = tabsState.getS
 export function deleteTabs(ids: number[]) {
   tabsState.dispatch('deleteTabs', ids);
 
-  // ids.forEach()
-  // TODO: delete filters
+  ids.forEach(id => {
+    filtersState.dispatch('deleteFilters', filtersState.getState().filters.filter(item => item.tab === id).map(item => item.id));
+  });
 }
 
 export function setTabProp<T extends keyof TabProps>(tabId: TabProps['id'], prop: T, value: TabProps[T]) {
@@ -80,7 +82,7 @@ export function changeTabName(tabId: number, newName: string) {
   }
 }
 
-export function addTab(parent: TabProps['id']) {
+export function addTab(parent: TabProps['parent']) {
   const id = getUniqueId(tabsState.getState().tabs);
 
   tabsState.dispatch('addTabs', [{

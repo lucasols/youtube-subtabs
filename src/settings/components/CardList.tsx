@@ -96,7 +96,7 @@ const styleWrapper = css`
 `;
 
 function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDepth, onClick, collapse }: Props<T>) {
-  const nestableRef = useRef<Nestable>(null);
+  const nestableRef = useRef<Nestable<T>>(null);
 
   function onChange(newItems: NestableItemBaseProps<T>[]) {
     setItems(newItems);
@@ -107,7 +107,7 @@ function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDe
   }, [collapse]);
 
   return (
-    <Nestable
+    <Nestable<T>
       css={styleWrapper}
       items={items}
       onChange={onChange}
