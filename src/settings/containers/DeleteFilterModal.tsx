@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Modal from 'components/Modal';
-import tabsState, { deleteTabs } from 'state/tabsState';
+import filtersState, { deleteFilters } from 'state/filtersState';
 import appState from 'state/appState';
 import { centerContent } from 'src/react/style/modifiers';
 import Button from 'components/Button';
@@ -10,9 +10,9 @@ const Container = styled(Modal)`
   width: 240px;
 `;
 
-const DeleteTabModal = () => {
-  const [itemToDeleteId, setItemToDeleteId] = appState.useStore('tabToDelete');
-  const itemToDelete = tabsState.getState().tabs.find(
+const DeleteFilterModal = () => {
+  const [itemToDeleteId, setItemToDeleteId] = appState.useStore('filterToDelete');
+  const itemToDelete = filtersState.getState().filters.find(
     (item) => item.id === itemToDeleteId,
   );
 
@@ -22,18 +22,18 @@ const DeleteTabModal = () => {
 
   function onConfirm() {
     if (itemToDeleteId) {
-      deleteTabs([itemToDeleteId]);
+      deleteFilters([itemToDeleteId]);
       onCloseModal();
     }
   }
 
   return (
     <Container
-      title={`Delete Tab ${itemToDelete?.name}?`}
+      title={`Delete Filter?`}
       show={!!itemToDelete}
       onClose={onCloseModal}
     >
-      All childs will be deleted too!
+      {itemToDelete?.name}
       <div css={[centerContent, { width: '100%', marginTop: 16 }]}>
         <Button label="Cancel" small onClick={onCloseModal} />
         <Button label="Delete" small css={{ marginLeft: 'auto' }} onClick={onConfirm} />
@@ -42,4 +42,4 @@ const DeleteTabModal = () => {
   );
 };
 
-export default DeleteTabModal;
+export default DeleteFilterModal;

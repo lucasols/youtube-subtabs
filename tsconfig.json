@@ -1,12 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2018",
     "moduleResolution": "node",
     "jsx": "preserve",
     "allowJs": true,
     "resolveJsonModule": true,
-    // "skipLibCheck": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "noEmit": true,
@@ -16,7 +16,7 @@
     "keyofStringsOnly": true,
     "paths": {
       "*": [
-        "src/settings/*",
+        "src/*",
         "*"
       ]
     },

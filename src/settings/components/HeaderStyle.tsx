@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { fontSecondary, fontCondensed } from 'style/theme';
+import { fontSecondary, fontCondensed } from 'src/react/style/theme';
 
 const HeaderStyle = styled.div`
   margin-top: 26px;
@@ -9,6 +9,10 @@ const HeaderStyle = styled.div`
   font-family: ${fontCondensed};
   font-weight: 300;
   color: #ddd;
+
+  span {
+    text-transform: capitalize;
+  }
 
   strong {
     font-weight: 400;

@@ -3,7 +3,7 @@ import { rgba } from '@lucasols/utils';
 import CardListItem, { CollapseIcon, Handler } from 'components/CardListItem';
 import Nestable, { NestableItemBaseProps, NestableProps } from 'lib/react-nestable';
 import React, { useRef, useEffect } from 'react';
-import { colorPrimary, colorSecondary } from 'style/theme';
+import { colorPrimary, colorSecondary } from 'src/react/style/theme';
 import { anyObj } from '@lucasols/utils/dist/typings/utils';
 
 type Props<T extends anyObj> = {
@@ -96,7 +96,7 @@ const styleWrapper = css`
 `;
 
 function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDepth, onClick, collapse }: Props<T>) {
-  const nestableRef = useRef<Nestable<T>>(null);
+  const nestableRef = useRef<Nestable>(null);
 
   function onChange(newItems: NestableItemBaseProps<T>[]) {
     setItems(newItems);
@@ -107,7 +107,7 @@ function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDe
   }, [collapse]);
 
   return (
-    <Nestable<T>
+    <Nestable
       css={styleWrapper}
       items={items}
       onChange={onChange}

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import styled from '@emotion/styled';
 import { rgba } from '@lucasols/utils';
 import Button from 'components/Button';
@@ -6,21 +7,19 @@ import HeaderStyle from 'components/HeaderStyle';
 import Icon from 'components/Icon';
 import React, { useEffect, useRef, useState } from 'react';
 import appState from 'state/appState';
-import tabsState, { changeTabName, setTabProp } from 'state/tabsState';
-import { circle } from 'style/helpers';
-import { centerContent, fillContainer, centerContentCollum } from 'style/modifiers';
-import { colorBg, colorPrimary, colorSecondary } from 'style/theme';
+import tabsState, { changeTabName, setTabProp, TabProps } from 'state/tabsState';
+import { circle } from 'src/react/style/helpers';
+import { centerContent, fillContainer, centerContentCollum } from 'src/react/style/modifiers';
+import { colorBg, colorPrimary, colorSecondary } from 'src/react/style/theme';
 import AutosizeInput from 'react-input-autosize';
 import { css } from 'emotion';
 import { debounce } from 'lodash-es';
 import Switch from 'components/Switch';
-import { ListItem } from 'utils/flatToNested';
 import { PartialKey } from 'src/typings/utils';
+import filtersState, { FilterProps, addFilter } from 'state/filtersState';
+import CardList from 'components/CardList';
+import { getUniqueId } from 'utils/getUniqueId';
 
-// TODO: add filter
-// TODO: add tab
-// TODO: add subtab
-// TODO: change filter position
 // IDEA: edit parent on edit tab page
 
 export const EditPageContainer = styled.div`
@@ -104,17 +103,19 @@ const debouncedSetNewTabName = debounce((id: number, newName: string) => changeT
 const EditTab = () => {
   const [editTab, setEditTab] = appState.useStore('editTab');
   const [tabs] = tabsState.useStore('tabs');
-  const [newTabProps, setNewTabProps] = useState<Omit<ListItem, 'id' | 'name'>>();
+  const [allFilters] = filtersState.useStore('filters');
+  const [tabName, setTabName] = useState('');
 
   const selectedTab = tabs.find((item: typeof tabs[0]) => item.id === editTab);
   const parentTab = tabs.find((item: typeof tabs[0]) => item.id === selectedTab?.parent);
-  const tabProps: PartialKey<ListItem, 'id' | 'name'> | undefined = selectedTab || newTabProps;
 
-  const show = editTab !== null || editTab === 'new';
+  const excludeFilters = allFilters.filter(item => item.tab === selectedTab?.id && item.type === 'exclude');
+  const includeFilters = allFilters.filter(item => item.tab === selectedTab?.id && item.type === 'include');
 
-  const [tabName, setTabName] = useState();
+  const show = editTab !== null && selectedTab;
+
   function onChangeName(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!tabProps) return;
+    if (!selectedTab) return;
 
     const newName = e.target.value;
 
@@ -125,27 +126,21 @@ const EditTab = () => {
   }
 
   function toggleIncludeChildFilters() {
-    if (!tabProps) return;
+    if (!selectedTab) return;
 
-    if (editTab === 'new' && newTabProps) {
-      setNewTabProps({
-        ...newTabProps,
-        includeChildsFilter: !tabProps.includeChildsFilter,
-      });
-    } else if (tabProps.id) {
-      setTabProp(tabProps.id, 'includeChildsFilter', !tabProps.includeChildsFilter);
-    }
+    setTabProp(selectedTab.id, 'includeChildsFilter', !selectedTab.includeChildsFilter);
   }
 
-  function checkIfIsValid() {
-    if (tabName === '') return false;
+  function onClick(item: FilterProps) {
+    appState.setKey('editFilter', item.id);
+  }
 
-    // if (parentTab && )
-    // TODO: Check if there are filters
+  function updateFilters(newItems: FilterProps[]) {
+    filtersState.dispatch('updateFilters', newItems);
   }
 
   useEffect(() => {
-    setTabName(editTab === 'new' ? '' : selectedTab?.name);
+    setTabName(selectedTab?.name ?? '');
   }, [editTab]);
 
   return (
@@ -161,7 +156,7 @@ const EditTab = () => {
       </CloseButton>
       <ContentWrapper>
         <HeaderStyle>
-          {editTab !== 'all' && editTab === 'new' ? 'New Tab · ' : 'Edit Tab · '}
+          {editTab !== 'all' && 'Tab · '}
           {parentTab && <><span>{parentTab?.name}</span> · </>}
           {editTab !== 'all' ? (
             <AutosizeInput
@@ -174,50 +169,49 @@ const EditTab = () => {
           ) : <strong>Global Filters (All)</strong>}
         </HeaderStyle>
 
-        {editTab !== 'all' && (!parentTab || editTab === 'new') &&
+        {editTab !== 'all' && !parentTab &&
           <Row css={{ marginTop: 0, justifyContent: 'center' }}>
             <IncludeChildFiltersSwitchContainer onClick={toggleIncludeChildFilters}>
-              Include child filters <Switch key={`${editTab}`} css={{ marginLeft: 8, marginBottom: -2 }} on={!!tabProps?.includeChildsFilter} />
+              Include child filters <Switch key={`${editTab}`} css={{ marginLeft: 8, marginBottom: -2 }} on={!!selectedTab?.includeChildsFilter} />
             </IncludeChildFiltersSwitchContainer>
           </Row>}
 
         <Row>
           <h1>+ Include Filters</h1>
-          <Button label="Add" icon="add" small />
+          <Button label="Add" icon="add" small onClick={() => selectedTab && addFilter(selectedTab.id, 'include')} />
         </Row>
-
-        {/* <CardList
-          items={nestedItems}
-          setItems={updateItems}
+        <CardList
+          items={includeFilters}
+          setItems={updateFilters}
           maxDepth={1}
-          confirmChange={confirmChange}
           onClick={onClick}
-        /> */}
+        />
 
         <Row>
           <h1> - Exclude Filters</h1>
-          <Button label="Add" icon="add" small />
+          <Button label="Add" icon="add" small onClick={() => selectedTab && addFilter(selectedTab.id, 'exclude')} />
         </Row>
-
-        {/* <CardList
-          items={nestedItems}
-          setItems={updateItems}
+        <CardList
+          items={excludeFilters}
+          setItems={updateFilters}
           maxDepth={1}
-          confirmChange={confirmChange}
           onClick={onClick}
-        /> */}
-        {editTab === 'new' &&
-          <Row
-            css={{
-              marginTop: 40,
-              paddingBottom: 24,
-              position: 'sticky',
-              bottom: 0,
-            }}
-          >
-            <Button label="Cancel" small css={{ marginLeft: 'auto' }} onClick={() => setEditTab(null)} />
-            <Button label="Add tab" disabled={checkIfIsValid()} small onClick={undefined} />
-          </Row>}
+        />
+
+        {selectedTab?.id !== 'all' && <Row
+          css={{
+            marginTop: 40,
+            paddingBottom: 24,
+            position: 'sticky',
+            bottom: 0,
+          }}
+        >
+          <Button label="Delete" small css={{ marginLeft: 'auto' }} onClick={() => {
+            if (selectedTab?.id && selectedTab?.id !== 'all') {
+              appState.setKey('tabToDelete', selectedTab.id);
+            }
+          }} />
+        </Row>}
       </ContentWrapper>
     </EditPageContainer>
   );

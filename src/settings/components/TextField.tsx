@@ -11,13 +11,17 @@ import css from '@emotion/css';
 import {
   fontSecondary,
   colorBg,
-  colorPrimary,
   colorSecondary,
-  colorRed,
-} from 'style/theme';
+  colorPrimary,
+  colorError,
+} from 'src/react/style/theme';
 import AutoGrow from 'textarea-autogrow';
-import { show, hide } from 'style/modifiers';
+import { show, hide } from 'src/react/style/modifiers';
 import { debounce } from 'lodash-es';
+import { rgba } from '@lucasols/utils';
+
+const color1 = colorPrimary;
+const color2 = rgba(colorPrimary, 0.7);
 
 export type HandleChange = (
   value: string | number,
@@ -84,7 +88,7 @@ const Label = styled.label<{ notEmpty: boolean }>`
   font-size: 16px;
   font-family: ${fontSecondary};
   letter-spacing: 0.0125em;
-  color: ${colorPrimary};
+  color: #fff;
 
   ${ellipsis()};
   pointer-events: none;
@@ -94,7 +98,7 @@ const Label = styled.label<{ notEmpty: boolean }>`
   input:focus + & {
     ${labelOnTop};
 
-    color: #333;
+    /* color: ${color1}; */
   }
 `;
 
@@ -109,17 +113,17 @@ const inputStyle = css`
   padding-bottom: 8px;
   padding-left: 12px;
 
-  color: #333;
+  color: #fff;
   font-size: 16px;
   letter-spacing: 0.0125em;
   background: transparent;
 
   border-radius: 8px;
-  border: 1.5px solid ${colorPrimary};
+  border: 1.5px solid ${color2};
   outline: none;
 
   &:focus {
-    border: 1.5px solid ${colorSecondary};
+    border: 1.5px solid ${color1};
   }
 `;
 
@@ -136,9 +140,10 @@ const TextArea = styled.textarea`
 const ValidationError = styled.div`
   ${hide};
   font-size: 10px;
+  margin-top: 4px;
   font-weight: 500;
   margin-bottom: 12px;
-  color: ${colorRed};
+  color: ${colorError};
   letter-spacing: 0.0125em;
 `;
 
@@ -273,8 +278,8 @@ const TextField: FunctionComponent<Props> = ({
         {errors
           ? errors.map((error, i) => [
             <span key={i}>{error}</span>,
-              i < errors.length ? <br key={`br-${i}`} /> : undefined,
-            ])
+            i < errors.length ? <br key={`br-${i}`} /> : undefined,
+          ])
           : undefined}
       </ValidationError>
     </Container>

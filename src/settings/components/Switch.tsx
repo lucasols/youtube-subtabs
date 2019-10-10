@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { colorPrimary, colorBg } from 'style/theme';
+import { colorPrimary, colorBg } from 'src/react/style/theme';
 
 type Props = {
   on: boolean;

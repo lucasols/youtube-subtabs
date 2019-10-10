@@ -2,9 +2,9 @@ import css from '@emotion/css';
 import styled from '@emotion/styled';
 import Icon, { Icons } from 'components/Icon';
 import React, { FunctionComponent } from 'react';
-import { letterSpacing } from 'style/helpers';
-import { centerContent, fillContainer } from 'style/modifiers';
-import { colorPrimary, colorGradient } from 'style/theme';
+import { letterSpacing } from 'src/react/style/helpers';
+import { centerContent, fillContainer } from 'src/react/style/modifiers';
+import { colorPrimary, colorGradient } from 'src/react/style/theme';
 
 type Props = {
   label?: string;
