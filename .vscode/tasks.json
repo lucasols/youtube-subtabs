@@ -8,12 +8,28 @@
       "script": "build",
       "problemMatcher": [
         "$tsc"
-      ]
+      ],
+      "presentation": {
+        "clear": true
+      }
     },
     {
       "type": "npm",
       "script": "hot-reload-dev",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "validate-typescript",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "presentation": {
+        "clear": true
+      }
     }
   ]
 }

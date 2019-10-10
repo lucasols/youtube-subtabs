@@ -1,7 +1,7 @@
 import css from '@emotion/css';
 import { rgba } from '@lucasols/utils';
 import CardListItem, { CollapseIcon, Handler } from 'components/CardListItem';
-import Nestable, { NestableItemBaseProps, NestableProps } from 'lib/react-nestable';
+import Nestable, { NestableItemBaseProps } from 'lib/react-nestable';
 import React, { useRef, useEffect } from 'react';
 import { colorPrimary, colorSecondary } from 'style/theme';
 import { anyObj } from '@lucasols/utils/dist/typings/utils';

@@ -1,30 +1,20 @@
 import { createStore } from 'hookstated';
-import { type } from 'os';
+import { TabProps } from 'state/tabsState';
+import { FilterProps } from 'state/filtersState';
 
 type appState = {
-  editTab: null | 'all' | 'new' | number;
-  editFilter: null | 'all' | 'new' | number;
-  tabToDelete: null | number;
-  addTabParent: number | null;
+  editTab: null | TabProps['id'];
+  editFilter: null | FilterProps['id'];
+  tabToDelete: null | TabProps['id'];
+  filterToDelete: null | FilterProps['id'];
 };
 
-type Reducers = {
-  addSubtab: { parent: number };
-}
-
-const appState = createStore<appState, Reducers>('app', {
+const appState = createStore<appState>('app', {
   state: {
     editTab: null,
     editFilter: null,
     tabToDelete: null,
-    addTabParent: null,
-  },
-  reducers: {
-    addSubtab: (state, { parent }) => ({
-      ...state,
-      editTab: 'new',
-      addTabParent: parent,
-    }),
+    filterToDelete: null,
   },
 });
 

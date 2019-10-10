@@ -1,5 +1,7 @@
 import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'lib/react-nestable';
+import { getUniqueId } from 'utils/getUniqueId';
+import appState from 'state/appState';
 
 export type ExclusiveTabProps = {
   includeChildsFilter: boolean;
@@ -76,6 +78,19 @@ export function changeTabName(tabId: number, newName: string) {
   if (newName) {
     setTabProp(tabId, 'name', newName);
   }
+}
+
+export function addTab(parent: TabProps['id']) {
+  const id = getUniqueId(tabsState.getState().tabs);
+
+  tabsState.dispatch('addTabs', [{
+    id,
+    includeChildsFilter: true,
+    name: 'New tab',
+    parent,
+  }]);
+
+  appState.setKey('editTab', id);
 }
 
 export default tabsState;
