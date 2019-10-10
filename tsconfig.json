@@ -16,7 +16,7 @@
     "keyofStringsOnly": true,
     "paths": {
       "*": [
-        "src/settings/*",
+        "src/*",
         "*"
       ]
     },

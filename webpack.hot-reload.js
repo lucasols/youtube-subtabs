@@ -15,7 +15,7 @@ module.exports = /** @type { import('webpack').Configuration } */ {
 
   entry: [
     // require.resolve('react-dev-utils/webpackHotDevClient'),
-    './src/settings/index',
+    './src/settingsApp/index',
   ],
 
   output: {
@@ -56,7 +56,7 @@ module.exports = /** @type { import('webpack').Configuration } */ {
     new ReactRefreshPlugin(),
     // new ErrorOverlayPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/settings/index.html',
+      template: 'src/settingsApp/index.html',
     }),
     new webpack.DefinePlugin({
       __DEV__: true,
