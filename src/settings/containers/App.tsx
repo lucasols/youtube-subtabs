@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React, { useEffect } from 'react';
-import { fillContainer, centerContent } from 'src/react/style/modifiers';
-import { colorBg, fontPrimary } from 'src/react/style/theme';
+import { fillContainer, centerContent } from 'style/modifiers';
+import { colorBg, fontPrimary } from 'style/theme';
 import Home from 'containers/Home';
 import EditTab from 'containers/EditTab';
 import { ContentWrapper } from 'components/ContentWrapper';

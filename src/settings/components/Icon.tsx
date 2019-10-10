@@ -1,6 +1,6 @@
 import iconsSet from 'data/icons.ts';
 import * as React from 'react';
-import { colorPrimary } from 'src/react/style/theme';
+import { colorPrimary } from 'style/theme';
 import { obj } from 'src/typings/utils';
 
 export type JsonIcon = {

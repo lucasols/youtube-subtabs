@@ -1,69 +1,73 @@
 import { createStore } from 'hookstated';
-import { ListItem } from 'utils/flatToNested';
+import { NestableItemBaseProps } from 'lib/react-nestable';
+import { TabProps } from 'state/tabsState';
+
+export type ExclusiveFilterProps = {
+  tab: TabProps['id'];
+  type: 'include' | 'exclude';
+  userRegex: string;
+  videoNameRegex: string;
+  daysOfWeek: number[];
+}
+
+export type FilterProps = NestableItemBaseProps<ExclusiveFilterProps, number>;
 
 type filtersState = {
-  tabs: ListItem[];
+  filters: FilterProps[];
 };
 
 type Reducers = {
-  addTabs: ListItem[];
-  updateTabs: ListItem[];
-  deleteTabs: number[];
+  addFilters: FilterProps[];
+  updateFilters: FilterProps[];
+  deleteFilters: number[];
 }
 
-const filtersState = createStore<filtersState, Reducers>('tabsState', {
+const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
-    tabs: [
-      { id: 'all', name: 'All', parent: null, includeChildsFilter: true },
-      { id: 1, name: 'Must Watch', parent: null, includeChildsFilter: true },
-      { id: 2, name: 'Humor', parent: null, includeChildsFilter: true },
-      { id: 3, name: 'Games', parent: 1, includeChildsFilter: true },
-      { id: 4, name: 'Science', parent: 2, includeChildsFilter: true },
-      { id: 5, name: 'Movies', parent: null, includeChildsFilter: true },
-    ],
+    filters: [],
   },
   reducers: {
-    addTabs: (state, newtabs) => ({
+    addFilters: (state, newfilters) => ({
       ...state,
-      tabs: [...state.tabs, ...newtabs],
+      filters: [...state.filters, ...newfilters],
     }),
-    updateTabs: (state, tabsToUpdate) => ({
+    updateFilters: (state, filtersToUpdate) => ({
       ...state,
-      tabs: state.tabs.map(tab => {
-        const updatedTab = tabsToUpdate?.find(({ id }) => id === tab.id);
+      filters: state.filters.map(filter => {
+        const updatedFilter = filtersToUpdate?.find(({ id }) => id === filter.id);
 
-        return updatedTab ? { ...tab, ...updatedTab } : tab;
+        return updatedFilter ? { ...filter, ...updatedFilter } : filter;
       }),
     }),
-    deleteTabs: (state, ids) => ({
+    deleteFilters: (state, ids) => ({
       ...state,
-      tabs: state.tabs.filter(tab => !(ids.includes(tab.id as number) || ids.includes(tab.parent as number))),
+      filters: state.filters.filter(filter => !ids.includes(filter.id as number)),
     }),
   },
 });
 
-export function getTabById(id: ListItem['id'], tabs: ListItem[] = filtersState.getState().tabs) {
-  return tabs.find((item: typeof tabs[0]) => item.id === id);
+export function getFilterById(id: FilterProps['id'], filters: FilterProps[] = filtersState.getState().filters) {
+  return filters.find((item: typeof filters[0]) => item.id === id);
 }
 
-export function deleteTabs(ids: number[]) {
-  filtersState.dispatch('deleteTabs', ids);
+export function deleteFilters(ids: number[]) {
+  filtersState.dispatch('deleteFilters', ids);
 }
 
-export function setTabProp<T extends keyof ListItem>(tabId: ListItem['id'], prop: T, value: ListItem[T]) {
-  const tab = getTabById(tabId);
+export function setFilterProp<T extends keyof FilterProps>(filterId: FilterProps['id'], prop: T, value: FilterProps[T]) {
+  const filter = getFilterById(filterId);
 
-  if (tab && tab?.[prop] !== value) {
-    filtersState.dispatch('updateTabs', [{
-      ...tab,
+  if (filter && filter?.[prop] !== value) {
+    filtersState.dispatch('updateFilters', [{
+      ...filter,
       [prop]: value,
     }]);
   }
 }
 
-export function changeTabName(tabId: number, newName: string) {
+export function changeFilterName(filterId: number, newName: string) {
   if (newName) {
-    setTabProp(tabId, 'name', newName);
+    setFilterProp(filterId, 'name', newName);
   }
 }
 

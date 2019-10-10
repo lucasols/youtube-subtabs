@@ -3,6 +3,7 @@ import { NestableItemBaseProps } from 'lib/react-nestable';
 
 export type ExclusiveTabProps = {
   includeChildsFilter: boolean;
+  parent: null | TabProps['id'];
 }
 
 export type TabProps = NestableItemBaseProps<ExclusiveTabProps>;

@@ -14,9 +14,9 @@ import {
   colorSecondary,
   colorPrimary,
   colorError,
-} from 'src/react/style/theme';
+} from 'style/theme';
 import AutoGrow from 'textarea-autogrow';
-import { show, hide } from 'src/react/style/modifiers';
+import { show, hide } from 'style/modifiers';
 import { debounce } from 'lodash-es';
 import { rgba } from '@lucasols/utils';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { fontSecondary, fontCondensed } from 'src/react/style/theme';
+import { fontSecondary, fontCondensed } from 'style/theme';
 
 const HeaderStyle = styled.div`
   margin-top: 26px;

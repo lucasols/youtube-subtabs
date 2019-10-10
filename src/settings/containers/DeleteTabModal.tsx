@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Modal from 'components/Modal';
 import tabsState, { deleteTabs } from 'state/tabsState';
 import appState from 'state/appState';
-import { centerContent } from 'src/react/style/modifiers';
+import { centerContent } from 'style/modifiers';
 import Button from 'components/Button';
 
 const Container = styled(Modal)`

@@ -10,13 +10,13 @@ import AutosizeInput from 'react-input-autosize';
 import { PartialKey } from 'src/typings/utils';
 import appState from 'state/appState';
 import tabsState, { changeTabName, TabProps } from 'state/tabsState';
-import { centerContent } from 'src/react/style/modifiers';
+import { centerContent } from 'style/modifiers';
 import filtersState, { FilterProps, ExclusiveFilterProps } from 'state/filtersState';
 import TextField from 'components/TextField';
 import { getUniqueId } from 'utils/getUniqueId';
 import DayOfWeekSelector from 'components/DayOfWeekSelector';
 import FilterTypeSelector from 'components/FilterTypeSelector';
-import { colorError } from 'src/react/style/theme';
+import { colorError } from 'style/theme';
 
 // IDEA: edit tab parent on edit tab page
 

@@ -4,15 +4,14 @@ import { obj as anyObj } from 'src/typings/utils';
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 
-export type NestableItemBaseProps<T extends anyObj> = {
-  id: number | "all";
+export type NestableItemBaseProps<T extends anyObj, I = number | 'all'> = {
+  id: I;
   name: string;
-  parent: number | null;
   children?: NestableItemBaseProps<T>[];
 } & T;
 
-export type NestableProps<T extends anyObj> = {
-  items: NestableItemBaseProps<T>[];
+export type NestableProps = {
+  items: NestableItemBaseProps<{}>[];
   threshold?: number;
   maxDepth?: number;
   collapsed?: boolean;
@@ -48,7 +47,7 @@ export type NestableProps<T extends anyObj> = {
   onClick?: (item: NestableItemBaseProps<T>) => any;
 };
 
-declare class Nestable<T extends anyObj> extends React.Component<NestableProps<T>> {
+declare class Nestable extends React.Component {
   collapse(value: 'ALL' | 'NONE'): void;
 }
 

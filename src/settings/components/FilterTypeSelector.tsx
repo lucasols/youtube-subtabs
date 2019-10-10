@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { FilterProps } from 'state/filtersState';
-import { fontSecondary, colorPrimary, colorSecondary } from 'src/react/style/theme';
-import { centerContent } from 'src/react/style/modifiers';
+import { fontSecondary, colorPrimary, colorSecondary } from 'style/theme';
+import { centerContent } from 'style/modifiers';
 import { css } from '@emotion/core';
 import { rgba } from '@lucasols/utils';
 

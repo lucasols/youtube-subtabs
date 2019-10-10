@@ -8,9 +8,9 @@ import Icon from 'components/Icon';
 import React, { useEffect, useRef, useState } from 'react';
 import appState from 'state/appState';
 import tabsState, { changeTabName, setTabProp, TabProps } from 'state/tabsState';
-import { circle } from 'src/react/style/helpers';
-import { centerContent, fillContainer, centerContentCollum } from 'src/react/style/modifiers';
-import { colorBg, colorPrimary, colorSecondary } from 'src/react/style/theme';
+import { circle } from 'style/helpers';
+import { centerContent, fillContainer, centerContentCollum } from 'style/modifiers';
+import { colorBg, colorPrimary, colorSecondary } from 'style/theme';
 import AutosizeInput from 'react-input-autosize';
 import { css } from 'emotion';
 import { debounce } from 'lodash-es';
@@ -18,8 +18,6 @@ import Switch from 'components/Switch';
 import { PartialKey } from 'src/typings/utils';
 import filtersState, { FilterProps, addFilter } from 'state/filtersState';
 import CardList from 'components/CardList';
-import { getUniqueId } from 'utils/getUniqueId';
-
 // IDEA: edit parent on edit tab page
 
 export const EditPageContainer = styled.div`

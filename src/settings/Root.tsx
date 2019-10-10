@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import App from 'containers/App';
-import GlobalStyle from 'src/react/style/GlobalStyle';
-import DebugLayout from 'src/react/style/DebugLayout';
+import GlobalStyle from 'style/GlobalStyle';
+import DebugLayout from 'style/DebugLayout';
 
 const Root = () => (
   <React.StrictMode>

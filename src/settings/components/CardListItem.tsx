@@ -5,9 +5,9 @@ import React from 'react';
 import appState from 'state/appState';
 import { ExclusiveFilterProps } from 'state/filtersState';
 import { addTab, ExclusiveTabProps } from 'state/tabsState';
-import { circle } from 'src/react/style/helpers';
-import { centerContent } from 'src/react/style/modifiers';
-import { colorBg, colorSecondary } from 'src/react/style/theme';
+import { circle } from 'style/helpers';
+import { centerContent } from 'style/modifiers';
+import { colorBg, colorSecondary } from 'style/theme';
 
 type Props = {
   item: NestableItemBaseProps<
