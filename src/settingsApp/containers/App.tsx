@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <AppContainer>
-      {__DEV__ && <TestSubTabs />}
+      {/* {__DEV__ && <TestSubTabs />} */}
       <Home />
       <EditTab />
       <EditFilter />

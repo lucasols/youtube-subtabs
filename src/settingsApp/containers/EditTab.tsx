@@ -18,6 +18,7 @@ import Switch from 'settingsApp/components/Switch';
 import { PartialKey } from 'src/typings/utils';
 import filtersState, { FilterProps, addFilter } from 'settingsApp/state/filtersState';
 import CardList from 'settingsApp/components/CardList';
+import { filterIsInvalid } from 'settingsApp/utils/validation';
 // IDEA: edit parent on edit tab page
 
 export const EditPageContainer = styled.div`
@@ -107,8 +108,13 @@ const EditTab = () => {
   const selectedTab = tabs.find((item: typeof tabs[0]) => item.id === editTab);
   const parentTab = tabs.find((item: typeof tabs[0]) => item.id === selectedTab?.parent);
 
-  const excludeFilters = allFilters.filter(item => item.tab === selectedTab?.id && item.type === 'exclude');
-  const includeFilters = allFilters.filter(item => item.tab === selectedTab?.id && item.type === 'include');
+  const tabFilters = allFilters.filter(item => item.tab === selectedTab?.id).map(item => ({
+    ...item,
+    isInvalid: filterIsInvalid(item) ? 'Filter is invalid' : undefined,
+  }));
+
+  const excludeFilters = tabFilters.filter(item => item.type === 'exclude');
+  const includeFilters = tabFilters.filter(item => item.type === 'include');
 
   const show = editTab !== null && selectedTab;
 

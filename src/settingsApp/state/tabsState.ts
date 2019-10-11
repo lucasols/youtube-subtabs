@@ -25,7 +25,7 @@ type Reducers = {
 const tabsState = createStore<tabsState, Reducers>('tabsState', {
   state: {
     tabs: module.hot ? [
-      { id: 'all', name: 'All', parent: null, includeChildsFilter: true },
+      { id: 'all', name: 'All', parent: null, includeChildsFilter: false },
       { id: 1, name: 'Must Watch', parent: null, includeChildsFilter: true },
       { id: 2, name: 'Humor', parent: null, includeChildsFilter: true },
       { id: 3, name: 'Games', parent: 1, includeChildsFilter: true },

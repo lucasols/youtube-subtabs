@@ -13,6 +13,8 @@ import tabsState, {
 import { flatToNested, nestedToFlat } from 'settingsApp/utils/flatToNested';
 import styled from '@emotion/styled';
 import { fillContainer, centerContent } from 'settingsApp/style/modifiers';
+import { checkIfTabIsInvalid } from 'settingsApp/utils/validation';
+import filtersState from 'settingsApp/state/filtersState';
 
 const Container = styled.div`
   ${fillContainer};
@@ -23,8 +25,13 @@ const Container = styled.div`
 
 const Home = () => {
   const [items, setItems] = tabsState.useStore('tabs');
-  const nestedItems = flatToNested<ExclusiveTabProps>(items);
+  const [filters] = filtersState.useStore('filters');
   const [collapse, setCollapse] = useState<'ALL' | 'NONE'>();
+
+  const nestedItems = flatToNested<ExclusiveTabProps>(items.map(tab => ({
+    ...tab,
+    isInvalid: checkIfTabIsInvalid(tab, filters, items),
+  })));
 
   function updateItems(newItems: TabProps[]) {
     console.log(newItems);

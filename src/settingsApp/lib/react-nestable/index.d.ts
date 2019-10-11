@@ -7,6 +7,7 @@ import { obj as anyObj } from 'src/typings/utils';
 export type NestableItemBaseProps<T extends anyObj, I = number | 'all'> = {
   id: I;
   name: string;
+  isInvalid?: string;
   children?: NestableItemBaseProps<T>[];
 } & T;
 

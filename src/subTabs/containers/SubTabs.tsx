@@ -10,6 +10,7 @@ import { colorYoutubeBg } from 'subTabs/theme';
 import { rgba, clampMin, clampMax } from '@lucasols/utils';
 import { debounce } from 'lodash-es';
 import { css } from '@emotion/core';
+import { getValidParentTabs } from 'settingsApp/utils/validation';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -71,29 +72,7 @@ const App = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const containerWidth = rootRect?.width || 0;
 
-  const parentTabs = tabs.filter(tab => {
-    if (tab.parent !== null) return false;
-
-    if (tab.id === 'all') return true;
-
-    const tabFilters = filters.filter(filter => filter.tab === tab.id);
-
-    if (tab.includeChildsFilter === false) {
-      if (
-        tabFilters.length === 0
-        || tabFilters.every(filter => filter.videoNameRegex === '' && filter.userRegex === '')
-      ) {
-        return false;
-      }
-    } else if (
-      tabFilters.length === 0
-      || tabFilters.every(filter => filter.videoNameRegex === '' && filter.userRegex === '')
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  const parentTabs = getValidParentTabs(tabs, filters);
 
   useEffect(() => {
     if (module.hot) {

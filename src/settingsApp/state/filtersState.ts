@@ -26,7 +26,20 @@ type Reducers = {
 
 const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
-    filters: [],
+    filters: module.hot ? [
+      {
+        id: 1, name: 'test', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+      },
+      {
+        id: 2, name: 'test2', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+      },
+      {
+        id: 3, name: 'test3', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+      },
+      {
+        id: 4, name: 'test4', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+      },
+    ] : [],
   },
   reducers: {
     addFilters: (state, newfilters) => ({
@@ -86,7 +99,7 @@ export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
     daysOfWeek: [],
   }]);
 
-  appState.setKey('editFilter', id);
+  // appState.setKey('editFilter', id);
 }
 
 export default filtersState;
