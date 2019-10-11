@@ -15,7 +15,7 @@
     },
     {
       "type": "npm",
-      "script": "settings-app-dev",
+      "script": "hot-load-dev",
       "problemMatcher": [],
       "presentation": {
         "clear": true

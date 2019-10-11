@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Extension for group youtube tabs",
   "scripts": {
-    "settings-app-dev": "node scripts/settings-app-dev-server.js",
+    "hot-load-dev": "node scripts/settings-app-dev-server.js",
     "subtabs-dev": "webpack --config webpack/webpack.subTabs.dev.js",
     "build": "npm run validate-typescript && webpack --config webpack/webpack.config.js",
     "validate-typescript": "tsc -p tsconfig.prod.json"

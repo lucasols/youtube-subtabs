@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commonConfig = require('./webpack.common');
+// const merge = require('webpack-merge');
 const merge = require('webpack-merge');
 const ExtensionReloader = require('webpack-extension-reloader');
 
