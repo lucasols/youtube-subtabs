@@ -17,7 +17,7 @@ type Props = {
   data: TabProps;
   activeTab?: TabProps;
   parentIsInteractive: boolean;
-  setActiveTab: (tab?: TabProps) => void;
+  setActiveTab: (tab: 'all' | number) => void;
 };
 
 const Container = styled.div`
@@ -36,6 +36,7 @@ const ParentButton = styled.button`
   font-size: 14px;
   height: 28px;
   transition: 160ms;
+  background: #171717;
   border-radius: 200px;
   cursor: pointer;
   pointer-events: none;
@@ -68,11 +69,11 @@ const DropDown = styled.div`
 `;
 
 const activeTabStyle = css`
-  border-color: ${colorYoutubePrimary};
+  border-color: ${colorYoutubePrimary} !important;
   cursor: normal;
 
   &:hover {
-    border-color: ${colorYoutubePrimary};
+    border-color: ${colorYoutubePrimary} !important;
   }
 `;
 
@@ -98,7 +99,7 @@ const Tab = ({ data, activeTab, setActiveTab, parentIsInteractive }: Props) => {
 
   function onTabClick(tab: TabProps) {
     if (activeTab?.id !== tab.id) {
-      setActiveTab(tab);
+      setActiveTab(tab.id);
     }
   }
 

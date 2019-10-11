@@ -97,7 +97,7 @@ const IncludeChildFiltersSwitchContainer = styled.div`
   }
 `;
 
-const debouncedSetNewTabName = debounce((id: number, newName: string) => changeTabName(id, newName), 1000);
+const debouncedSetNewTabName = debounce((id: number | 'all', newName: string) => changeTabName(id, newName), 1000);
 
 const EditTab = () => {
   const [editTab, setEditTab] = appState.useStore('editTab');

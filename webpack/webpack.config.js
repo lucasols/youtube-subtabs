@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 const path = require('path');
-const workboxPlugin = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const merge = require('webpack-merge');
-
-const folder = './dist';
 
 module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
 
   entry: {
-    main: './src/index.tsx',
+    'content-script': './src/subTabs/index.tsx',
+    popup: './src/settingsApp/index.tsx',
+    background: './src/background.ts',
   },
 
   output: {
-    path: path.join(__dirname, folder),
-    filename: '[name].[contenthash:8].js',
+    pathinfo: true,
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '',
   },
 
   module: {
@@ -85,27 +86,6 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
         cache: true,
       }),
     ],
-    splitChunks: {
-      chunks: 'all',
-      maxInitialRequests: Infinity,
-      minSize: 30 * 1000,
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name(module) {
-            // get the name. E.g. node_modules/packageName/not/this/part.js
-            // or node_modules/packageName
-            const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-            )[1];
-
-            // npm package names are URL-safe, but some servers don't like @ symbols
-            return `npm.${packageName.replace('@', '')}`;
-          },
-        },
-      },
-    },
-    runtimeChunk: true,
   },
 
   plugins: [
@@ -113,13 +93,11 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
       __DEV__: false,
       __PROD__: true,
     }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [`**/*`, `!static*`, '!icons*'],
-    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: 'src/settingsApp/index.html',
+      chunks: ['popup'],
       inject: true,
       minify: {
         removeComments: true,
@@ -133,36 +111,6 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
         minifyCSS: true,
         minifyURLs: true,
       },
-    }),
-    new workboxPlugin.GenerateSW({
-      swDest: 'sw.js',
-      exclude: ['index.html', 'icons'],
-      clientsClaim: true,
-      skipWaiting: true,
-      importWorkboxFrom: 'cdn',
-      runtimeCaching: [
-        {
-          urlPattern: new RegExp(
-            '^https://fonts.(?:googleapis|gstatic).com/(.*)',
-          ),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'googleFonts',
-            expiration: {
-              maxEntries: 30,
-              maxAgeSeconds: 60 * 60 * 24 * 365,
-            },
-          },
-        },
-        {
-          urlPattern: '/static',
-          handler: 'CacheFirst',
-        },
-        {
-          urlPattern: '/index.html',
-          handler: 'NetworkFirst',
-        },
-      ],
     }),
   ],
 });

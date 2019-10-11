@@ -12,6 +12,7 @@ import { css } from '@emotion/core';
 import { getValidParentTabs } from 'utils/validation';
 import { ChromeStorage } from 'utils/chromeStorage';
 import { Response } from 'background';
+import { filterVideos } from 'utils/filterVideos';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -67,6 +68,12 @@ const scrollButtonVisible = css`
   }
 `;
 
+function getActiveTabFromUrl() {
+  const activeTab = /#subTab=(.+)/.exec(window.location.hash)?.[1];
+
+  return activeTab && !Number.isNaN(+activeTab) ? +activeTab : 'all';
+}
+
 const App = () => {
   const [tabs, setTabs] = useState<TabProps[]>([]);
   const [filters, setFilters] = useState<FilterProps[]>([]);
@@ -75,10 +82,20 @@ const App = () => {
   const [rootRect, setRootRect] = useState<DOMRect>();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<TabProps>();
+  const [activeTabId, setActiveTabId] = useState<number | 'all'>(getActiveTabFromUrl());
   const containerWidth = rootRect?.width || 0;
 
+  const activeTab = tabs.find(tab => tab.id === activeTabId);
+
   const parentTabs = getValidParentTabs(flatToNested(tabs), filters);
+
+  useEffect(() => {
+    window.history.replaceState('', '', `#subTab=${activeTabId}`);
+  }, [activeTabId]);
+
+  useEffect(() => {
+    filterVideos(activeTabId, tabs, filters);
+  }, [activeTabId, tabs, filters]);
 
   useEffect(() => {
     function setAllDataBasedOnResponse(response: Response) {
@@ -115,21 +132,19 @@ const App = () => {
       }
     }
 
-    if (module.hot) {
-      setTabs(tabsState.getState().tabs);
-      setFilters(filtersState.getState().filters);
-    } else {
+    if (!module.hot) {
       chrome.runtime.onMessage.addListener(
         (request: Response) => {
           setAllDataBasedOnResponse(request);
-          console.log(request);
         }
       );
 
       chrome.runtime.sendMessage({ type: "load" }, (response: Response) => {
         setAllDataBasedOnResponse(response);
-        console.log(response);
       });
+    } else {
+      setTabs(tabsState.getState().tabs);
+      setFilters(filtersState.getState().filters);
     }
 
     const rootElem = document.getElementById('youtube-subtabs');
@@ -179,7 +194,7 @@ const App = () => {
               activeTab={activeTab}
               parentIsInteractive={tab.id === 'all' || !!filters.find(filter => filter.tab === tab.id)}
               data={tab}
-              setActiveTab={setActiveTab}
+              setActiveTab={setActiveTabId}
             />
           ))}
         </TabsWrapper>

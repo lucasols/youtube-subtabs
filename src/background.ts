@@ -36,24 +36,22 @@ chrome.storage.onChanged.addListener(changes => {
 
 chrome.runtime.onMessage.addListener(
   (msg: { type: 'load' }, sender, response) => {
-    switch (msg.type) {
-      case 'load':
-        chrome.storage.local.get(
-          ['tabs', 'filters'],
-          (result: ChromeStorage) => {
-            const resp: Response = {
-              type: 'allData',
-              value: result,
-            };
+    if (msg.type === 'load') {
+      chrome.storage.local.get(
+        ['tabs', 'filters'],
+        (result: ChromeStorage) => {
+          const resp: Response = {
+            type: 'allData',
+            value: result,
+          };
 
-            response(resp);
-          },
-        );
-        break;
-
-      default:
-        response('error');
-        break;
+          response(resp);
+          return true;
+        },
+      );
+    } else {
+      response('error');
     }
+    return true;
   },
 );

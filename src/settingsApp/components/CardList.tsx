@@ -43,8 +43,8 @@ const styleWrapper = css`
     margin: 8px 0 0;
   }
 
-  .nestable-item:first-child,
-  .nestable-item-copy:first-child {
+  .nestable-item:first-of-type,
+  .nestable-item-copy:first-of-type {
     margin-top: 0;
   }
 
