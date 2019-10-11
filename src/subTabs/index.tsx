@@ -7,15 +7,19 @@ if (__PROD__) {
   console.log(`${name} v${version}`);
 }
 
+if (__DEV__) {
+  // alert('1');
+}
+
 function injectSubTab() {
   const parent = document.getElementById('dismissable');
+  const subTabsRoot = document.createElement('div');
+  subTabsRoot.id = 'youtube-subtabs';
+  subTabsRoot.style.height = '28px';
+  subTabsRoot.style.marginTop = '24px';
 
   if (parent) {
     if (!document.getElementById('youtube-subtabs')) {
-      const subTabsRoot = document.createElement('div');
-      subTabsRoot.id = 'youtube-subtabs';
-      subTabsRoot.style.height = '28px';
-      subTabsRoot.style.marginTop = '24px';
       parent.insertBefore(subTabsRoot, parent.firstChild);
     }
   } else {
@@ -23,7 +27,7 @@ function injectSubTab() {
     return;
   }
 
-  ReactDOM.render(<Root />, document.getElementById('app'));
+  ReactDOM.render(<Root />, subTabsRoot);
 }
 
 // document.addEventListener('DOMContentLoaded', injectSubTab);

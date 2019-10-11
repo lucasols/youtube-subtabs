@@ -10,4 +10,6 @@ production
 compilation-stats.json
 stats.json
 resources
-dist/js
+dist
+!dist/manifest.json
+!dist/icon.png

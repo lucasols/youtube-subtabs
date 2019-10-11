@@ -40,6 +40,11 @@ const ParentButton = styled.button`
   cursor: pointer;
   pointer-events: none;
 
+  &:focus {
+    outline: none;
+    border-color: ${rgba(colorYoutubePrimary, 0.4)};
+  }
+
   &:hover {
     border-color: ${rgba(colorYoutubePrimary, 0.4)};
   }
@@ -48,7 +53,7 @@ const ParentButton = styled.button`
 const DropDown = styled.div`
   ${centerContentCollum};
   position: absolute;
-  background: ${colorYoutubeBg};
+  background: #282828;
   padding: 4px 0;
   border-radius: 4px;
   transition: 160ms;

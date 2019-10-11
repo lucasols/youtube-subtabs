@@ -12,9 +12,11 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   mode: 'development',
   watch: true,
 
+  devtool: false,
+
   entry: {
-    subTabs: './src/subTabs/index.tsx',
-    settingsApp: './src/settingsApp/index.tsx',
+    'content-script': './src/subTabs/index.tsx',
+    popup: './src/settingsApp/index.tsx',
     background: './src/background.ts',
   },
 
@@ -22,7 +24,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     pathinfo: true,
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
-    path: path.resolve(__dirname, '../dist/js'),
+    path: path.resolve(__dirname, '../dist'),
     publicPath: '',
   },
 
@@ -37,18 +39,18 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   },
 
   plugins: [
+    // new ExtensionReloader({
+    //   reloadPage: true,
+    //   manifest: path.resolve(__dirname, "../dist/manifest.json"),
+    // }),
     new webpack.DefinePlugin({
       __DEV__: true,
       __PROD__: false,
     }),
     new HtmlWebpackPlugin({
       template: 'src/settingsApp/index.html',
-      chunks: ['settingsApp'],
-    }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!static*', '!icons*'],
+      chunks: ['popup'],
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new ExtensionReloader(),
   ],
 });

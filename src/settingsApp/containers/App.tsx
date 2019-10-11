@@ -50,18 +50,17 @@ const App = () => {
         ]);
       } else {
         tabsState.setKey('tabs', result.tabs);
+        initializeTabsSubscriber();
       }
 
       if (result.filters) filtersState.setKey('filters', result.filters);
       initializeFiltersSubscriber();
-
-      console.log(result);
     });
   }, []);
 
   return (
     <AppContainer>
-      {/* {!!module.hot && <TestSubTabs />} */}
+      {!!module.hot && <TestSubTabs />}
       <Home />
       <EditTab />
       <EditFilter />

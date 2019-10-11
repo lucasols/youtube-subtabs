@@ -10,16 +10,21 @@ import { colorYoutubeBg } from 'subTabs/theme';
 import { rgba, clampMin, clampMax } from '@lucasols/utils';
 import { css } from '@emotion/core';
 import { getValidParentTabs } from 'utils/validation';
+import { ChromeStorage } from 'utils/chromeStorage';
+import { Response } from 'background';
 
 const FixedContainer = styled.div`
   position: fixed;
   z-index: 1000;
+  top: 56px;
   width: 0;
 `;
 
 const Container = styled.div`
   width: 100%;
   color: #fff;
+  padding-top: 24px;
+  padding-bottom: 8px;
   background: ${colorYoutubeBg};
   overflow: hidden;
 `;
@@ -73,12 +78,58 @@ const App = () => {
   const [activeTab, setActiveTab] = useState<TabProps>();
   const containerWidth = rootRect?.width || 0;
 
-  const parentTabs = getValidParentTabs(tabs, filters);
+  const parentTabs = getValidParentTabs(flatToNested(tabs), filters);
 
   useEffect(() => {
+    function setAllDataBasedOnResponse(response: Response) {
+      if (response && response !== 'error') {
+        switch (response.type) {
+          case 'allData': {
+            if (response.value?.tabs) {
+              setTabs(response.value.tabs);
+            }
+
+            if (response.value?.filters) {
+              setFilters(response.value.filters);
+            }
+            break;
+          }
+
+          case 'filters': {
+            if (response.value) {
+              setFilters(response.value as FilterProps[]);
+            }
+            break;
+          }
+
+          case 'tabs': {
+            if (response.value) {
+              setTabs(response.value as TabProps[]);
+            }
+            break;
+          }
+
+          default:
+            break;
+        }
+      }
+    }
+
     if (module.hot) {
-      setTabs(flatToNested(tabsState.getState().tabs));
+      setTabs(tabsState.getState().tabs);
       setFilters(filtersState.getState().filters);
+    } else {
+      chrome.runtime.onMessage.addListener(
+        (request: Response) => {
+          setAllDataBasedOnResponse(request);
+          console.log(request);
+        }
+      );
+
+      chrome.runtime.sendMessage({ type: "load" }, (response: Response) => {
+        setAllDataBasedOnResponse(response);
+        console.log(response);
+      });
     }
 
     const rootElem = document.getElementById('youtube-subtabs');
@@ -113,7 +164,6 @@ const App = () => {
       css={{
         width: rootRect?.width,
         height: rootRect?.height,
-        top: rootRect?.top,
       }}
     >
       <Container ref={containerRef}>

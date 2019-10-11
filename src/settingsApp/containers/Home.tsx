@@ -43,7 +43,7 @@ const Home = () => {
     dragItem: TabProps,
     destinationParent: TabProps | null,
   ) {
-    return !(dragItem.id === 'all' && destinationParent !== null);
+    return !((dragItem.id === 'all' && destinationParent !== null) || destinationParent?.id === 'all');
   }
 
   function onClick(item: TabProps) {
