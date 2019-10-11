@@ -5,8 +5,21 @@ import HeaderStyle from 'settingsApp/components/HeaderStyle';
 import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
 import React, { useState } from 'react';
 import appState from 'settingsApp/state/appState';
-import tabsState, { ExclusiveTabProps, TabProps, addTab } from 'settingsApp/state/tabsState';
+import tabsState, {
+  ExclusiveTabProps,
+  TabProps,
+  addTab,
+} from 'settingsApp/state/tabsState';
 import { flatToNested, nestedToFlat } from 'settingsApp/utils/flatToNested';
+import styled from '@emotion/styled';
+import { fillContainer, centerContent } from 'settingsApp/style/modifiers';
+
+const Container = styled.div`
+  ${fillContainer};
+  ${centerContent};
+  align-items: flex-start;
+  overflow-y: auto;
+`;
 
 const Home = () => {
   const [items, setItems] = tabsState.useStore('tabs');
@@ -31,30 +44,28 @@ const Home = () => {
   }
 
   return (
-    <ContentWrapper>
-      <HeaderStyle>
-        <strong>Youtube SubTabs</strong>
-      </HeaderStyle>
+    <Container>
+      <ContentWrapper>
+        <HeaderStyle>
+          <strong>Youtube SubTabs</strong>
+        </HeaderStyle>
 
-      <div css={{ marginBottom: 12 }}>
-        <Button
-          label="Add Tab"
-          small
-          onClick={() => addTab(null)}
+        <div css={{ marginBottom: 12 }}>
+          <Button label="Add Tab" small onClick={() => addTab(null)} />
+          <Button label="Expand" small onClick={() => setCollapse('NONE')} />
+          <Button label="Collapse" small onClick={() => setCollapse('ALL')} />
+        </div>
+
+        <CardList<ExclusiveTabProps>
+          items={nestedItems}
+          setItems={updateItems}
+          maxDepth={2}
+          confirmChange={confirmChange}
+          onClick={onClick}
+          collapse={collapse}
         />
-        <Button label="Expand" small onClick={() => setCollapse('NONE')} />
-        <Button label="Collapse" small onClick={() => setCollapse('ALL')} />
-      </div>
-
-      <CardList<ExclusiveTabProps>
-        items={nestedItems}
-        setItems={updateItems}
-        maxDepth={2}
-        confirmChange={confirmChange}
-        onClick={onClick}
-        collapse={collapse}
-      />
-    </ContentWrapper>
+      </ContentWrapper>
+    </Container>
   );
 };
 

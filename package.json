@@ -76,6 +76,7 @@
     "react-flip-toolkit": "^7.0.6",
     "react-input-autosize": "^2.2.2",
     "react-nestable": "^1.2.2",
+    "textarea-autogrow": "^1.0.0",
     "ts-loader": "^6.2.0",
     "typescript": "~3.7.0-beta",
     "use-debounce": "^3.1.0",

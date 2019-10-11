@@ -14,7 +14,6 @@ const reset = css`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: ${rgba(colorSecondary, 0.3)};
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

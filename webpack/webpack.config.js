@@ -109,6 +109,10 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: false,
+      __PROD__: true,
+    }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [`**/*`, `!static*`, '!icons*'],
     }),

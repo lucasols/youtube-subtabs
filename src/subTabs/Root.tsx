@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import App from 'subTabs/containers/App';
+import App from 'subTabs/containers/SubTabs';
 import DebugLayout from 'settingsApp/style/DebugLayout';
 
 const Root = () => (

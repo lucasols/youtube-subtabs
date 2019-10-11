@@ -24,14 +24,33 @@ type Reducers = {
 
 const tabsState = createStore<tabsState, Reducers>('tabsState', {
   state: {
-    tabs: [
+    tabs: module.hot ? [
       { id: 'all', name: 'All', parent: null, includeChildsFilter: true },
       { id: 1, name: 'Must Watch', parent: null, includeChildsFilter: true },
       { id: 2, name: 'Humor', parent: null, includeChildsFilter: true },
       { id: 3, name: 'Games', parent: 1, includeChildsFilter: true },
       { id: 4, name: 'Science', parent: 2, includeChildsFilter: true },
       { id: 5, name: 'Movies', parent: null, includeChildsFilter: true },
-    ],
+      { id: 6, name: 'All', parent: null, includeChildsFilter: true },
+      { id: 7, name: 'Must Watch', parent: null, includeChildsFilter: true },
+      { id: 8, name: 'Humor', parent: 1, includeChildsFilter: true },
+      { id: 9, name: 'All', parent: 1, includeChildsFilter: true },
+      { id: 10, name: 'Must Watch', parent: 1, includeChildsFilter: true },
+      { id: 11, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 12, name: 'All', parent: 1, includeChildsFilter: true },
+      { id: 13, name: 'Must Watch', parent: 1, includeChildsFilter: true },
+      { id: 14, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 15, name: 'All', parent: 1, includeChildsFilter: true },
+      { id: 16, name: 'Must Watch', parent: 1, includeChildsFilter: true },
+      { id: 17, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 18, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 19, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 20, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 21, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 22, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 23, name: 'Humor', parent: null, includeChildsFilter: true },
+      { id: 24, name: 'Humor', parent: null, includeChildsFilter: true },
+    ] : [],
   },
   reducers: {
     addTabs: (state, newtabs) => ({

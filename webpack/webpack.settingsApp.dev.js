@@ -41,6 +41,10 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      __DEV__: true,
+      __PROD__: false,
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsWebpackPlugin(),
     new ReactRefreshPlugin(),
