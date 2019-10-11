@@ -15,7 +15,15 @@
     },
     {
       "type": "npm",
-      "script": "hot-reload-dev",
+      "script": "settings-app-dev",
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "subtabs-dev",
       "problemMatcher": [],
       "presentation": {
         "clear": true

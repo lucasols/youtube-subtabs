@@ -5,13 +5,13 @@ const workboxPlugin = require('workbox-webpack-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const commonConfig = require('')
+const commonConfig = require('./webpack.common');
+const merge = require('webpack-merge');
 
 const folder = './dist';
 
-module.exports = {
+module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
 
   entry: {
@@ -130,10 +130,6 @@ module.exports = {
         minifyURLs: true,
       },
     }),
-    new webpack.DefinePlugin({
-      __DEV__: false,
-      __PROD__: true,
-    }),
     new workboxPlugin.GenerateSW({
       swDest: 'sw.js',
       exclude: ['index.html', 'icons'],
@@ -165,4 +161,4 @@ module.exports = {
       ],
     }),
   ],
-};
+});

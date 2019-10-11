@@ -1,0 +1,26 @@
+{
+  "name": "Youtube SubTabs",
+  "version": "1.0.0",
+  "description": "Group and filter your youtube subscriptions",
+  "manifest_version": 2,
+  "incognito": "split",
+  "browser_action": {
+
+  },
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/feed/subscriptions"],
+      "js": ["js/subTabs.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab"
+  ],
+  "icons": {
+    "256": "icon.png"
+  }
+}

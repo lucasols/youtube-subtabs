@@ -10,4 +10,4 @@ production
 compilation-stats.json
 stats.json
 resources
-dist
+dist/js

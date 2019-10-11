@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Extension for group youtube tabs",
   "scripts": {
-    "hot-reload-dev": "node scripts/dev-server.js",
+    "settings-app-dev": "node scripts/settings-app-dev-server.js",
+    "subtabs-dev": "webpack --config webpack/webpack.subTabs.dev.js",
+    "build": "npm run validate-typescript && webpack --config webpack/webpack.config.js",
     "validate-typescript": "tsc -p tsconfig.prod.json"
   },
   "author": "Lucas Santos",
@@ -14,6 +16,7 @@
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "@babel/plugin-transform-react-constant-elements": "^7.6.0",
@@ -78,7 +81,8 @@
     "use-debounce": "^3.1.0",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.8.2",
+    "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
     "@types/node": "^12.7.11",
@@ -86,6 +90,7 @@
     "error-overlay-webpack-plugin": "^0.4.1",
     "react-refresh": "^0.5.2",
     "react-refresh-webpack-plugin": "git+https://github.com/pmmmwh/react-refresh-webpack-plugin.git",
-    "ts-node": "^8.4.1"
+    "ts-node": "^8.4.1",
+    "webpack-extension-reloader": "^1.1.1"
   }
 }

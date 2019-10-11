@@ -2,19 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const commonsConfig = require('./webpack.common');
 const ReactRefreshPlugin = require('react-refresh-webpack-plugin');
-// const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+const commonConfig = require('./webpack.common');
+const merge = require('webpack-merge');
 
-module.exports = /** @type { import('webpack').Configuration } */ {
-  ...commonsConfig,
-
+module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'development',
 
   devtool: 'cheap-module-source-map',
 
   entry: [
-    // require.resolve('react-dev-utils/webpackHotDevClient'),
     './src/settingsApp/index',
   ],
 
@@ -24,8 +21,6 @@ module.exports = /** @type { import('webpack').Configuration } */ {
     chunkFilename: '[name].chunk.js',
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
-    // devtoolModuleFilenameTemplate: info =>
-    //   path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
 
   module: {
@@ -39,14 +34,9 @@ module.exports = /** @type { import('webpack').Configuration } */ {
   },
 
   optimization: {
-    // Automatically split vendor and commons
-    // https://twitter.com/wSokra/status/969633336732905474
-    // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
     splitChunks: {
       chunks: 'all',
     },
-    // Keep the runtime chunk seperated to enable long term caching
-    // https://twitter.com/wSokra/status/969679223278505985
     runtimeChunk: true,
   },
 
@@ -54,14 +44,8 @@ module.exports = /** @type { import('webpack').Configuration } */ {
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsWebpackPlugin(),
     new ReactRefreshPlugin(),
-    // new ErrorOverlayPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/settingsApp/index.html',
     }),
-    new webpack.DefinePlugin({
-      __DEV__: true,
-      __PROD__: false,
-      __HOT__: true,
-    }),
   ],
-};
+});

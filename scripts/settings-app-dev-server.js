@@ -1,11 +1,9 @@
 const WebpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
-const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
-const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
 const express = require('express');
 const portfinder = require('portfinder');
 
-const config = require('../webpack.hot-reload');
+const config = require('../webpack/webpack.settingsApp.dev');
 const path = require('path');
 
 portfinder.basePort = 5000;
@@ -21,8 +19,7 @@ const options = {
   quiet: true,
   overlay: true,
   stats: {
-    colors: true, // color is life
-    // errorDetails: true,
+    colors: true,
   },
   headers: {
     'Access-Control-Allow-Origin': '*',
@@ -37,12 +34,6 @@ const options = {
       express.static(path.join(__dirname, `../${staticDir}`)),
     );
   },
-  // before(app, server) {
-  //   // This lets us fetch source contents from webpack for the error overlay
-  //   app.use(evalSourceMapMiddleware(server));
-  //   // This lets us open files from the runtime error overlay.
-  //   app.use(errorOverlayMiddleware());
-  // },
 };
 
 WebpackDevServer.addDevServerEntrypoints(config, options);
