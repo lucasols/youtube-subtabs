@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 const path = require('path');
 const webpack = require('webpack');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonConfig = require('./webpack.common');
 // const merge = require('webpack-merge');
 const merge = require('webpack-merge');
@@ -12,10 +12,9 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   mode: 'development',
   watch: true,
 
-  devtool: 'cheap-module-source-map',
-
   entry: {
     subTabs: './src/subTabs/index.tsx',
+    settingsApp: './src/settingsApp/index.tsx',
     background: './src/background.ts',
   },
 
@@ -24,7 +23,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
     path: path.resolve(__dirname, '../dist/js'),
-    publicPath: '/',
+    publicPath: '',
   },
 
   module: {
@@ -41,6 +40,10 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     new webpack.DefinePlugin({
       __DEV__: true,
       __PROD__: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/settingsApp/index.html',
+      chunks: ['settingsApp'],
     }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/*', '!static*', '!icons*'],

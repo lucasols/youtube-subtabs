@@ -1,7 +1,7 @@
 import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
 import { TabProps } from 'settingsApp/state/tabsState';
-import { getUniqueId } from 'settingsApp/utils/getUniqueId';
+import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'settingsApp/state/appState';
 
 export type ExclusiveFilterProps = {
@@ -31,13 +31,13 @@ const filtersState = createStore<filtersState, Reducers>('filtersState', {
         id: 1, name: 'test', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 2, name: 'test2', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 2, name: 'test2', daysOfWeek: [], tab: 3, type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 3, name: 'test3', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 3, name: 'test3', daysOfWeek: [], tab: 3, type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 4, name: 'test4', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 4, name: 'test4', daysOfWeek: [], tab: 4, type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
     ] : [],
   },

@@ -23,7 +23,7 @@
     },
     {
       "type": "npm",
-      "script": "subtabs-dev",
+      "script": "dev",
       "problemMatcher": [],
       "presentation": {
         "clear": true

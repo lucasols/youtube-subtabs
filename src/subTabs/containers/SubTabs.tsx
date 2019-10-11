@@ -3,14 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
 import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 import Tab from 'subTabs/components/Tab';
-import { flatToNested } from 'settingsApp/utils/flatToNested';
+import { flatToNested } from 'utils/flatToNested';
 import Icon from 'settingsApp/components/Icon';
 import { centerContent, hide, show } from 'settingsApp/style/modifiers';
 import { colorYoutubeBg } from 'subTabs/theme';
 import { rgba, clampMin, clampMax } from '@lucasols/utils';
-import { debounce } from 'lodash-es';
 import { css } from '@emotion/core';
-import { getValidParentTabs } from 'settingsApp/utils/validation';
+import { getValidParentTabs } from 'utils/validation';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -21,6 +20,7 @@ const FixedContainer = styled.div`
 const Container = styled.div`
   width: 100%;
   color: #fff;
+  background: ${colorYoutubeBg};
   overflow: hidden;
 `;
 
@@ -70,6 +70,7 @@ const App = () => {
   const [rootRect, setRootRect] = useState<DOMRect>();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<TabProps>();
   const containerWidth = rootRect?.width || 0;
 
   const parentTabs = getValidParentTabs(tabs, filters);
@@ -80,23 +81,22 @@ const App = () => {
       setFilters(filtersState.getState().filters);
     }
 
-    setTimeout(() => {
-      if (tabsWrapperRef.current) {
-        setTabWrapperWidth(tabsWrapperRef.current.getBoundingClientRect().width);
-      }
-    }, 500);
+    const rootElem = document.getElementById('youtube-subtabs');
 
-    const observeRoot = new ResizeObserver(entries => {
+    const observeElemSizes = new ResizeObserver(entries => {
       entries.forEach(entry => {
-        setRootRect(entry.contentRect);
+        if (entry.target === rootElem) {
+          setRootRect(entry.contentRect);
+        } else if (entry.target === tabsWrapperRef.current) {
+          setTabWrapperWidth(entry.contentRect.width);
+        }
       });
     });
 
-    const rootElem = document.getElementById('youtube-subtabs');
+    if (rootElem) observeElemSizes.observe(rootElem);
+    if (tabsWrapperRef.current) observeElemSizes.observe(tabsWrapperRef.current);
 
-    if (rootElem) observeRoot.observe(rootElem);
-
-    return () => observeRoot.disconnect();
+    return () => observeElemSizes.disconnect();
   }, []);
 
   function moveScroll(direction: 'left' | 'right') {
@@ -124,7 +124,13 @@ const App = () => {
           }}
         >
           {parentTabs.map(tab => (
-            <Tab key={tab.id} active={tab.id === 1} data={tab} />
+            <Tab
+              key={tab.id}
+              activeTab={activeTab}
+              parentIsInteractive={tab.id === 'all' || !!filters.find(filter => filter.tab === tab.id)}
+              data={tab}
+              setActiveTab={setActiveTab}
+            />
           ))}
         </TabsWrapper>
         <ScrollButtonRight

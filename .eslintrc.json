@@ -17,7 +17,8 @@
     "firebase": true,
     "__DEV__": true,
     "__PROD__": true,
-    "__HOT__": true
+    "__HOT__": true,
+    "chrome": true
   },
   "rules": {
     "implicit-arrow-linebreak": 0,

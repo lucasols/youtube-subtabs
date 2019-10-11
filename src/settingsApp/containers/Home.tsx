@@ -10,10 +10,10 @@ import tabsState, {
   TabProps,
   addTab,
 } from 'settingsApp/state/tabsState';
-import { flatToNested, nestedToFlat } from 'settingsApp/utils/flatToNested';
+import { flatToNested, nestedToFlat } from 'utils/flatToNested';
 import styled from '@emotion/styled';
 import { fillContainer, centerContent } from 'settingsApp/style/modifiers';
-import { checkIfTabIsInvalid } from 'settingsApp/utils/validation';
+import { checkIfTabIsInvalid } from 'utils/validation';
 import filtersState from 'settingsApp/state/filtersState';
 
 const Container = styled.div`

@@ -1,6 +1,6 @@
 import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
-import { getUniqueId } from 'settingsApp/utils/getUniqueId';
+import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'settingsApp/state/appState';
 import filtersState from 'settingsApp/state/filtersState';
 

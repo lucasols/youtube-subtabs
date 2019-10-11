@@ -48,5 +48,5 @@ export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs:
 }
 
 export function getValidParentTabs(tabs: TabProps[], filters: FilterProps[]) {
-  return tabs.filter(tab => tab.parent === null && tab.id !== 'all' && !checkIfTabIsInvalid(tab, filters, tabs));
+  return tabs.filter(tab => tab.parent === null && (tab.id === 'all' || !checkIfTabIsInvalid(tab, filters, tabs)));
 }

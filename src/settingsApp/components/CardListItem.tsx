@@ -127,7 +127,7 @@ const CardListItem = ({
     {handler}
     {collapseIcon}
     <ListLabel onClick={() => onClick(item)}>
-      <span>{item.name}</span>{' '}
+      <span>{`${item.name} ${item.id === 'all' ? '🌐' : ''}`}</span>{' '}
       {item.isInvalid && <Icon name="warn" size={16} css={{ marginLeft: 4 }} />}
     </ListLabel>
     {item.id !== 'all' && item.parent === null && maxDepth > 1 && (

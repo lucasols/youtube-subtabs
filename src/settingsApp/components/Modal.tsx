@@ -44,8 +44,8 @@ const ModalCard = styled.div`
 
 const Bg = styled.div`
   ${fillContainer};
-  background: ${rgba(colorBg, 0.2)};
-  backdrop-filter: blur(10px);
+  background: ${rgba(colorBg, 0.8)};
+  /* backdrop-filter: blur(10px); */
 `;
 
 const ModalTitle = styled.h1`

@@ -13,7 +13,7 @@ import tabsState, { changeTabName, TabProps } from 'settingsApp/state/tabsState'
 import { centerContent } from 'settingsApp/style/modifiers';
 import filtersState, { FilterProps, ExclusiveFilterProps } from 'settingsApp/state/filtersState';
 import TextField from 'settingsApp/components/TextField';
-import { getUniqueId } from 'settingsApp/utils/getUniqueId';
+import { getUniqueId } from 'utils/getUniqueId';
 import DayOfWeekSelector from 'settingsApp/components/DayOfWeekSelector';
 import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
 import { colorError } from 'settingsApp/style/theme';

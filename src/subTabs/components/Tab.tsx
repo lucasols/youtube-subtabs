@@ -4,13 +4,20 @@ import React from 'react';
 import { TabProps } from 'settingsApp/state/tabsState';
 import { colorYoutubePrimary, colorYoutubeBg } from 'subTabs/theme';
 import { css } from '@emotion/core';
-import { centerContent, hide, show, centerContentCollum } from 'settingsApp/style/modifiers';
+import {
+  centerContent,
+  hide,
+  show,
+  centerContentCollum,
+} from 'settingsApp/style/modifiers';
 import Icon from 'settingsApp/components/Icon';
 import { ellipsis } from 'polished';
 
 type Props = {
   data: TabProps;
-  active: boolean;
+  activeTab?: TabProps;
+  parentIsInteractive: boolean;
+  setActiveTab: (tab?: TabProps) => void;
 };
 
 const Container = styled.div`
@@ -31,6 +38,7 @@ const ParentButton = styled.button`
   transition: 160ms;
   border-radius: 200px;
   cursor: pointer;
+  pointer-events: none;
 
   &:hover {
     border-color: ${rgba(colorYoutubePrimary, 0.4)};
@@ -56,6 +64,7 @@ const DropDown = styled.div`
 
 const activeTabStyle = css`
   border-color: ${colorYoutubePrimary};
+  cursor: normal;
 
   &:hover {
     border-color: ${colorYoutubePrimary};
@@ -73,22 +82,49 @@ const Child = styled.div`
   }
 `;
 
-const Tab = ({ data, active }: Props) => {
+const activeChildStyle = css`
+  color: ${colorYoutubePrimary};
+`;
+
+const Tab = ({ data, activeTab, setActiveTab, parentIsInteractive }: Props) => {
   const hasChilds = data.children && data.children.length > 0;
+
+  const isActive = activeTab?.id === data.id || activeTab?.parent === data.id;
+
+  function onTabClick(tab: TabProps) {
+    if (activeTab?.id !== tab.id) {
+      setActiveTab(tab);
+    }
+  }
 
   return (
     <Container>
-      <ParentButton css={active && activeTabStyle}>
+      <ParentButton
+        css={[isActive && activeTabStyle, parentIsInteractive && {
+          pointerEvents: 'auto',
+        }]}
+        onClick={() => onTabClick(data)}
+      >
         <span>{data.name}</span>
-        {hasChilds && <Icon name="chevron-down" size={16} color="#fff" css={{ marginRight: -4 }} />}
+        {activeTab?.parent === data.id && <span css={ellipsis(70)}>: {activeTab?.name}</span>}
+        {hasChilds && (
+          <Icon
+            name="chevron-down"
+            size={16}
+            color="#fff"
+            css={{ marginRight: -6 }}
+          />
+        )}
       </ParentButton>
-      {data.children && hasChilds && <DropDown>
-        {data.children.map(child => (
-          <Child key={child.id}>
-            {child.name}
-          </Child>
-        ))}
-      </DropDown>}
+      {data.children && hasChilds && (
+        <DropDown>
+          {data.children.map(child => (
+            <Child key={child.id} css={activeTab?.id === child.id && activeChildStyle} onClick={() => onTabClick(child)}>
+              {child.name}
+            </Child>
+          ))}
+        </DropDown>
+      )}
     </Container>
   );
 };

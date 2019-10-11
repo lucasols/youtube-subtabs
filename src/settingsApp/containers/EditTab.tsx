@@ -18,7 +18,7 @@ import Switch from 'settingsApp/components/Switch';
 import { PartialKey } from 'src/typings/utils';
 import filtersState, { FilterProps, addFilter } from 'settingsApp/state/filtersState';
 import CardList from 'settingsApp/components/CardList';
-import { filterIsInvalid } from 'settingsApp/utils/validation';
+import { filterIsInvalid } from 'utils/validation';
 // IDEA: edit parent on edit tab page
 
 export const EditPageContainer = styled.div`
@@ -123,7 +123,7 @@ const EditTab = () => {
 
     const newName = e.target.value;
 
-    if (selectedTab?.id && selectedTab.id !== 'all') {
+    if (selectedTab?.id) {
       debouncedSetNewTabName(selectedTab?.id, newName);
     }
     setTabName(newName);
@@ -160,17 +160,15 @@ const EditTab = () => {
       </CloseButton>
       <ContentWrapper>
         <HeaderStyle>
-          {editTab !== 'all' && 'Tab · '}
+          {editTab !== 'all' ? 'Tab · ' : 'Global Filters · '}
           {parentTab && <><span>{parentTab?.name}</span> · </>}
-          {editTab !== 'all' ? (
-            <AutosizeInput
-              type="text"
-              inputClassName={tabNameInputClassname}
-              onChange={onChangeName}
-              placeholder="Tab Name"
-              value={tabName}
-            />
-          ) : <strong>Global Filters (All)</strong>}
+          <AutosizeInput
+            type="text"
+            inputClassName={tabNameInputClassname}
+            onChange={onChangeName}
+            placeholder="Tab Name"
+            value={tabName}
+          />
         </HeaderStyle>
 
         {editTab !== 'all' && !parentTab &&
