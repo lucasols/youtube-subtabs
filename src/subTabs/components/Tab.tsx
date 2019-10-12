@@ -70,7 +70,6 @@ const DropDown = styled.div`
 
 const activeTabStyle = css`
   border-color: ${colorYoutubePrimary} !important;
-  cursor: normal;
 
   &:hover {
     border-color: ${colorYoutubePrimary} !important;

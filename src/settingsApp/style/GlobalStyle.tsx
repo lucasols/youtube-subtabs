@@ -2,7 +2,7 @@ import { css, Global } from '@emotion/core';
 import React from 'react';
 import normalize from './normalize';
 // import scrollBar from './scrollBar';
-import { fontPrimary, colorSecondary } from './theme';
+import { fontPrimary, colorSecondary, colorBg } from './theme';
 import { fillContainer } from './modifiers';
 import { rgba } from '@lucasols/utils';
 import scrollBar from 'settingsApp/style/scrollBar';
@@ -22,6 +22,7 @@ const reset = css`
   html {
     font-family: ${fontPrimary};
     color: #fff;
+    background: ${colorBg};
   }
 
   a {

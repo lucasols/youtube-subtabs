@@ -8,11 +8,12 @@ if (__PROD__) {
 }
 
 if (__DEV__) {
-  // alert('1');
+  const title = document.querySelector('#title');
+  if (title) title.innerHTML = `${title.innerHTML}-122`;
 }
 
 function injectSubTab() {
-  const parent = document.getElementById('dismissable');
+  const parent = document.querySelector('ytd-shelf-renderer > #dismissable');
   const subTabsRoot = document.createElement('div');
   subTabsRoot.id = 'youtube-subtabs';
   subTabsRoot.style.height = '28px';

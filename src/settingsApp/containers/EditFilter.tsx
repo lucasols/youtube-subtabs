@@ -19,6 +19,7 @@ import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
 import { colorError } from 'settingsApp/style/theme';
 
 // IDEA: edit tab parent on edit tab page
+// TODO: allow empty name, and if name is empty show filter props
 
 const Row = styled.div`
   ${centerContent};

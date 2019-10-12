@@ -4,6 +4,7 @@
   "description": "Group and filter your youtube subscriptions",
   "manifest_version": 2,
   "incognito": "split",
+  "options_page": "index.html",
   "browser_action": {
     "default_popup": "index.html"
   },

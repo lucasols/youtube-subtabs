@@ -19,6 +19,10 @@ const FixedContainer = styled.div`
   z-index: 1000;
   top: 56px;
   width: 0;
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 const Container = styled.div`
@@ -98,50 +102,22 @@ const App = () => {
   }, [activeTabId, tabs, filters]);
 
   useEffect(() => {
-    function setAllDataBasedOnResponse(response: Response) {
-      if (response && response !== 'error') {
-        switch (response.type) {
-          case 'allData': {
-            if (response.value?.tabs) {
-              setTabs(response.value.tabs);
-            }
-
-            if (response.value?.filters) {
-              setFilters(response.value.filters);
-            }
-            break;
-          }
-
-          case 'filters': {
-            if (response.value) {
-              setFilters(response.value as FilterProps[]);
-            }
-            break;
-          }
-
-          case 'tabs': {
-            if (response.value) {
-              setTabs(response.value as TabProps[]);
-            }
-            break;
-          }
-
-          default:
-            break;
-        }
+    chrome.storage.onChanged.addListener((changes) => {
+      if (changes.tabs) {
+        setTabs(changes.tabs.newValue || []);
+      } else if (changes.filters) {
+        setFilters(changes.filters.newValue || []);
       }
-    }
+    });
 
     if (!module.hot) {
-      chrome.runtime.onMessage.addListener(
-        (request: Response) => {
-          setAllDataBasedOnResponse(request);
-        }
+      chrome.storage.local.get(
+        ['tabs', 'filters'],
+        (result: ChromeStorage) => {
+          if (result.tabs) setTabs(result.tabs);
+          if (result.filters) setFilters(result.filters);
+        },
       );
-
-      chrome.runtime.sendMessage({ type: "load" }, (response: Response) => {
-        setAllDataBasedOnResponse(response);
-      });
     } else {
       setTabs(tabsState.getState().tabs);
       setFilters(filtersState.getState().filters);
@@ -192,7 +168,7 @@ const App = () => {
             <Tab
               key={tab.id}
               activeTab={activeTab}
-              parentIsInteractive={tab.id === 'all' || !!filters.find(filter => filter.tab === tab.id)}
+              parentIsInteractive={tab.id === 'all' || !!filters.find(filter => filter.tab === tab.id) || (tab.includeChildsFilter && !!tab.children)}
               data={tab}
               setActiveTab={setActiveTabId}
             />
