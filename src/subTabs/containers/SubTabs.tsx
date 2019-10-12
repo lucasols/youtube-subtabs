@@ -11,8 +11,10 @@ import { rgba, clampMin, clampMax } from '@lucasols/utils';
 import { css } from '@emotion/core';
 import { getValidParentTabs } from 'utils/validation';
 import { ChromeStorage } from 'utils/chromeStorage';
-import { Response } from 'background';
 import { filterVideos } from 'utils/filterVideos';
+import { debounce } from 'lodash-es';
+
+// TODO: filter again when new videos are loaded
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -78,6 +80,8 @@ function getActiveTabFromUrl() {
   return activeTab && !Number.isNaN(+activeTab) ? +activeTab : 'all';
 }
 
+const debouncedFilterVideos = debounce(filterVideos, 500);
+
 const App = () => {
   const [tabs, setTabs] = useState<TabProps[]>([]);
   const [filters, setFilters] = useState<FilterProps[]>([]);
@@ -98,7 +102,21 @@ const App = () => {
   }, [activeTabId]);
 
   useEffect(() => {
-    filterVideos(activeTabId, tabs, filters);
+    debouncedFilterVideos(activeTabId, tabs, filters);
+
+    const mainVideoContainer = document.querySelector('ytd-section-list-renderer');
+
+    const observeElemSizes = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.target === mainVideoContainer) {
+          debouncedFilterVideos(activeTabId, tabs, filters);
+        }
+      });
+    });
+
+    if (mainVideoContainer) observeElemSizes.observe(mainVideoContainer);
+
+    return () => observeElemSizes.disconnect();
   }, [activeTabId, tabs, filters]);
 
   useEffect(() => {

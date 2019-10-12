@@ -2,7 +2,8 @@ import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
 
 // TODO: day of week check
-
+// TODO: use for loops
+// IDEA: chache checks for better perf
 export function checkIfExcludeVideo(userName: string, videoName: string, includeFilters: FilterProps[], excludeFilters: FilterProps[]) {
   const includeVideo = includeFilters.length === 0 ? true : includeFilters.some(filter => {
     let include = false;
@@ -81,9 +82,9 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
     const excludeVideo = checkIfExcludeVideo(userName, videoName, includeFilters, excludeFilters);
 
     if (excludeVideo) {
-      element.style.background = "#f00";
+      element.style.display = 'none';
     } else {
-      element.style.background = 'transparent';
+      element.style.display = 'block';
     }
   });
 }

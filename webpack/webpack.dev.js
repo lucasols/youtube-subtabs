@@ -17,7 +17,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   entry: {
     'content-script': './src/subTabs/index.tsx',
     popup: './src/settingsApp/index.tsx',
-    background: './src/background.ts',
+    // background: './src/background.ts',
   },
 
   output: {
