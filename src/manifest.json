@@ -1,6 +1,6 @@
 {
   "name": "Youtube SubTabs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Group and filter your youtube subscriptions",
   "manifest_version": 2,
   "incognito": "split",
