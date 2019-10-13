@@ -80,6 +80,10 @@ export const tabNameInputClassname = css`
     border: 1px solid ${colorPrimary};
     outline: none;
   }
+
+  &::placeholder {
+    color: #666;
+  }
 `;
 
 const IncludeChildFiltersSwitchContainer = styled.div`

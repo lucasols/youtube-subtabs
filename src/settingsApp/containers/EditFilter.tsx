@@ -19,7 +19,6 @@ import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
 import { colorError } from 'settingsApp/style/theme';
 
 // IDEA: edit tab parent on edit tab page
-// TODO: allow empty name, and if name is empty show filter props
 
 const Row = styled.div`
   ${centerContent};
@@ -79,8 +78,7 @@ const EditFilter = () => {
   function checkIfIsValid() {
     if (!newFilterProps) return false;
 
-    if (!(newFilterProps.name !== ''
-      && newFilterProps.textFields.userRegex.isValid
+    if (!(newFilterProps.textFields.userRegex.isValid
       && newFilterProps.textFields.videoNameRegex.isValid
       && newFilterProps.type !== null
       && newFilterProps.tab !== null
@@ -138,7 +136,7 @@ const EditFilter = () => {
       name: newFilterProps.name,
       tab: newFilterProps.tab,
       type: newFilterProps.type,
-      userRegex: newFilterProps.textFields.userRegex.value,
+      userRegex: newFilterProps.textFields.userRegex.value.replace(/https:\/\/www.youtube.com\/(user|channel)\//, ''),
       videoNameRegex: newFilterProps.textFields.videoNameRegex.value,
     };
 
@@ -179,6 +177,7 @@ const EditFilter = () => {
 
     setNewFilterProps({
       ...newFilterProps,
+      daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !newFilterProps.daysOfWeek.includes(day)),
       type,
     });
   }

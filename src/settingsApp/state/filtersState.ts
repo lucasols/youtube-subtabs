@@ -91,12 +91,12 @@ export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
 
   filtersState.dispatch('addFilters', [{
     id,
-    name: 'New filter',
+    name: '',
     tab,
     type,
     userRegex: '',
     videoNameRegex: '',
-    daysOfWeek: [],
+    daysOfWeek: type === 'include' ? [0, 1, 2, 3, 4, 5, 6] : [],
   }]);
 
   // appState.setKey('editFilter', id);

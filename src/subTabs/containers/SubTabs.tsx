@@ -14,8 +14,6 @@ import { ChromeStorage } from 'utils/chromeStorage';
 import { filterVideos } from 'utils/filterVideos';
 import { debounce } from 'lodash-es';
 
-// TODO: filter again when new videos are loaded
-
 const FixedContainer = styled.div`
   position: fixed;
   z-index: 1000;
@@ -93,31 +91,35 @@ const App = () => {
   const [activeTabId, setActiveTabId] = useState<number | 'all'>(getActiveTabFromUrl());
   const containerWidth = rootRect?.width || 0;
 
-  const activeTab = tabs.find(tab => tab.id === activeTabId);
+  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs.find(tab => tab.id === 'all');
 
-  const parentTabs = getValidParentTabs(flatToNested(tabs), filters);
-
-  useEffect(() => {
-    window.history.replaceState('', '', `#subTab=${activeTabId}`);
-  }, [activeTabId]);
+  const parentTabs = flatToNested(tabs);
 
   useEffect(() => {
-    debouncedFilterVideos(activeTabId, tabs, filters);
+    if (activeTab?.id) {
+      window.history.replaceState('', '', `#subTab=${activeTab.id}`);
+    }
+  }, [activeTab?.id]);
 
-    const mainVideoContainer = document.querySelector('ytd-section-list-renderer');
+  useEffect(() => {
+    if (!activeTab?.id) return () => {};
+
+    debouncedFilterVideos(activeTab.id, tabs, filters);
+
+    const videoContainer = document.querySelector('ytd-section-list-renderer');
 
     const observeElemSizes = new ResizeObserver(entries => {
       entries.forEach(entry => {
-        if (entry.target === mainVideoContainer) {
-          debouncedFilterVideos(activeTabId, tabs, filters);
+        if (entry.target === videoContainer) {
+          debouncedFilterVideos(activeTab.id, tabs, filters);
         }
       });
     });
 
-    if (mainVideoContainer) observeElemSizes.observe(mainVideoContainer);
+    if (videoContainer) observeElemSizes.observe(videoContainer);
 
     return () => observeElemSizes.disconnect();
-  }, [activeTabId, tabs, filters]);
+  }, [activeTab?.id, tabs, filters]);
 
   useEffect(() => {
     chrome.storage.onChanged.addListener((changes) => {
