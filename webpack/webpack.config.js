@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const merge = require('webpack-merge');
-const Crx = require("crx-webpack-plugin");
+const Crx3 = require("crx3-webpack-plugin");
 
 module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
@@ -94,7 +94,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
         minifyURLs: true,
       },
     }),
-    new Crx({
+    new Crx3({
       keyFile: '../key.pem',
       contentPath: '../dist',
       outputPath: '../',

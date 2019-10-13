@@ -12,4 +12,5 @@ stats.json
 resources
 dist/*
 !dist/static
+*.xml
 *.crx
