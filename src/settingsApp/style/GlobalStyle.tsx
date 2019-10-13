@@ -23,6 +23,8 @@ const reset = css`
     font-family: ${fontPrimary};
     color: #fff;
     background: ${colorBg};
+    min-width: 400px;
+    min-height: 600px;
   }
 
   a {

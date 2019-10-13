@@ -23,6 +23,6 @@
     "storage"
   ],
   "icons": {
-    "256": "icon.png"
+    "256": "static/icon.png"
   }
 }

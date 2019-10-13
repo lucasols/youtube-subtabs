@@ -29,7 +29,7 @@ const DeleteFilterModal = () => {
 
   return (
     <Container
-      title={`Delete Filter?`}
+      title="Delete Filter?"
       show={!!itemToDelete}
       onClose={onCloseModal}
     >

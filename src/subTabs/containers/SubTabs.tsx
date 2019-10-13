@@ -45,7 +45,7 @@ const ScrollButtonRight = styled.button`
   ${centerContent};
   position: absolute;
   right: 0;
-  top: 0;
+  top: 24px;
   height: 28px;
   width: 28px;
   transform: rotate(-90deg);
@@ -65,11 +65,6 @@ const ScrollButtonLeft = styled(ScrollButtonRight)`
 
 const scrollButtonVisible = css`
   ${show};
-  opacity: 0.6;
-
-  &:hover {
-    opacity: 1;
-  }
 `;
 
 function getActiveTabFromUrl() {
@@ -122,13 +117,15 @@ const App = () => {
   }, [activeTab?.id, tabs, filters]);
 
   useEffect(() => {
-    chrome.storage.onChanged.addListener((changes) => {
-      if (changes.tabs) {
-        setTabs(changes.tabs.newValue || []);
-      } else if (changes.filters) {
-        setFilters(changes.filters.newValue || []);
-      }
-    });
+    if (!module.hot) {
+      chrome.storage.onChanged.addListener((changes) => {
+        if (changes.tabs) {
+          setTabs(changes.tabs.newValue || []);
+        } else if (changes.filters) {
+          setFilters(changes.filters.newValue || []);
+        }
+      });
+    }
 
     if (!module.hot) {
       chrome.storage.local.get(

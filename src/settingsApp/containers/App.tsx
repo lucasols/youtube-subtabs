@@ -22,12 +22,9 @@ import {
 import filtersState from 'settingsApp/state/filtersState';
 
 const AppContainer = styled.div`
-  /* ${fillContainer}; */
-  position: relative;
+  position: absolute;
   height: 100%;
   width: 100%;
-  min-width: 500px;
-  min-height: 600px;
   background: ${colorBg};
   overflow: hidden;
 `;
@@ -60,7 +57,7 @@ const App = () => {
 
   return (
     <AppContainer>
-      {!!module.hot && <TestSubTabs />}
+      {/* {!!module.hot && <TestSubTabs />} */}
       <Home />
       <EditTab />
       <EditFilter />

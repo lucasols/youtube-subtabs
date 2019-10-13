@@ -7,7 +7,7 @@ const config = require('../webpack/webpack.settingsApp.dev');
 const path = require('path');
 
 portfinder.basePort = 5000;
-const staticDir = 'dist/settings/static';
+const staticDir = 'dist/static';
 
 const options = {
   publicPath: config.output.publicPath,

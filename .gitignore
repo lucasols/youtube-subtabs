@@ -13,3 +13,4 @@ resources
 dist
 !dist/manifest.json
 !dist/icon.png
+*.crx

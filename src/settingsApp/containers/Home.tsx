@@ -15,6 +15,7 @@ import styled from '@emotion/styled';
 import { fillContainer, centerContent } from 'settingsApp/style/modifiers';
 import { checkIfTabIsInvalid } from 'utils/validation';
 import filtersState from 'settingsApp/state/filtersState';
+import ExportImportMenu from 'settingsApp/containers/ExportImportMenu';
 
 const Container = styled.div`
   ${fillContainer};
@@ -72,6 +73,7 @@ const Home = () => {
           collapse={collapse}
         />
       </ContentWrapper>
+      <ExportImportMenu />
     </Container>
   );
 };
