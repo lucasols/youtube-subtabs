@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const merge = require('webpack-merge');
+const Crx = require("crx-webpack-plugin");
 
 module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
@@ -92,6 +93,12 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
         minifyCSS: true,
         minifyURLs: true,
       },
+    }),
+    new Crx({
+      keyFile: '../key.pem',
+      contentPath: '../dist',
+      outputPath: '../',
+      name: 'sub-tabs',
     }),
   ],
 });

@@ -11,7 +11,10 @@ export function checkIfExcludeVideo(userName: string, videoName: string, include
     for (let i = 0; i < includeFilters.length; i++) {
       const filter = includeFilters[i];
 
-      if (filter.userRegex === '' && filter.videoNameRegex === '') continue;
+      if (filter.userRegex === '' && filter.videoNameRegex === '') {
+        includeVideo = true;
+        continue;
+      }
 
       if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
         includeVideo = true;
