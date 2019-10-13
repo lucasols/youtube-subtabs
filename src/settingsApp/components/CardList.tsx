@@ -113,6 +113,7 @@ function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDe
       onChange={onChange}
       onClick={onClick}
       maxDepth={maxDepth}
+      collapsed
       confirmChange={confirmChange}
       renderCollapseIcon={CollapseIcon}
       renderItem={CardListItem}
