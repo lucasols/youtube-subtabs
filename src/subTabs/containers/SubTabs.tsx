@@ -6,7 +6,7 @@ import Tab from 'subTabs/components/Tab';
 import { flatToNested } from 'utils/flatToNested';
 import Icon from 'settingsApp/components/Icon';
 import { centerContent, hide, show } from 'settingsApp/style/modifiers';
-import { colorYoutubeBg } from 'subTabs/theme';
+import { colorYoutubeBg, colorYoutubePrimary } from 'subTabs/theme';
 import { rgba, clampMin, clampMax } from '@lucasols/utils';
 import { css } from '@emotion/core';
 import { getValidParentTabs } from 'utils/validation';
@@ -45,8 +45,11 @@ const ScrollButtonRight = styled.button`
   ${centerContent};
   position: absolute;
   right: 0;
+  padding: 0;
   top: 24px;
   height: 28px;
+  cursor: pointer;
+  border: 0;
   width: 28px;
   transform: rotate(-90deg);
   background: linear-gradient(
@@ -195,13 +198,13 @@ const App = () => {
           css={tabWrapperWidth > containerWidth && scrollX !== tabWrapperWidth - containerWidth && scrollButtonVisible}
           onClick={() => moveScroll('right')}
         >
-          <Icon name="chevron-down" />
+          <Icon name="chevron-down" size={28} color={colorYoutubePrimary} />
         </ScrollButtonRight>
         <ScrollButtonLeft
           onClick={() => moveScroll('left')}
           css={scrollX > 0 && scrollButtonVisible}
         >
-          <Icon name="chevron-down" />
+          <Icon name="chevron-down" size={28} color={colorYoutubePrimary} />
         </ScrollButtonLeft>
       </Container>
     </FixedContainer>

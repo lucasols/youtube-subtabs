@@ -1,6 +1,6 @@
 {
   "name": "youtube-subtabs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extension for group youtube tabs",
   "scripts": {
     "hot-load-dev": "node scripts/settings-app-dev-server.js",
@@ -95,6 +95,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "debounce": "^1.2.0",
     "fast-memoize": "^2.5.1",
     "fp-ts": "^2.1.0",
     "io-ts": "^2.0.1",

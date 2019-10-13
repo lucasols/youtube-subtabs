@@ -1,6 +1,6 @@
 import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
-import moize from 'moize';
+import { memoize } from 'lodash-es';
 
 export function checkIfExcludeVideo(userName: string, videoName: string, includeFilters: FilterProps[], excludeFilters: FilterProps[], dayOfWeek: number | null) {
   let includeVideo = false;
@@ -56,24 +56,26 @@ export function checkIfExcludeVideo(userName: string, videoName: string, include
   return excludeVideo;
 }
 
-const checkVideo = moize((element: HTMLDivElement, includeFilters: FilterProps[], excludeFilters: FilterProps[]) => {
+function checkVideo(element: HTMLDivElement, includeFilters: FilterProps[], excludeFilters: FilterProps[]) {
   const videoName = element.querySelector<HTMLDivElement>('#video-title')?.innerText;
-  const userName = element.querySelector<HTMLAnchorElement>('yt-formatted-string a')?.href.replace(/https:\/\/www.youtube.com\/(user|channel)\//, '');
+  const userName = element.querySelector<HTMLAnchorElement>('#channel-name a')?.href.replace(/https:\/\/www.youtube.com\/(user|channel)\//, '');
   const timeOfUpload = element.querySelector<HTMLSpanElement>('#metadata-line > span:nth-child(2)')?.innerText;
 
-  if (!videoName || !userName || !timeOfUpload) return;
+  if (!videoName || !userName) return;
 
   const today = new Date();
   let dayOfWeek: number | null = null;
 
-  if (/hour|minute/.test(timeOfUpload)) {
-    dayOfWeek = today.getDay();
-  } else {
-    const daysAgo = /(\d+) day/.exec(timeOfUpload)?.[1];
+  if (timeOfUpload) {
+    if (/hour|minute/.test(timeOfUpload)) {
+      dayOfWeek = today.getDay();
+    } else {
+      const daysAgo = /(\d+) day/.exec(timeOfUpload)?.[1];
 
-    if (daysAgo) {
-      const uploadDate = today.setDate(today.getDate() - +daysAgo);
-      dayOfWeek = new Date(uploadDate).getDay();
+      if (daysAgo) {
+        const uploadDate = today.setDate(today.getDate() - +daysAgo);
+        dayOfWeek = new Date(uploadDate).getDay();
+      }
     }
   }
 
@@ -84,7 +86,10 @@ const checkVideo = moize((element: HTMLDivElement, includeFilters: FilterProps[]
   } else {
     element.style.display = 'block';
   }
-});
+}
+
+let lastFilteredVideo = -1;
+let lastRunId = '';
 
 export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: FilterProps[]) {
   const videosElements = document.querySelectorAll<HTMLDivElement>('#items > ytd-grid-video-renderer');
@@ -107,9 +112,20 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
   const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
   const includeFilters = activeFilters.filter(item => item.type === 'include');
 
-  for (let i = 0; i < videosElements.length; i++) {
-    const element = videosElements[i];
+  const runId = JSON.stringify([activeTab?.id, activeFilters]);
 
-    checkVideo(element, includeFilters, excludeFilters);
+  if (runId !== lastRunId) {
+    lastRunId = runId;
+    lastFilteredVideo = -1;
   }
+
+  // console.time(`videos-${videosElements.length}`);
+
+  for (let i = lastFilteredVideo + 1; i < videosElements.length; i++) {
+    checkVideo(videosElements[i], includeFilters, excludeFilters);
+  }
+
+  lastFilteredVideo = videosElements.length - 1;
+
+  // console.timeEnd(`videos-${videosElements.length}`);
 }

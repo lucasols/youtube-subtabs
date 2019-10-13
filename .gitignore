@@ -11,6 +11,5 @@ compilation-stats.json
 stats.json
 resources
 dist
-!dist/manifest.json
 !dist/icon.png
 *.crx
