@@ -1,6 +1,6 @@
 {
   "name": "youtube-subtabs",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "Extension for group youtube tabs",
   "scripts": {
     "hot-load-dev": "node scripts/settings-app-dev-server.js",
@@ -8,7 +8,7 @@
     "build": "npm run validate-typescript && npm run clean && cpy src/assets dist/assets && webpack --config webpack/webpack.config.js",
     "validate-typescript": "tsc -p tsconfig.prod.json",
     "copy-assets": "cpy src/assets dist/assets",
-    "clean": "rimraf dist/* !dist/manifest.json"
+    "clean": "rimraf dist/*.html dist/*.js dist/assets"
   },
   "author": "Lucas Santos",
   "license": "MIT",
