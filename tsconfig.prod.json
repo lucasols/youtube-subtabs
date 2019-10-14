@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig",
   "files": [
-    "src/settingsApp/index.tsx"
+    "src/settingsApp/index.tsx",
+    "src/subTabs/index.tsx",
   ],
   "include": [
     "src/typings/**.ts"

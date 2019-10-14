@@ -188,7 +188,7 @@ const App = () => {
             <Tab
               key={tab.id}
               activeTab={activeTab}
-              parentIsInteractive={tab.id === 'all' || !!filters.find(filter => filter.tab === tab.id) || (tab.includeChildsFilter && !!tab.children)}
+              parentIsInteractive={tab.id === 'all' || filters.some(filter => filter.tabs.includes(tab.id)) || (tab.includeChildsFilter && !!tab.children)}
               data={tab}
               setActiveTab={setActiveTabId}
             />

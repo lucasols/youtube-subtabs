@@ -80,7 +80,7 @@ export function deleteTabs(ids: number[]) {
   tabsState.dispatch('deleteTabs', ids);
 
   ids.forEach(id => {
-    filtersState.dispatch('deleteFilters', filtersState.getState().filters.filter(item => item.tab === id).map(item => item.id));
+    filtersState.dispatch('deleteFilters', filtersState.getState().filters.filter(item => item.tabs.includes(id)).map(item => item.id));
   });
 }
 

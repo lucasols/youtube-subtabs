@@ -5,10 +5,11 @@ import { fontSecondary, fontCondensed } from 'settingsApp/style/theme';
 const HeaderStyle = styled.div`
   margin-top: 26px;
   margin-bottom: 16px;
-  font-size: 20px;
+  font-size: 18px;
   font-family: ${fontCondensed};
   font-weight: 300;
   color: #ddd;
+  text-align: center;
 
   span {
     text-transform: capitalize;

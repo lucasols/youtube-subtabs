@@ -1,25 +1,17 @@
 import styled from '@emotion/styled';
 import React, { useEffect } from 'react';
-import {
-  fillContainer,
-  centerContent,
-  centerContentCollum,
-} from 'settingsApp/style/modifiers';
-import { colorBg, fontPrimary } from 'settingsApp/style/theme';
-import Home from 'settingsApp/containers/Home';
-import EditTab from 'settingsApp/containers/EditTab';
-import { ContentWrapper } from 'settingsApp/components/ContentWrapper';
+import DeleteFilterModal from 'settingsApp/containers/DeleteFilterModal';
 import DeleteTabModal from 'settingsApp/containers/DeleteTabModal';
 import EditFilter from 'settingsApp/containers/EditFilter';
-import DeleteFilterModal from 'settingsApp/containers/DeleteFilterModal';
-import TestSubTabs from 'settingsApp/components/TestSubTabs';
-import tabsState from 'settingsApp/state/tabsState';
-import {
-  ChromeStorage,
-  initializeTabsSubscriber,
-  initializeFiltersSubscriber,
-} from 'utils/chromeStorage';
-import filtersState from 'settingsApp/state/filtersState';
+import EditTab from 'settingsApp/containers/EditTab';
+import Home from 'settingsApp/containers/Home';
+import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
+import tabsState, { TabProps } from 'settingsApp/state/tabsState';
+import { colorBg } from 'settingsApp/style/theme';
+import { ChromeStorage, initializeFiltersSubscriber, initializeTabsSubscriber } from 'utils/chromeStorage';
+import { validate } from 'utils/ioTsValidate';
+import { TabsValidator, FiltersValidator } from 'settingsApp/containers/ExportImportMenu';
+import { download } from 'utils/download';
 
 const AppContainer = styled.div`
   position: absolute;
@@ -34,23 +26,38 @@ const App = () => {
     if (module.hot) return;
 
     chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
-      if (!result.tabs || result.tabs.length === 0) {
-        initializeTabsSubscriber();
+      const globalTab: TabProps = { id: 'all', name: 'All', parent: null, includeChildsFilter: false };
 
-        tabsState.dispatch('addTabs', [
-          {
-            id: 'all',
-            name: 'All',
-            parent: null,
-            includeChildsFilter: false,
-          },
-        ]);
-      } else {
-        tabsState.setKey('tabs', result.tabs);
-        initializeTabsSubscriber();
+      function downloadData() {
+        const data = window.confirm('Invalid data from chrome storage, click OK to download the current data. With this you will be able to fix the file and import it later');
+        if (data) {
+          download(JSON.stringify(result, undefined, 2), 'old-format-data.json', 'text/plain');
+        }
       }
 
-      if (result.filters) filtersState.setKey('filters', result.filters);
+      function onInvalidTabs() {
+        initializeTabsSubscriber();
+        tabsState.setKey('tabs', [globalTab]);
+        downloadData();
+      }
+
+      validate(result?.tabs, TabsValidator, (value) => {
+        const globalTabs = value.filter(tab => tab.id === 'all').length;
+
+        if (globalTabs === 1) {
+          tabsState.setKey('tabs', value);
+          initializeTabsSubscriber();
+        } else if (value.length === 0) {
+          initializeTabsSubscriber();
+          tabsState.setKey('tabs', [globalTab]);
+        } else {
+          onInvalidTabs();
+        }
+      }, onInvalidTabs);
+
+      validate(result?.filters, FiltersValidator, (value) => {
+        filtersState.setKey('filters', value);
+      }, downloadData);
       initializeFiltersSubscriber();
     });
   }, []);

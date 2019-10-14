@@ -7,7 +7,7 @@ import { centerContent } from 'settingsApp/style/modifiers';
 import Button from 'settingsApp/components/Button';
 
 const Container = styled(Modal)`
-  width: 240px;
+  max-width: 240px;
 `;
 
 const DeleteFilterModal = () => {

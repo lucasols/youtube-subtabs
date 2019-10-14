@@ -16,9 +16,8 @@ import TextField from 'settingsApp/components/TextField';
 import { getUniqueId } from 'utils/getUniqueId';
 import DayOfWeekSelector from 'settingsApp/components/DayOfWeekSelector';
 import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
-import { colorError } from 'settingsApp/style/theme';
-
-// IDEA: edit tab parent on edit tab page
+import { colorError, colorBg } from 'settingsApp/style/theme';
+import TabSelector from 'settingsApp/components/TabSelector';
 
 const Row = styled.div`
   ${centerContent};
@@ -29,7 +28,7 @@ const Row = styled.div`
 
 type EditFilterProps = Omit<ExclusiveFilterProps, 'userRegex' | 'videoNameRegex' | 'tab' | 'type'> & {
   name: string;
-  tab: ExclusiveFilterProps['tab'];
+  tabs: ExclusiveFilterProps['tabs'];
   type: ExclusiveFilterProps['type'];
   textFields: {
     userRegex: { value: string, isValid: boolean };
@@ -60,7 +59,7 @@ const EditFilter = () => {
   const [filters] = filtersState.useStore('filters');
 
   const selectedFilter = filtersState.getState().filters.find((item: typeof filters[0]) => item.id === editFilter);
-  const filterTab = tabsState.getState().tabs.find((item) => item.id === (selectedFilter?.tab ?? editTab));
+  const filterTab = tabsState.getState().tabs.find((item) => item.id === (selectedFilter?.tabs ?? editTab));
 
   const show = !!selectedFilter;
 
@@ -80,10 +79,9 @@ const EditFilter = () => {
 
     if (!(newFilterProps.textFields.userRegex.isValid
       && newFilterProps.textFields.videoNameRegex.isValid
-      && newFilterProps.type !== null
-      && newFilterProps.tab !== null
+      && newFilterProps.tabs.length > 0
     )) {
-      console.error('invalid props');
+      console.log('invalid props');
       return false;
     };
 
@@ -92,6 +90,7 @@ const EditFilter = () => {
       userRegex: string | null;
       videoNameRegex: string | null;
       daysOfWeek: number[];
+      tabs: FilterProps['tabs'];
       type: "include" | "exclude";
     };
 
@@ -99,26 +98,28 @@ const EditFilter = () => {
       selectedFilter
       && stringify<DiffCheckObject>({
         name: newFilterProps.name,
+        tabs: newFilterProps.tabs,
         userRegex: newFilterProps.textFields.userRegex.value,
         videoNameRegex: newFilterProps.textFields.videoNameRegex.value,
         daysOfWeek: newFilterProps.daysOfWeek.sort((a, b) => a - b),
         type: newFilterProps.type,
       }) === stringify<DiffCheckObject>({
         name: selectedFilter.name,
+        tabs: selectedFilter.tabs,
         userRegex: selectedFilter.userRegex,
         videoNameRegex: selectedFilter.videoNameRegex,
         daysOfWeek: selectedFilter.daysOfWeek.sort((a, b) => a - b),
         type: selectedFilter.type,
       })
     ) {
-      console.error('new props is equal to saved');
+      console.log('new props is equal to saved');
       return false;
     };
 
     if (
       !newFilterProps.textFields.userRegex.value && !newFilterProps.textFields.videoNameRegex.value
     ) {
-      console.error('at least one filte must be defined');
+      console.log('at least one filte must be defined');
       return false;
     };
 
@@ -126,7 +127,7 @@ const EditFilter = () => {
   }
 
   function onSaveFilter() {
-    if (!newFilterProps || !checkIfIsValid() || !newFilterProps.tab || !newFilterProps.type) {
+    if (!newFilterProps || !checkIfIsValid() || !newFilterProps.type) {
       return
     };
 
@@ -134,7 +135,7 @@ const EditFilter = () => {
       id: selectedFilter?.id ?? getUniqueId(filtersState.getState().filters),
       daysOfWeek: newFilterProps.daysOfWeek,
       name: newFilterProps.name,
-      tab: newFilterProps.tab,
+      tabs: newFilterProps.tabs,
       type: newFilterProps.type,
       userRegex: newFilterProps.textFields.userRegex.value.replace(/https:\/\/www.youtube.com\/(user|channel)\//, ''),
       videoNameRegex: newFilterProps.textFields.videoNameRegex.value,
@@ -177,8 +178,16 @@ const EditFilter = () => {
 
     setNewFilterProps({
       ...newFilterProps,
-      daysOfWeek: [0, 1, 2, 3, 4, 5, 6].filter(day => !newFilterProps.daysOfWeek.includes(day)),
       type,
+    });
+  }
+
+  function onTabsChange(tabs: FilterProps['tabs']) {
+    if (!newFilterProps) return;
+
+    setNewFilterProps({
+      ...newFilterProps,
+      tabs,
     });
   }
 
@@ -193,11 +202,11 @@ const EditFilter = () => {
           videoNameRegex: { value: selectedFilter.videoNameRegex, isValid: true }
         },
         daysOfWeek: selectedFilter.daysOfWeek,
-        tab: selectedFilter.tab,
+        tabs: selectedFilter.tabs,
         type: selectedFilter.type,
       });
     } else {
-      console.error('error on set filter props');
+      console.log('error on set filter props');
     }
   }, [selectedFilter?.id]);
 
@@ -215,7 +224,7 @@ const EditFilter = () => {
       <ContentWrapper>
         <HeaderStyle>
           Filter {'· '}
-          <span>{filterTab?.name}</span>{' · '}
+          {/* <span>{filterTab?.name}</span>{' · '} */}
           <AutosizeInput
             type="text"
             inputClassName={tabNameInputClassname}
@@ -228,6 +237,11 @@ const EditFilter = () => {
         <FilterTypeSelector
           selected={newFilterProps?.type ?? null}
           onChange={onTypeChange}
+        />
+
+        <TabSelector
+          selectedTabsId={newFilterProps?.tabs}
+          onChange={onTabsChange}
         />
 
         <TextField
@@ -266,6 +280,8 @@ const EditFilter = () => {
             paddingBottom: 24,
             position: 'sticky',
             bottom: 0,
+            zIndex: 20,
+            background: colorBg,
           }}
         >
           <Button label="Delete" small onClick={() => {

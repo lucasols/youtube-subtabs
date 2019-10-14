@@ -5,7 +5,7 @@ import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'settingsApp/state/appState';
 
 export type ExclusiveFilterProps = {
-  tab: TabProps['id'];
+  tabs: TabProps['id'][];
   type: 'include' | 'exclude';
   userRegex: string;
   videoNameRegex: string;
@@ -28,16 +28,16 @@ const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
     filters: module.hot ? [
       {
-        id: 1, name: 'test', daysOfWeek: [], tab: 1, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 1, name: 'test', daysOfWeek: [], tabs: [1], type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 2, name: 'test2', daysOfWeek: [], tab: 3, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 2, name: 'test2', daysOfWeek: [], tabs: [3], type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 3, name: 'test3', daysOfWeek: [], tab: 3, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 3, name: 'test3', daysOfWeek: [], tabs: [3], type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
       {
-        id: 4, name: 'test4', daysOfWeek: [], tab: 4, type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 4, name: 'test4', daysOfWeek: [], tabs: [4], type: 'include', userRegex: 'a', videoNameRegex: 'a',
       },
     ] : [],
   },
@@ -92,14 +92,14 @@ export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
   filtersState.dispatch('addFilters', [{
     id,
     name: '',
-    tab,
+    tabs: [tab],
     type,
     userRegex: '',
     videoNameRegex: '',
-    daysOfWeek: type === 'include' ? [0, 1, 2, 3, 4, 5, 6] : [],
+    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
   }]);
 
-  // appState.setKey('editFilter', id);
+  appState.setKey('editFilter', id);
 }
 
 export default filtersState;

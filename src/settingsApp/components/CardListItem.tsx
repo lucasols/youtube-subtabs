@@ -127,7 +127,7 @@ const CardListItem = ({
     {handler}
     {collapseIcon}
     <ListLabel onClick={() => onClick(item)}>
-      <span>{item.tab
+      <span>{item.tabs
         ? item.name || (item.userRegex || item.videoNameRegex ? `${item.userRegex ? `user: "${item.userRegex}"` : ''} ${item.videoNameRegex ? `video: "${item.videoNameRegex}"` : ''}` : 'Invalid Filter')
         : `${item.name} ${item.id === 'all' ? '🌐' : ''}`}</span>{' '}
       {item.isInvalid && <Icon name="warn" size={16} css={{ marginLeft: 4 }} />}
@@ -140,7 +140,7 @@ const CardListItem = ({
     {item.id !== 'all' && (
       <IconButton
         onClick={() =>
-          (item.tab
+          (item.tabs
             ? appState.setKey('filterToDelete', item.id as number)
             : appState.setKey('tabToDelete', item.id as number))}
       >

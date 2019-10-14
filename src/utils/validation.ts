@@ -13,7 +13,7 @@ export function someFilterIsInvalid(filters: FilterProps[]) {
 }
 
 export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs: TabProps[]) {
-  const tabFilters = filters.filter(filter => filter.tab === tab.id);
+  const tabFilters = filters.filter(filter => filter.tabs.includes(tab.id));
 
   // if the tab has filters all filters must be valid
   if (tabFilters.length > 0 && someFilterIsInvalid(tabFilters)) {

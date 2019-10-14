@@ -74,7 +74,7 @@ const Container = styled.div`
 
 const labelOnTop = css`
   font-size: 14px;
-  top: -7px;
+  top: -8px;
   left: 10px;
 `;
 

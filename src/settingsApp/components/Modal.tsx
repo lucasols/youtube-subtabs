@@ -1,7 +1,12 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from '@emotion/styled';
-import { show as showStyleModifier, centerContent, hide, fillContainer } from 'settingsApp/style/modifiers';
+import {
+  show as showStyleModifier,
+  centerContent,
+  hide,
+  fillContainer,
+} from 'settingsApp/style/modifiers';
 import css from '@emotion/css';
 import { colorBg, textGradient, colorSecondary } from 'settingsApp/style/theme';
 import { rgba } from '@lucasols/utils';
@@ -11,6 +16,7 @@ import { rectSize } from 'settingsApp/style/helpers';
 type Props = {
   show: boolean;
   className?: string;
+  maxWidth?: number;
   title?: string;
   onClose?: () => void;
 };
@@ -30,13 +36,12 @@ const ModalWrapper = styled.div`
 
 const ModalCard = styled.div`
   position: absolute;
-  width: 100%;
+  width: calc(100% - 16px * 2);
   top: 160px;
   max-width: 540px;
   max-height: calc(100% - 32px * 2);
   /* margin: 32px 0; */
   overflow-y: auto;
-  padding: 16px;
   font-size: 14px;
   border-radius: 12px;
   background: ${colorSecondary};
@@ -50,14 +55,14 @@ const Bg = styled.div`
 
 const ModalTitle = styled.h1`
   width: 100%;
+  padding: 16px 16px 8px;
   padding-right: 40px;
   font-size: 16px;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   font-weight: 600;
 `;
 
 const closeButtonStyle = css`
-  position: absolute;
   ${rectSize(40)};
   padding: 0;
   margin: 0;
@@ -77,11 +82,24 @@ const closeButtonStyle = css`
   }
 `;
 
+const TopBar = styled.div`
+  ${centerContent};
+  position: sticky;
+  top: 0;
+  background: ${colorSecondary};
+`;
+
+const ContentWrapper = styled.div`
+  padding: 16px;
+  padding-top: 6px;
+`;
+
 const Modal: FunctionComponent<Props> = ({
   children,
   show,
   className,
   title,
+  maxWidth,
   onClose,
 }) => {
   const root = useRef<HTMLElement>();
@@ -105,12 +123,21 @@ const Modal: FunctionComponent<Props> = ({
   return ReactDOM.createPortal(
     <ModalWrapper css={show && showStyleModifier}>
       <Bg onClick={onClose} />
-      <ModalCard className={className}>
-        {title && <ModalTitle>{title}</ModalTitle>}
-        {onClose && (
-          <Button icon="close" css={closeButtonStyle} iconSize={32} onClick={onClose} />
-        )}
-        {children}
+      <ModalCard className={className} css={{ maxWidth }}>
+        <TopBar>
+          {title && <ModalTitle>{title}</ModalTitle>}
+          {onClose && (
+            <Button
+              icon="close"
+              css={closeButtonStyle}
+              iconSize={32}
+              onClick={onClose}
+            />
+          )}
+        </TopBar>
+        <ContentWrapper>
+          {children}
+        </ContentWrapper>
       </ModalCard>
     </ModalWrapper>,
     getRoot(),

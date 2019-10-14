@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { rgba } from '@lucasols/utils';
-import { fold } from 'fp-ts/lib/Either';
+import { fold, parseJSON } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as t from 'io-ts';
 import { reporter } from 'io-ts-reporters';
@@ -13,6 +13,8 @@ import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 import { circle } from 'settingsApp/style/helpers';
 import { centerContent, centerContentCollum, hide, show } from 'settingsApp/style/modifiers';
 import { colorBg, colorError, colorSecondary } from 'settingsApp/style/theme';
+import { validate } from 'utils/ioTsValidate';
+import { download } from '../../utils/download';
 
 const MenuButton = styled.button`
   ${centerContent};
@@ -60,7 +62,7 @@ const Option = styled.button`
 `;
 
 const ImportDataModal = styled(Modal)`
-  width: 240px;
+  max-width: 240px;
   font-size: 12px;
 `;
 
@@ -71,39 +73,31 @@ const ImportDataInfo = styled.div`
   white-space: pre-line;
 `;
 
-function download(
-  content: BlobPart,
-  fileName: string,
-  contentType: BlobPropertyBag['type'],
-) {
-  const a = document.createElement('a');
-  const file = new Blob([content], { type: contentType });
-  a.href = URL.createObjectURL(file);
-  a.download = fileName;
-  a.click();
-}
-
 type ImportData = {
   tabs: Omit<TabProps, 'children' | 'isInvalid'>[];
   filters: Omit<FilterProps, 'children' | 'isInvalid'>[];
 }
 
+export const TabsValidator = t.array(t.type({
+  id: t.union([t.number, t.literal('all')]),
+  name: t.string,
+  includeChildsFilter: t.boolean,
+  parent: t.union([t.null, t.union([t.number, t.literal('all')])]),
+}));
+
+export const FiltersValidator = t.array(t.type({
+  id: t.number,
+  name: t.string,
+  type: t.union([t.literal('include'), t.literal('exclude')]),
+  userRegex: t.string,
+  tabs: t.array(t.union([t.number, t.literal('all')])),
+  videoNameRegex: t.string,
+  daysOfWeek: t.array(t.number),
+}));
+
 const ImportDataValidator: t.Type<ImportData, ImportData> = t.type({
-  tabs: t.array(t.type({
-    id: t.union([t.number, t.literal('all')]),
-    name: t.string,
-    includeChildsFilter: t.boolean,
-    parent: t.union([t.null, t.union([t.number, t.literal('all')])]),
-  })),
-  filters: t.array(t.type({
-    id: t.number,
-    name: t.string,
-    type: t.union([t.literal('include'), t.literal('exclude')]),
-    userRegex: t.string,
-    tab: t.union([t.number, t.literal('all')]),
-    videoNameRegex: t.string,
-    daysOfWeek: t.array(t.number),
-  })),
+  tabs: TabsValidator,
+  filters: FiltersValidator,
 });
 
 const ExportImportMenu = () => {
@@ -144,26 +138,46 @@ const ExportImportMenu = () => {
   function onFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
-    if (!file) return;
+    if (!file) {
+      setImportError('Select a file');
+      setImportData(undefined);
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (readerEvent: ProgressEvent<FileReader>) => {
       const contents = readerEvent.target?.result;
 
       if (typeof contents === 'string') {
-        const data = JSON.parse(contents);
+        let data = '';
 
-        const result = ImportDataValidator.decode(data);
+        try {
+          data = JSON.parse(contents);
+        } catch (error) {
+          console.error(error);
+          setImportError('invalid JSON');
+          setImportData(undefined);
+          return;
+        }
 
-        pipe(
-          result,
-          fold(() => {
-            setImportError(reporter<ImportData>(ImportDataValidator.decode(data)).join('\n'));
+        validate(
+          data,
+          ImportDataValidator,
+          (value) => {
+            const globalTabs = value.tabs.filter(tab => tab.id === 'all').length;
+
+            if (globalTabs === 1) {
+              setImportData(value);
+              setImportError('');
+            } else {
+              setImportError(`${globalTabs} global tabs in file, expected 1 global tab`);
+              setImportData(undefined);
+            }
+          },
+          (err, result) => {
+            setImportError(reporter<ImportData>(result).join('\n'));
             setImportData(undefined);
-          }, (value) => {
-            setImportData(value);
-            setImportError('');
-          })
+          }
         );
       }
     };

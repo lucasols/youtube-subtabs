@@ -16,12 +16,20 @@ export function checkIfExcludeVideo(userName: string, videoName: string, include
         continue;
       }
 
-      if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
-        includeVideo = true;
-      }
+      if (filter.userRegex !== '' && filter.videoNameRegex !== '') {
+        if (new RegExp(filter.userRegex, 'i').test(userName)) {
+          if (new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
+            includeVideo = true;
+          }
+        }
+      } else {
+        if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
+          includeVideo = true;
+        }
 
-      if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-        includeVideo = true;
+        if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
+          includeVideo = true;
+        }
       }
 
       if (includeVideo) {
@@ -43,12 +51,20 @@ export function checkIfExcludeVideo(userName: string, videoName: string, include
 
     if (filter.userRegex === '' && filter.videoNameRegex === '') continue;
 
-    if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
-      excludeVideo = true;
-    }
+    if (filter.userRegex !== '' && filter.videoNameRegex !== '') {
+      if (new RegExp(filter.userRegex, 'i').test(userName)) {
+        if (new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
+          excludeVideo = true;
+        }
+      }
+    } else {
+      if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
+        excludeVideo = true;
+      }
 
-    if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-      excludeVideo = true;
+      if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
+        excludeVideo = true;
+      }
     }
 
     if (excludeVideo) {
@@ -102,19 +118,28 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
   const videosElements = document.querySelectorAll<HTMLDivElement>('#items > ytd-grid-video-renderer');
 
   const activeTab = tabs.find(item => item.id === active);
-  let activeFilters = filters.filter(item => item.tab === active);
+  let activeFilters = filters.filter(item => item.tabs.includes(active));
 
   if (active !== 'all') {
     activeFilters = [
-      ...filters.filter(item => item.tab === 'all'),
+      ...filters.filter(item => item.tabs.includes('all')),
       ...activeFilters,
       ...(activeTab?.includeChildsFilter
         ? tabs.filter(item => item.parent === activeTab.id).reduce((prev, curr) =>
-          [...prev, ...filters.filter(item => item.tab === curr.id)], [])
+          [...prev, ...filters.filter(item => item.tabs.includes(curr.id))], [])
         : []
       ),
     ];
   }
+
+  activeFilters = activeFilters.filter((filter, index, self) =>
+    index === self.findIndex((t) => (
+      t.id === filter.id
+    ))
+  );
+
+  console.log(activeFilters);
+
 
   const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
   const includeFilters = activeFilters.filter(item => item.type === 'include');

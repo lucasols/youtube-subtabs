@@ -112,7 +112,7 @@ const EditTab = () => {
   const selectedTab = tabs.find((item: typeof tabs[0]) => item.id === editTab);
   const parentTab = tabs.find((item: typeof tabs[0]) => item.id === selectedTab?.parent);
 
-  const tabFilters = allFilters.filter(item => item.tab === selectedTab?.id).map(item => ({
+  const tabFilters = allFilters.filter(item => selectedTab && item.tabs.includes(selectedTab.id)).map(item => ({
     ...item,
     isInvalid: filterIsInvalid(item) ? 'Filter is invalid' : undefined,
   }));
@@ -208,8 +208,6 @@ const EditTab = () => {
           css={{
             marginTop: 40,
             paddingBottom: 24,
-            position: 'sticky',
-            bottom: 0,
           }}
         >
           <Button label="Delete" small css={{ marginLeft: 'auto' }} onClick={() => {
