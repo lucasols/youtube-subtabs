@@ -2,7 +2,7 @@ import { createStore } from 'hookstated';
 import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
 import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'settingsApp/state/appState';
-import filtersState from 'settingsApp/state/filtersState';
+import filtersState, { setFilterProp } from 'settingsApp/state/filtersState';
 
 export type ExclusiveTabProps = {
   includeChildsFilter: boolean;
@@ -79,8 +79,22 @@ export function getTabById(id: TabProps['id'], tabs: TabProps[] = tabsState.getS
 export function deleteTabs(ids: number[]) {
   tabsState.dispatch('deleteTabs', ids);
 
+  tabsState.getState().tabs.forEach(tab => {
+    if (ids.includes(tab.parent as number)) {
+      deleteTabs([tab.id as number]);
+    }
+  });
+
+  filtersState.getState().filters.forEach(filter => {
+    ids.forEach(tabId => {
+      if (filter.tabs.includes(tabId)) {
+        setFilterProp(filter.id, 'tabs', filter.tabs.filter(filterTabId => tabId !== filterTabId));
+      }
+    });
+  });
+
   ids.forEach(id => {
-    filtersState.dispatch('deleteFilters', filtersState.getState().filters.filter(item => item.tabs.includes(id)).map(item => item.id));
+    filtersState.dispatch('deleteFilters', filtersState.getState().filters.filter(item => item.tabs.length === 1 && item.tabs.includes(id)).map(item => item.id));
   });
 }
 

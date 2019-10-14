@@ -35,8 +35,6 @@ const Home = () => {
   })));
 
   function updateItems(newItems: TabProps[]) {
-    console.log(newItems);
-
     setItems(nestedToFlat(newItems));
   }
 
