@@ -133,11 +133,10 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
   }
 
   activeFilters = activeFilters.filter((filter, index, self) =>
-    index === self.findIndex((t) => (
+    (filter.userRegex !== '' || filter.videoNameRegex !== '') && index === self.findIndex((t) => (
       t.id === filter.id
     ))
   );
-
 
   const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
   const includeFilters = activeFilters.filter(item => item.type === 'include');
