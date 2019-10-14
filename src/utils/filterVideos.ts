@@ -138,8 +138,6 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
     ))
   );
 
-  console.log(activeFilters);
-
 
   const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
   const includeFilters = activeFilters.filter(item => item.type === 'include');
@@ -149,6 +147,11 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
   if (runId !== lastRunId) {
     lastRunId = runId;
     lastFilteredVideo = -1;
+
+    if (videosElements.length > 393) {
+      window.location.reload(false);
+      return;
+    }
   }
 
   // console.time(`videos-${videosElements.length}`);

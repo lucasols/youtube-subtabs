@@ -4,10 +4,11 @@
   "description": "Extension for group youtube tabs",
   "scripts": {
     "hot-load-dev": "node scripts/settings-app-dev-server.js",
-    "dev": "cpy src/manifest.dev.json dist --rename manifest.json && webpack --config webpack/webpack.dev.js",
-    "build": "npm run validate-typescript && npm run clean && cpy src/manifest.json dist && webpack --config webpack/webpack.config.js",
+    "dev": "cpy src/assets dev/assets && webpack --config webpack/webpack.dev.js",
+    "build": "npm run validate-typescript && npm run clean && cpy src/assets dist/assets && webpack --config webpack/webpack.config.js",
     "validate-typescript": "tsc -p tsconfig.prod.json",
-    "clean": "rimraf dist/*.js dist/*.html dist/*.json"
+    "copy-assets": "cpy src/assets dist/assets",
+    "clean": "rimraf dist/* !dist/manifest.json"
   },
   "author": "Lucas Santos",
   "license": "MIT",

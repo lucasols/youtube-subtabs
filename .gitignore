@@ -12,4 +12,6 @@ stats.json
 resources
 dist/*
 !dist/static
+!dist/manifest.json
 *.xml
+dev

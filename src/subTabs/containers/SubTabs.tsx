@@ -70,10 +70,16 @@ const scrollButtonVisible = css`
   ${show};
 `;
 
-function getActiveTabFromUrl() {
-  const activeTab = /#subTab=(.+)/.exec(window.location.hash)?.[1];
+function getActiveTabFromUrl(tabs: TabProps[]) {
+  const { 1: name, 2: id }: (string|undefined)[] = (/#subTab=(.+)-(\d+|all)/.exec(window.location.hash) || []);
 
-  return activeTab && !Number.isNaN(+activeTab) ? +activeTab : 'all';
+  const activeTab = tabs.find(tab => tab.name === name?.replace(/ /g, ' '));
+
+  if (activeTab) {
+    return activeTab.id;
+  }
+
+  return id && !Number.isNaN(+id) ? +id : 'all';
 }
 
 const debouncedFilterVideos = debounce(filterVideos, 500);
@@ -86,7 +92,7 @@ const App = () => {
   const [rootRect, setRootRect] = useState<DOMRect>();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeTabId, setActiveTabId] = useState<number | 'all'>(getActiveTabFromUrl());
+  const [activeTabId, setActiveTabId] = useState<number | 'all'>(getActiveTabFromUrl(tabs));
   const containerWidth = rootRect?.width || 0;
 
   const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs.find(tab => tab.id === 'all');
@@ -95,7 +101,7 @@ const App = () => {
 
   useEffect(() => {
     if (activeTab?.id) {
-      window.history.replaceState('', '', `#subTab=${activeTab.id}`);
+      window.history.replaceState('', '', `#subTab=${activeTab.name.replace(/ /g, '_')}${activeTab.id !== 'all' ? `-${activeTab.id}` : ''}`);
     }
   }, [activeTab?.id]);
 

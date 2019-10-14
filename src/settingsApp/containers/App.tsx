@@ -12,6 +12,7 @@ import { ChromeStorage, initializeFiltersSubscriber, initializeTabsSubscriber } 
 import { validate } from 'utils/ioTsValidate';
 import { TabsValidator, FiltersValidator } from 'settingsApp/containers/ExportImportMenu';
 import { download } from 'utils/download';
+import * as t from 'io-ts';
 
 const AppContainer = styled.div`
   position: absolute;
@@ -20,6 +21,11 @@ const AppContainer = styled.div`
   background: ${colorBg};
   overflow: hidden;
 `;
+
+const ChromeStorageValidator: t.Type<ChromeStorage> = t.type({
+  tabs: t.union([TabsValidator, t.undefined]),
+  filters: t.union([FiltersValidator, t.undefined]),
+});
 
 const App = () => {
   useEffect(() => {
@@ -41,23 +47,31 @@ const App = () => {
         downloadData();
       }
 
-      validate(result?.tabs, TabsValidator, (value) => {
-        const globalTabs = value.filter(tab => tab.id === 'all').length;
+      validate(result, ChromeStorageValidator, (chromeStorage) => {
+        if (chromeStorage.tabs) {
+          const globalTabs = chromeStorage.tabs.filter(tab => tab.id === 'all').length;
 
-        if (globalTabs === 1) {
-          tabsState.setKey('tabs', value);
-          initializeTabsSubscriber();
-        } else if (value.length === 0) {
+          if (globalTabs === 1) {
+            tabsState.setKey('tabs', chromeStorage.tabs);
+            initializeTabsSubscriber();
+          } else if (chromeStorage.tabs.length === 0) {
+            initializeTabsSubscriber();
+            tabsState.setKey('tabs', [globalTab]);
+          } else {
+            onInvalidTabs();
+          }
+        } else {
           initializeTabsSubscriber();
           tabsState.setKey('tabs', [globalTab]);
-        } else {
-          onInvalidTabs();
         }
-      }, onInvalidTabs);
 
-      validate(result?.filters, FiltersValidator, (value) => {
-        filtersState.setKey('filters', value);
-      }, downloadData);
+        if (chromeStorage.filters) {
+          filtersState.setKey('filters', chromeStorage.filters);
+        }
+      }, () => {
+        onInvalidTabs();
+      });
+
       initializeFiltersSubscriber();
     });
   }, []);

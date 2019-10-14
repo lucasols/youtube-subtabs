@@ -96,7 +96,7 @@ export function setTabProp<T extends keyof TabProps>(tabId: TabProps['id'], prop
 }
 
 export function changeTabName(tabId: number | 'all', newName: string) {
-  if (newName) {
+  if (newName && !/_/.test(newName)) {
     setTabProp(tabId, 'name', newName);
   }
 }
