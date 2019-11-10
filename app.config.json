@@ -1,0 +1,20 @@
+{
+  "html": {
+    "title": "Youtube Subtabs Settings",
+    "language": "en",
+    "fonts": [
+      {
+        "family": "Open Sans",
+        "weights": ["300", "300i", "400", "400i", "600", "600i"]
+      },
+      {
+        "family": "Roboto Condensed",
+        "weights": ["300", "300i", "400", "400i", "600", "600i"]
+      },
+      {
+        "family": "Roboto",
+        "weights": ["300", "300i", "400", "400i", "600", "600i"]
+      }
+    ]
+  }
+}

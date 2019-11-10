@@ -7,6 +7,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const merge = require('webpack-merge');
 const Crx3 = require("crx3-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
@@ -71,6 +72,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   },
 
   plugins: [
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       __DEV__: false,
       __PROD__: true,
@@ -78,21 +80,9 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/settingsApp/index.html',
+      template: 'src/settingsApp/index.ejs',
       chunks: ['popup'],
       inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
     }),
     new Crx3({
       keyFile: '../key.pem',

@@ -47,7 +47,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
       __PROD__: false,
     }),
     new HtmlWebpackPlugin({
-      template: 'src/settingsApp/index.html',
+      template: 'src/settingsApp/index.ejs',
       chunks: ['popup'],
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

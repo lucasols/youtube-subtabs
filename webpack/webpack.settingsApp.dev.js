@@ -49,7 +49,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     new FriendlyErrorsWebpackPlugin(),
     new ReactRefreshPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/settingsApp/index.html',
+      template: 'src/settingsApp/index.ejs',
     }),
   ],
 });

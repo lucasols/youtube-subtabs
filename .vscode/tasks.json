@@ -31,7 +31,7 @@
     },
     {
       "type": "npm",
-      "script": "validate-typescript",
+      "script": "lint:ts",
       "problemMatcher": [
         "$tsc"
       ],
