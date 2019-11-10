@@ -89,17 +89,17 @@ function checkVideo(element: HTMLDivElement, includeFilters: FilterProps[], excl
   const today = new Date();
   let dayOfWeek: number | null = null;
 
-  if (timeOfUpload) {
-    if (/hour|minute/.test(timeOfUpload)) {
-      dayOfWeek = today.getDay();
-    } else {
-      const daysAgo = /(\d+) day/.exec(timeOfUpload)?.[1];
+  if (timeOfUpload && /hour|minute/.test(timeOfUpload)) {
+    const hours = /(\d+) hour/.exec(timeOfUpload)?.[1];
+    const minutes = /(\d+) minute/.exec(timeOfUpload)?.[1];
 
-      if (daysAgo) {
-        const uploadDate = today.setDate(today.getDate() - +daysAgo);
-        dayOfWeek = new Date(uploadDate).getDay();
-      }
+    if (hours) {
+      today.setHours(today.getHours() - +hours);
+    } else if (minutes) {
+      today.setMinutes(today.getMinutes() - +minutes);
     }
+
+    dayOfWeek = today.getDay();
   }
 
   const excludeVideo = checkIfExcludeVideo(userName, videoName, includeFilters, excludeFilters, dayOfWeek);
