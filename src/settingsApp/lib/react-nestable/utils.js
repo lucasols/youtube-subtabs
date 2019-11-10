@@ -1,24 +1,11 @@
-export const objectType = (obj) => {
-  return Object.prototype.toString.call(obj).slice(8, -1);
-};
-export const isDefined = (param) => {
-  return typeof param != "undefined";
-};
-export const isUndefined = (param) => {
-  return typeof param == "undefined";
-};
-export const isFunction = (param) => {
-  return typeof param == "function";
-};
-export const isNumber = (param) => {
-  return typeof param == "number" && !isNaN(param);
-};
-export const isString = (str) => {
-  return objectType(str) === "String";
-};
-export const isArray = (arr) => {
-  return objectType(arr) === "Array";
-};
+/* eslint-disable no-param-reassign */
+export const objectType = (obj) => Object.prototype.toString.call(obj).slice(8, -1);
+export const isDefined = (param) => typeof param !== "undefined";
+export const isUndefined = (param) => typeof param === "undefined";
+export const isFunction = (param) => typeof param === "function";
+export const isNumber = (param) => typeof param === "number" && !isNaN(param);
+export const isString = (str) => objectType(str) === "String";
+export const isArray = (arr) => objectType(arr) === "Array";
 
 export const closest = (target, selector) => {
   // closest(e.target, '.field')
@@ -31,22 +18,22 @@ export const closest = (target, selector) => {
 
 export const getOffsetRect = (elem) => {
   // (1)
-  var box = elem.getBoundingClientRect();
+  const box = elem.getBoundingClientRect();
 
-  var body = document.body;
-  var docElem = document.documentElement;
+  const { body } = document;
+  const docElem = document.documentElement;
 
   // (2)
-  var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
-  var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+  const scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+  const scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
 
   // (3)
-  var clientTop = docElem.clientTop || body.clientTop || 0;
-  var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+  const clientTop = docElem.clientTop || body.clientTop || 0;
+  const clientLeft = docElem.clientLeft || body.clientLeft || 0;
 
   // (4)
-  var top = box.top + scrollTop - clientTop;
-  var left = box.left + scrollLeft - clientLeft;
+  const top = box.top + scrollTop - clientTop;
+  const left = box.left + scrollLeft - clientLeft;
 
   return { top: Math.round(top), left: Math.round(left) };
 };
@@ -63,26 +50,20 @@ export const getTotalScroll = (elem) => {
   return { top, left };
 };
 
-export const getTransformProps = (x, y) => {
-  return {
-    transform: 'translate(' + x + 'px, ' + y + 'px)'
-  };
-};
+export const getTransformProps = (x, y) => ({
+  transform: `translate(${x}px, ${y}px)`,
+});
 
-export const listWithChildren = (list, childrenProp) => {
-  return list.map(item => {
-    return {
-      ...item,
-      [childrenProp]: item[childrenProp]
-        ? listWithChildren(item[childrenProp], childrenProp)
-        : []
-    };
-  });
-};
+export const listWithChildren = (list, childrenProp) => list.map(item => ({
+  ...item,
+  [childrenProp]: item[childrenProp]
+    ? listWithChildren(item[childrenProp], childrenProp)
+    : [],
+}));
 
 export const getAllNonEmptyNodesIds = (items, childrenProp) => {
   let childrenIds = [];
-  let ids = items
+  const ids = items
     .filter(item => item[childrenProp].length)
     .map(item => {
       childrenIds = childrenIds.concat(getAllNonEmptyNodesIds(item[childrenProp], childrenProp));

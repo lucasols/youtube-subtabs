@@ -17,7 +17,7 @@ type Icon = {
   size?: number;
 };
 
-const Icon = ({ name, className, color = colorPrimary, size = 24}: Icon) => {
+const Icon = ({ name, className, color = colorPrimary, size = 24 }: Icon) => {
   if (__DEV__ && !iconsSet[name]) throw new Error(`Icon ${name} do not exists`);
 
   const { viewBox, paths }: JsonIcon = iconsSet[name];

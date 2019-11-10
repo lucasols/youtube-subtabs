@@ -1,7 +1,12 @@
 import css from '@emotion/css';
 import { rgba } from '@lucasols/utils';
-import CardListItem, { CollapseIcon, Handler } from 'settingsApp/components/CardListItem';
-import Nestable, { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
+import CardListItem, {
+  CollapseIcon,
+  Handler,
+} from 'settingsApp/components/CardListItem';
+import Nestable, {
+  NestableItemBaseProps,
+} from 'settingsApp/lib/react-nestable';
 import React, { useRef, useEffect } from 'react';
 import { colorPrimary, colorSecondary } from 'settingsApp/style/theme';
 import { anyObj } from '@lucasols/utils/dist/typings/utils';
@@ -95,7 +100,14 @@ const styleWrapper = css`
   }
 `;
 
-function CardList<T extends anyObj = {}>({ items, setItems, confirmChange, maxDepth, onClick, collapse }: Props<T>) {
+function CardList<T extends anyObj = {}>({
+  items,
+  setItems,
+  confirmChange,
+  maxDepth,
+  onClick,
+  collapse,
+}: Props<T>) {
   const nestableRef = useRef<Nestable<T>>(null);
 
   function onChange(newItems: NestableItemBaseProps<T>[]) {

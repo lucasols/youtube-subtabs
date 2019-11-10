@@ -12,9 +12,9 @@ const Container = styled(Modal)`
 
 const DeleteTabModal = () => {
   const [itemToDeleteId, setItemToDeleteId] = appState.useStore('tabToDelete');
-  const itemToDelete = tabsState.getState().tabs.find(
-    (item) => item.id === itemToDeleteId,
-  );
+  const itemToDelete = tabsState
+    .getState()
+    .tabs.find(item => item.id === itemToDeleteId);
 
   function onCloseModal() {
     setItemToDeleteId(null);
@@ -36,7 +36,12 @@ const DeleteTabModal = () => {
       All childs will be deleted too!
       <div css={[centerContent, { width: '100%', marginTop: 16 }]}>
         <Button label="Cancel" small onClick={onCloseModal} />
-        <Button label="Delete" small css={{ marginLeft: 'auto' }} onClick={onConfirm} />
+        <Button
+          label="Delete"
+          small
+          css={{ marginLeft: 'auto' }}
+          onClick={onConfirm}
+        />
       </div>
     </Container>
   );

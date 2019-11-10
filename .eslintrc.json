@@ -173,7 +173,12 @@
     "@typescript-eslint/no-use-before-define": 0,
     "no-useless-constructor": 0,
     "@typescript-eslint/no-useless-constructor": "error",
-    "@typescript-eslint/no-non-null-assertion": 0
+    "@typescript-eslint/no-non-null-assertion": 0,
+
+    // delete after update
+    "no-restricted-globals": 0,
+    "no-unused-expressions": 0,
+    "no-undef": 0
   },
   "extends": ["airbnb", "plugin:@typescript-eslint/recommended"]
 }
