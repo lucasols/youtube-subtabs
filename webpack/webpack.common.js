@@ -2,24 +2,24 @@ const path = require('path');
 const appConfig = require('../app.config.json');
 
 const fileLoaderOptions = {
-  outputPath: (url, resourcePath) => {
-    // if (/fonts\\[^\n\r\\]+?$/.test(resourcePath)) {
-    //   return `fonts/${url}`;
-    // }
+  outputPath: (url, resourcePath) =>
+  // if (/fonts\\[^\n\r\\]+?$/.test(resourcePath)) {
+  //   return `fonts/${url}`;
+  // }
 
-    return `images/${url}`;
-  },
+    `images/${url}`,
   name: '[name]-[contenthash:8].[ext]',
 };
 
-const googleFonts = appConfig.html.fonts ?
-  appConfig.html.fonts.map(
-    font =>
-      `${font.family.replace(' ', '+')}${
-        font.weights ? `:${font.weights.join(',')}` : ''
-      }`,
-  )
-  .join('|')
+const googleFonts = appConfig.html.fonts
+  ? appConfig.html.fonts
+    .map(
+      font =>
+        `${font.family.replace(' ', '+')}${
+          font.weights ? `:${font.weights.join(',')}` : ''
+        }`,
+    )
+    .join('|')
   : false;
 
 module.exports = /** @type { import('webpack').Configuration } */ {

@@ -7,29 +7,48 @@ if (__PROD__) {
   console.log(`${name} v${version}`);
 }
 
-if (__DEV__) {
-  const title = document.querySelector('#title');
-  if (title) title.innerHTML = `${title.innerHTML}-122`;
-}
-
 function injectSubTab() {
   const parent = document.querySelector('ytd-shelf-renderer > #dismissable');
-  const subTabsRoot = document.createElement('div');
-  subTabsRoot.id = 'youtube-subtabs';
-  subTabsRoot.style.height = '28px';
-  subTabsRoot.style.marginTop = '24px';
 
   if (parent) {
+    const subTabsRoot =
+      document.getElementById('youtube-subtabs') ??
+      document.createElement('div');
+
     if (!document.getElementById('youtube-subtabs')) {
+      subTabsRoot.id = 'youtube-subtabs';
+      subTabsRoot.style.height = '28px';
+      subTabsRoot.style.marginTop = '24px';
       parent.insertBefore(subTabsRoot, parent.firstChild);
     }
-  } else {
-    alert('parent element not exists');
-    return;
-  }
 
-  ReactDOM.render(<Root />, subTabsRoot);
+    ReactDOM.render(<Root />, subTabsRoot);
+  }
 }
 
-// document.addEventListener('DOMContentLoaded', injectSubTab);
 injectSubTab();
+
+const observer = new MutationObserver(mutations => {
+  mutations.forEach(mutation => {
+    if (
+      mutation.attributeName === 'aria-selected' &&
+      (mutation.target as HTMLElement).getAttribute('aria-selected') === 'true'
+    ) {
+      setTimeout(injectSubTab, 400);
+    }
+  });
+});
+
+function addObserver() {
+  const subscriptionButton = document.querySelector('a[href="/feed/subscriptions"] paper-item');
+  if (subscriptionButton) {
+    observer.observe(subscriptionButton, {
+      attributes: true,
+      attributeFilter: ['aria-selected'],
+    });
+  } else {
+    setTimeout(addObserver, 400);
+  }
+}
+
+setTimeout(addObserver, 400);

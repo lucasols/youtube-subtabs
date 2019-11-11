@@ -72,7 +72,9 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!manifest.json'],
+    }),
     new webpack.DefinePlugin({
       __DEV__: false,
       __PROD__: true,

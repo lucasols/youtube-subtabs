@@ -71,15 +71,18 @@ const scrollButtonVisible = css`
 `;
 
 function getActiveTabFromUrl(tabs: TabProps[]) {
-  const { 1: name, 2: id }: (string|undefined)[] = (/#subTab=(.+)-(\d+|all)/.exec(window.location.hash) || []);
+  const { 1: name, 2: id }: (string | undefined)[] =
+    /#subTab=(.+)-(\d+|all)/.exec(window.location.hash) || [];
 
-  const activeTab = tabs.find(tab => tab.name === name?.replace(/ /g, ' '));
+  if (id === 'all') return id;
+
+  const activeTab = tabs.find(tab => tab.name === name?.replace(/_/g, ' '));
 
   if (activeTab) {
     return activeTab.id;
   }
 
-  return id && !Number.isNaN(+id) ? +id : 'all';
+  return id && !Number.isNaN(+id) ? +id : false;
 }
 
 const debouncedFilterVideos = debounce(filterVideos, 500);
@@ -92,16 +95,24 @@ const App = () => {
   const [rootRect, setRootRect] = useState<DOMRect>();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeTabId, setActiveTabId] = useState<number | 'all'>(getActiveTabFromUrl(tabs));
+  const [activeTabId, setActiveTabId] = useState<number | 'all' | false>(
+    getActiveTabFromUrl(tabs),
+  );
   const containerWidth = rootRect?.width || 0;
 
-  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs.find(tab => tab.id === 'all');
+  const activeTab =
+    tabs.find(tab => tab.id === activeTabId)
+    || tabs[0];
 
   const parentTabs = flatToNested(tabs);
 
   useEffect(() => {
     if (activeTab?.id) {
-      window.history.replaceState('', '', `#subTab=${activeTab.name.replace(/ /g, '_')}${activeTab.id !== 'all' ? `-${activeTab.id}` : ''}`);
+      window.history.replaceState(
+        '',
+        '',
+        `#subTab=${activeTab.name.replace(/ /g, '_')}-${activeTab.id}`,
+      );
     }
   }, [activeTab?.id]);
 
@@ -127,7 +138,7 @@ const App = () => {
 
   useEffect(() => {
     if (!module.hot) {
-      chrome.storage.onChanged.addListener((changes) => {
+      chrome.storage.onChanged.addListener(changes => {
         if (changes.tabs) {
           setTabs(changes.tabs.newValue || []);
         } else if (changes.filters) {
@@ -137,13 +148,10 @@ const App = () => {
     }
 
     if (!module.hot) {
-      chrome.storage.local.get(
-        ['tabs', 'filters'],
-        (result: ChromeStorage) => {
-          if (result.tabs) setTabs(result.tabs);
-          if (result.filters) setFilters(result.filters);
-        },
-      );
+      chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
+        if (result.tabs) setTabs(result.tabs);
+        if (result.filters) setFilters(result.filters);
+      });
     } else {
       setTabs(tabsState.getState().tabs);
       setFilters(filtersState.getState().filters);
@@ -194,14 +202,22 @@ const App = () => {
             <Tab
               key={tab.id}
               activeTab={activeTab}
-              parentIsInteractive={tab.id === 'all' || filters.some(filter => filter.tabs.includes(tab.id)) || (tab.includeChildsFilter && !!tab.children)}
+              parentIsInteractive={
+                tab.id === 'all'
+                || filters.some(filter => filter.tabs.includes(tab.id))
+                || (tab.includeChildsFilter && !!tab.children)
+              }
               data={tab}
               setActiveTab={setActiveTabId}
             />
           ))}
         </TabsWrapper>
         <ScrollButtonRight
-          css={tabWrapperWidth > containerWidth && scrollX !== tabWrapperWidth - containerWidth && scrollButtonVisible}
+          css={
+            tabWrapperWidth > containerWidth &&
+            scrollX !== tabWrapperWidth - containerWidth &&
+            scrollButtonVisible
+          }
           onClick={() => moveScroll('right')}
         >
           <Icon name="chevron-down" size={28} color={colorYoutubePrimary} />
