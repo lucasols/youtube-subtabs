@@ -2,13 +2,8 @@ const path = require('path');
 const appConfig = require('../app.config.json');
 
 const fileLoaderOptions = {
-  outputPath: (url, resourcePath) =>
-  // if (/fonts\\[^\n\r\\]+?$/.test(resourcePath)) {
-  //   return `fonts/${url}`;
-  // }
-
-    `images/${url}`,
-  name: '[name]-[contenthash:8].[ext]',
+  outputPath: 'assets',
+  name: '[name].[ext]',
 };
 
 const googleFonts = appConfig.html.fonts
