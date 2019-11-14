@@ -1,6 +1,5 @@
-import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
-import { subscribe } from 'hookstated';
+import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 
 export type ChromeStorage = {
   tabs?: Omit<TabProps, 'children' | 'isInvalid'>[];

@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 import { rgba } from '@lucasols/utils';
-import { fold, parseJSON } from 'fp-ts/lib/Either';
-import { pipe } from 'fp-ts/lib/pipeable';
 import * as t from 'io-ts';
 import { reporter } from 'io-ts-reporters';
 import React, { ChangeEvent, useRef, useState } from 'react';
@@ -90,6 +88,7 @@ export const FiltersValidator = t.array(t.type({
   name: t.string,
   type: t.union([t.literal('include'), t.literal('exclude')]),
   userRegex: t.string,
+  userNameRegex: t.string,
   tabs: t.array(t.union([t.number, t.literal('all')])),
   videoNameRegex: t.string,
   daysOfWeek: t.array(t.number),

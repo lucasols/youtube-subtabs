@@ -128,7 +128,7 @@ const CardListItem = ({
     {collapseIcon}
     <ListLabel onClick={() => onClick(item)}>
       <span>{item.tabs
-        ? item.name || (item.userRegex || item.videoNameRegex ? `${item.userRegex ? `user: "${item.userRegex}"` : ''} ${item.videoNameRegex ? `video: "${item.videoNameRegex}"` : ''}` : 'Invalid Filter')
+        ? item.name || (item.userId || item.videoNameRegex ? `${item.userId ? `user: "${item.userId}"` : ''} ${item.videoNameRegex ? `video: "${item.videoNameRegex}"` : ''}` : 'Invalid Filter')
         : `${item.name} ${item.id === 'all' ? '🌐' : ''}`}</span>{' '}
       {item.isInvalid && <Icon name="warn" size={16} css={{ marginLeft: 4 }} />}
     </ListLabel>

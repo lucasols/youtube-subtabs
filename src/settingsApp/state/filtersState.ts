@@ -7,7 +7,8 @@ import appState from 'settingsApp/state/appState';
 export type ExclusiveFilterProps = {
   tabs: TabProps['id'][];
   type: 'include' | 'exclude';
-  userRegex: string;
+  userId: string;
+  userName: string;
   videoNameRegex: string;
   daysOfWeek: number[];
 }
@@ -28,16 +29,16 @@ const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
     filters: module.hot ? [
       {
-        id: 1, name: 'test', daysOfWeek: [], tabs: [1], type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 1, name: 'test', daysOfWeek: [], tabs: [1], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
       },
       {
-        id: 2, name: 'test2', daysOfWeek: [], tabs: [3], type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 2, name: 'test2', daysOfWeek: [], tabs: [3], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
       },
       {
-        id: 3, name: 'test3', daysOfWeek: [], tabs: [3], type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 3, name: 'test3', daysOfWeek: [], tabs: [3], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
       },
       {
-        id: 4, name: 'test4', daysOfWeek: [], tabs: [4], type: 'include', userRegex: 'a', videoNameRegex: 'a',
+        id: 4, name: 'test4', daysOfWeek: [], tabs: [4], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
       },
     ] : [],
   },
@@ -94,7 +95,8 @@ export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
     name: '',
     tabs: [tab],
     type,
-    userRegex: '',
+    userId: '',
+    userName: '',
     videoNameRegex: '',
     daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
   }]);

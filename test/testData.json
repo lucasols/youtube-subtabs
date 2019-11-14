@@ -1,0 +1,1756 @@
+{
+  "tabs": [
+    {
+      "id": 2,
+      "includeChildsFilter": true,
+      "name": "Fav",
+      "parent": null
+    },
+    {
+      "id": 1,
+      "includeChildsFilter": true,
+      "name": "Must Watch",
+      "parent": 2
+    },
+    {
+      "id": 12,
+      "includeChildsFilter": true,
+      "name": "Most watched",
+      "parent": 2
+    },
+    {
+      "id": 18,
+      "includeChildsFilter": true,
+      "name": "Gaming",
+      "parent": null
+    },
+    {
+      "id": 19,
+      "includeChildsFilter": true,
+      "name": "PUBG",
+      "parent": 18
+    },
+    {
+      "id": 15,
+      "includeChildsFilter": true,
+      "name": "Science/Tech",
+      "parent": null
+    },
+    {
+      "id": 24,
+      "includeChildsFilter": true,
+      "name": "Tech",
+      "parent": 15
+    },
+    {
+      "id": 25,
+      "includeChildsFilter": true,
+      "name": "Science",
+      "parent": 15
+    },
+    {
+      "id": 26,
+      "includeChildsFilter": true,
+      "name": "Cars",
+      "parent": 15
+    },
+    {
+      "id": 16,
+      "includeChildsFilter": true,
+      "name": "Humor",
+      "parent": null
+    },
+    {
+      "id": 23,
+      "includeChildsFilter": true,
+      "name": "Economy",
+      "parent": null
+    },
+    {
+      "id": 21,
+      "includeChildsFilter": true,
+      "name": "Movies/Series",
+      "parent": null
+    },
+    {
+      "id": 14,
+      "includeChildsFilter": true,
+      "name": "Politics",
+      "parent": null
+    },
+    {
+      "id": 17,
+      "includeChildsFilter": true,
+      "name": "Dev",
+      "parent": null
+    },
+    {
+      "id": 20,
+      "includeChildsFilter": true,
+      "name": "Vfx",
+      "parent": null
+    },
+    {
+      "id": "all",
+      "includeChildsFilter": false,
+      "name": "All",
+      "parent": null
+    }
+  ],
+  "filters": [
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 1,
+      "name": "",
+      "tabs": [
+        1
+      ],
+      "type": "include",
+      "userRegex": "destinws2",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 2,
+      "name": "",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "Vsauce3",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 3,
+      "name": "3Blue1Brown",
+      "tabs": [
+        1,
+        25
+      ],
+      "type": "include",
+      "userRegex": "UCYO_jab_esuFRV4b17AJtAw",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "id": 4,
+      "name": "",
+      "tabs": [
+        1
+      ],
+      "type": "include",
+      "userRegex": "JovemNerd",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 5,
+      "name": "Afonso Padilha",
+      "tabs": [
+        1,
+        16
+      ],
+      "type": "include",
+      "userRegex": "UCCqoc2as2nMEXoZPlwXei4g",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 6,
+      "name": "Code Bullet",
+      "tabs": [
+        12,
+        17
+      ],
+      "type": "include",
+      "userRegex": "UC0e3QhIYukixgh5VVpKHH9Q",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 7,
+      "name": "Murilo Couto",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "UCDG56nDKCg302lY6Lr_GOWg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 8,
+      "name": "Real Engineering",
+      "tabs": [
+        12,
+        15
+      ],
+      "type": "include",
+      "userRegex": "UCR1IuLEqb6UEA_zQ81kwXfg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 9,
+      "name": "",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "portadosfundos",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 10,
+      "name": "",
+      "tabs": [
+        16
+      ],
+      "type": "include",
+      "userRegex": "sbtthenoite",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 11,
+      "name": "",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "andersongaveta",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 12,
+      "name": "Two Minute Papers",
+      "tabs": [
+        12,
+        25
+      ],
+      "type": "include",
+      "userRegex": "keeroyz",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 13,
+      "name": "Maurício meirelhes",
+      "tabs": [
+        12
+      ],
+      "type": "include",
+      "userRegex": "UCxcDCeShqZWIUQuEo2iJSVA",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 14,
+      "name": "",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "rafinhabastos",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 15,
+      "name": "",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "matheuscanella96",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 16,
+      "name": "",
+      "tabs": [
+        12,
+        19
+      ],
+      "type": "include",
+      "userRegex": "netenho1",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 17,
+      "name": "",
+      "tabs": [
+        "all"
+      ],
+      "type": "exclude",
+      "userRegex": "portadosfundos",
+      "videoNameRegex": "making of"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 18,
+      "name": "Joe Scott",
+      "tabs": [
+        12,
+        15
+      ],
+      "type": "include",
+      "userRegex": "jnightandday",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 19,
+      "name": "Filipe Deschamps",
+      "tabs": [
+        12,
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCU5JicSrEM5A63jkJ2QvGYw",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 20,
+      "name": "Universo Programado",
+      "tabs": [
+        12,
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCf_kacKyoRRUP0nM3obzFbg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 21,
+      "name": "",
+      "tabs": [
+        12,
+        24
+      ],
+      "type": "include",
+      "userRegex": "avioesemusicas",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 22,
+      "name": "Tom Scott",
+      "tabs": [
+        12,
+        25
+      ],
+      "type": "include",
+      "userRegex": "enyay",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 23,
+      "name": "",
+      "tabs": [
+        12,
+        24
+      ],
+      "type": "include",
+      "userRegex": "coldfustion",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 24,
+      "name": "",
+      "tabs": [
+        12,
+        14
+      ],
+      "type": "include",
+      "userRegex": "voxdotcom",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 25,
+      "name": "",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "canalinutilismo",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 26,
+      "name": "",
+      "tabs": [
+        1,
+        25
+      ],
+      "type": "include",
+      "userRegex": "Kurzgesagt",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 27,
+      "name": "Corridor Crew",
+      "tabs": [
+        12,
+        20
+      ],
+      "type": "include",
+      "userRegex": "samandniko",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 29,
+      "name": "",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "",
+      "videoNameRegex": "chrome|typescript|javascript"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 30,
+      "name": "MBL",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "UC8QAdpiEWAOg3AOCCFDCOYw",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 31,
+      "name": "Panico",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "UC9U4nIDyIzzelXrjNQXNvxA",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 32,
+      "name": "",
+      "tabs": [
+        19,
+        12
+      ],
+      "type": "include",
+      "userRegex": "burgaoFPS",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 33,
+      "name": "",
+      "tabs": [
+        19
+      ],
+      "type": "include",
+      "userRegex": "",
+      "videoNameRegex": "pubg"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 34,
+      "name": "",
+      "tabs": [
+        "all"
+      ],
+      "type": "exclude",
+      "userRegex": "Gameplayrj",
+      "videoNameRegex": "GTA V -"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 35,
+      "name": "",
+      "tabs": [
+        21
+      ],
+      "type": "include",
+      "userRegex": "einerdtv",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 36,
+      "name": "",
+      "tabs": [
+        16,
+        12
+      ],
+      "type": "include",
+      "userRegex": "mauriciomeirelles",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 37,
+      "name": "",
+      "tabs": [
+        18
+      ],
+      "type": "include",
+      "userRegex": "Gameplayrj",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 38,
+      "name": "Kim Kataguiri",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "Tharryify",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 39,
+      "name": "Seeker",
+      "tabs": [
+        12,
+        24,
+        25
+      ],
+      "type": "include",
+      "userRegex": "DNewsChannel",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 40,
+      "name": "",
+      "tabs": [
+        "all"
+      ],
+      "type": "exclude",
+      "userRegex": "sbtthenoite",
+      "videoNameRegex": "ultraje|vale a pena ver the noite|canta"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 41,
+      "name": "",
+      "tabs": [
+        23,
+        12
+      ],
+      "type": "include",
+      "userRegex": "ideiasradicais",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 42,
+      "name": "Fernando Ulrich",
+      "tabs": [
+        23
+      ],
+      "type": "include",
+      "userRegex": "UCLJkh3QjHsLtK0LZFd28oGg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 43,
+      "name": "",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "scishow",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 44,
+      "name": "",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "tvspotniks",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 45,
+      "name": "Tech Insider",
+      "tabs": [
+        24,
+        12
+      ],
+      "type": "include",
+      "userRegex": "UCVLZmDKeT-mV4H3ToYXIFYg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 46,
+      "name": "",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "GoogleDevelopers",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 47,
+      "name": "Microsoft Dev",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCsMica-v34Irf9KVTh6xx-g",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 48,
+      "name": "Varanda Gourmet",
+      "tabs": [
+        12,
+        16
+      ],
+      "type": "include",
+      "userRegex": "UCkI99TG1VfkUCS6HAtLj4cg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 49,
+      "name": "Mamãe falei",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "UCkSjy-IOEq-eMtarZl2uH1Q",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 50,
+      "name": "",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "MinutoDaFisica",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 51,
+      "name": "",
+      "tabs": [
+        12
+      ],
+      "type": "include",
+      "userRegex": "izzynobre",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 52,
+      "name": "",
+      "tabs": [
+        12
+      ],
+      "type": "include",
+      "userRegex": "wired",
+      "videoNameRegex": "Why It’s Almost Impossible"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 53,
+      "name": "",
+      "tabs": [
+        12
+      ],
+      "type": "exclude",
+      "userRegex": "sbtthenoite",
+      "videoNameRegex": "Monólogo"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 54,
+      "name": "Lucas Ramos",
+      "tabs": [
+        16,
+        12
+      ],
+      "type": "include",
+      "userRegex": "UCnnzTMp48Qcp6-y4MF_XmoQ",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 55,
+      "name": "Coisa Nossa",
+      "tabs": [
+        16,
+        12
+      ],
+      "type": "include",
+      "userRegex": "UCbtlMIfdRVxPXZ1nI8NBN2A",
+      "videoNameRegex": "Canella|Inutilismo|gaveta"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 56,
+      "name": "",
+      "tabs": [
+        16,
+        12,
+        21
+      ],
+      "type": "include",
+      "userRegex": "matandorobosgigantes",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 57,
+      "name": "",
+      "tabs": [
+        1,
+        25
+      ],
+      "type": "include",
+      "userRegex": "nerdologia",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 58,
+      "name": "",
+      "tabs": [
+        24,
+        12
+      ],
+      "type": "include",
+      "userRegex": "marquesbrownlee",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 59,
+      "name": "Dave Lee",
+      "tabs": [
+        24
+      ],
+      "type": "include",
+      "userRegex": "UCVYamHliCI9rw1tHR1xbkfw",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 60,
+      "name": "Painel WW",
+      "tabs": [
+        14
+      ],
+      "type": "include",
+      "userRegex": "UCAVq36KDhPluroMCL1BZhbg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 61,
+      "name": "",
+      "tabs": [
+        23
+      ],
+      "type": "include",
+      "userRegex": "Bloomberg",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 62,
+      "name": "",
+      "tabs": [
+        26
+      ],
+      "type": "include",
+      "userRegex": "TeslaMotors",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 63,
+      "name": "",
+      "tabs": [
+        24
+      ],
+      "type": "include",
+      "userRegex": "unboxtherapy",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 64,
+      "name": "PBS Space Time",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "UC7_gcs09iThXybpVgjHZ_7g",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 65,
+      "name": "Open AI",
+      "tabs": [
+        24
+      ],
+      "type": "include",
+      "userRegex": "UCXZCJLdBC09xxGZ6gcdrc6A",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 66,
+      "name": "",
+      "tabs": [
+        23
+      ],
+      "type": "include",
+      "userRegex": "businessinsider",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 67,
+      "name": "WackyJacky101",
+      "tabs": [
+        19
+      ],
+      "type": "include",
+      "userRegex": "UCfK7qpS954pk14YvDCsWCuw",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 68,
+      "name": "",
+      "tabs": [
+        21,
+        1
+      ],
+      "type": "include",
+      "userRegex": "Nerdwriter1",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 69,
+      "name": "Programador BR",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCrdgeUeCll2QKmqmihIgKBQ",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 70,
+      "name": " Atila Iamarino",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "UCSTlOTcyUmzvhQi6F8lFi5w",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 71,
+      "name": "Mozilla Dev",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCh5UlGiu9d6LegIeUCW4N1w",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 72,
+      "name": "DevPleno",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UC07JWf9A0B1scApbS1Te7Ww",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 73,
+      "name": "",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "bigthink",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 74,
+      "name": "",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "ChromeDevelopers",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 75,
+      "name": "",
+      "tabs": [
+        25
+      ],
+      "type": "include",
+      "userRegex": "minutospsiquicos",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 76,
+      "name": "FreeCodeCamp",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UC8butISFwT-Wl7EV0hUK0BQ",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 77,
+      "name": "Panico",
+      "tabs": [
+        23
+      ],
+      "type": "include",
+      "userRegex": "UC9U4nIDyIzzelXrjNQXNvxA",
+      "videoNameRegex": "Samy Dana"
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 78,
+      "name": "Mark Rober",
+      "tabs": [
+        1,
+        25
+      ],
+      "type": "include",
+      "userRegex": "onemeeeliondollars",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 79,
+      "name": "",
+      "tabs": [
+        12,
+        20
+      ],
+      "type": "include",
+      "userRegex": "ZachKingVine",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 80,
+      "name": "",
+      "tabs": [
+        1,
+        25
+      ],
+      "type": "include",
+      "userRegex": "1veritasium",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 81,
+      "name": "",
+      "tabs": [
+        25,
+        12
+      ],
+      "type": "include",
+      "userRegex": "itsokaytobesmart",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 82,
+      "name": "",
+      "tabs": [
+        14,
+        12
+      ],
+      "type": "include",
+      "userRegex": "joelpinheirodafonsec",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 83,
+      "name": "React Conf",
+      "tabs": [
+        17
+      ],
+      "type": "include",
+      "userRegex": "UCz5vTaEhvh7dOHEyd1efcaQ",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 84,
+      "name": "Curious Elephant",
+      "tabs": [
+        24,
+        12
+      ],
+      "type": "include",
+      "userRegex": "UCZUlf2TKB8vATuo5-s1N-5Q",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 85,
+      "name": "Pesadelo na cozinha",
+      "tabs": [
+        1
+      ],
+      "type": "include",
+      "userRegex": "UCp7tUxXfE9jUtkMLGCzeXqA",
+      "videoNameRegex": ""
+    },
+    {
+      "daysOfWeek": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "id": 86,
+      "name": "",
+      "tabs": [
+        "all"
+      ],
+      "type": "exclude",
+      "userRegex": "JovemNerd",
+      "videoNameRegex": "NerdTrader"
+    }
+  ]
+}

@@ -1,90 +1,100 @@
 import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
-import { memoize } from 'lodash-es';
 
-export function checkIfExcludeVideo(userName: string, videoName: string, includeFilters: FilterProps[], excludeFilters: FilterProps[], dayOfWeek: number | null) {
+export function checkIfExcludeVideo(
+  {
+    userName,
+    userId,
+    videoName,
+    dayOfWeek,
+  }: {
+    userName: string;
+    userId: string;
+    videoName: string;
+    dayOfWeek: number | null;
+  },
+  includeFilters: FilterProps[],
+  excludeFilters: FilterProps[],
+) {
   let includeVideo = false;
+  let includeBasedOnFilter: number | undefined;
+  const includeBasedOnFields: ('userName' | 'userId' | 'videoName')[] = [];
+  let excludeBasedOn: string | undefined;
 
   if (includeFilters.length === 0) {
     includeVideo = true;
   } else {
     for (let i = 0; i < includeFilters.length; i++) {
-      const filter = includeFilters[i];
+      const {
+        userName: filterUserName,
+        userId: filterUserId,
+        daysOfWeek,
+        id,
+        videoNameRegex,
+      } = includeFilters[i];
 
-      if (filter.userRegex === '' && filter.videoNameRegex === '') {
-        includeVideo = true;
-        continue;
+      let userMatches = !(filterUserName || filterUserId);
+
+      if (filterUserName && filterUserName === userName) {
+        userMatches = true;
+        includeBasedOnFilter = id;
+        includeBasedOnFields.push('userName');
       }
 
-      if (filter.userRegex !== '' && filter.videoNameRegex !== '') {
-        if (new RegExp(filter.userRegex, 'i').test(userName)) {
-          if (new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-            includeVideo = true;
-          }
-        }
-      } else {
-        if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
-          includeVideo = true;
-        }
-
-        if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-          includeVideo = true;
-        }
+      if (!userMatches && filterUserId && filterUserId === userId) {
+        userMatches = true;
+        includeBasedOnFilter = id;
+        includeBasedOnFields.push('userId');
       }
 
-      if (includeVideo) {
-        includeVideo = dayOfWeek === null
-          ? true
-          : filter.daysOfWeek.includes(dayOfWeek);
+      let videoNameMatches = !videoNameRegex;
 
-        if (includeVideo) break;
+      if (
+        userMatches &&
+        videoNameRegex &&
+        new RegExp(videoNameRegex, 'i').test(videoName)
+      ) {
+        videoNameMatches = true;
+        includeBasedOnFilter = id;
+        includeBasedOnFields.push('videoName');
       }
+
+      // let dayOfWeekMatches =
+
+      includeVideo = videoNameMatches && userMatches;
+      break;
     }
   }
 
-  if (!includeVideo) return true;
-
-  let excludeVideo = false;
-
-  for (let i = 0; i < excludeFilters.length; i++) {
-    const filter = excludeFilters[i];
-
-    if (filter.userRegex === '' && filter.videoNameRegex === '') continue;
-
-    if (filter.userRegex !== '' && filter.videoNameRegex !== '') {
-      if (new RegExp(filter.userRegex, 'i').test(userName)) {
-        if (new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-          excludeVideo = true;
-        }
-      }
-    } else {
-      if (filter.userRegex && new RegExp(filter.userRegex, 'i').test(userName)) {
-        excludeVideo = true;
-      }
-
-      if (filter.videoNameRegex && new RegExp(filter.videoNameRegex, 'i').test(videoName)) {
-        excludeVideo = true;
-      }
-    }
-
-    if (excludeVideo) {
-      excludeVideo = dayOfWeek === null
-        ? true
-        : filter.daysOfWeek.includes(dayOfWeek);
-
-      if (excludeVideo) break;
-    }
-  }
-
-  return excludeVideo;
+  return {
+    excludeVideo: !includeVideo,
+    includeBasedOnFilter,
+    includeBasedOnFields,
+    excludeBasedOn,
+  };
 }
 
-function checkVideo(element: HTMLDivElement, includeFilters: FilterProps[], excludeFilters: FilterProps[]) {
-  const videoName = element.querySelector<HTMLDivElement>('#video-title')?.innerText;
-  const userName = element.querySelector<HTMLAnchorElement>('#channel-name a')?.href.replace(/https:\/\/www.youtube.com\/(user|channel)\//, '');
-  const timeOfUpload = element.querySelector<HTMLSpanElement>('#metadata-line > span:nth-child(2)')?.innerText;
+function checkVideo(
+  element: HTMLDivElement,
+  includeFilters: FilterProps[],
+  excludeFilters: FilterProps[],
+) {
+  const userNameElement = element.querySelector<HTMLAnchorElement>(
+    '#channel-name a',
+  );
 
-  if (!videoName || !userName) return;
+  const videoName = element.querySelector<HTMLDivElement>('#video-title')
+    ?.innerText;
+  const userId = userNameElement?.href.replace(
+    /https:\/\/www.youtube.com\/(user|channel)\//,
+    '',
+  );
+  const userName = userNameElement?.innerText;
+  const timeOfUpload = element.querySelector<HTMLSpanElement>(
+    '#metadata-line > span:nth-child(2)',
+  )?.innerText;
+
+  if (!videoName || !userId || !userName) return false;
 
   const today = new Date();
   let dayOfWeek: number | null = null;
@@ -102,20 +112,33 @@ function checkVideo(element: HTMLDivElement, includeFilters: FilterProps[], excl
     dayOfWeek = today.getDay();
   }
 
-  const excludeVideo = checkIfExcludeVideo(userName, videoName, includeFilters, excludeFilters, dayOfWeek);
+  const excludeVideo = checkIfExcludeVideo(
+    {
+      userId,
+      userName,
+      videoName,
+      dayOfWeek,
+    },
+    includeFilters,
+    excludeFilters,
+  );
 
-  if (excludeVideo) {
-    element.style.display = 'none';
-  } else {
-    element.style.display = 'block';
-  }
+  return {
+    exclude: excludeVideo,
+  };
 }
 
 let lastFilteredVideo = -1;
 let lastRunId = '';
 
-export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: FilterProps[]) {
-  const videosElements = document.querySelectorAll<HTMLDivElement>('#items > ytd-grid-video-renderer');
+export function filterVideos(
+  active: 'all' | number,
+  tabs: TabProps[],
+  filters: FilterProps[],
+) {
+  const videosElements = document.querySelectorAll<HTMLDivElement>(
+    '#items > ytd-grid-video-renderer',
+  );
 
   const activeTab = tabs.find(item => item.id === active);
   let activeFilters = filters.filter(item => item.tabs.includes(active));
@@ -125,17 +148,23 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
       ...filters.filter(item => item.tabs.includes('all')),
       ...activeFilters,
       ...(activeTab?.includeChildsFilter
-        ? tabs.filter(item => item.parent === activeTab.id).reduce((prev, curr) =>
-          [...prev, ...filters.filter(item => item.tabs.includes(curr.id))], [])
-        : []
-      ),
+        ? tabs
+            .filter(item => item.parent === activeTab.id)
+            .reduce(
+              (prev, curr) => [
+                ...prev,
+                ...filters.filter(item => item.tabs.includes(curr.id)),
+              ],
+              [],
+            )
+        : []),
     ];
   }
 
-  activeFilters = activeFilters.filter((filter, index, self) =>
-    (filter.userRegex !== '' || filter.videoNameRegex !== '') && index === self.findIndex((t) => (
-      t.id === filter.id
-    ))
+  activeFilters = activeFilters.filter(
+    (filter, index, self) =>
+      (filter.userId !== '' || filter.videoNameRegex !== '') &&
+      index === self.findIndex(t => t.id === filter.id),
   );
 
   const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
@@ -156,7 +185,19 @@ export function filterVideos(active: 'all' | number, tabs: TabProps[], filters: 
   // console.time(`videos-${videosElements.length}`);
 
   for (let i = lastFilteredVideo + 1; i < videosElements.length; i++) {
-    checkVideo(videosElements[i], includeFilters, excludeFilters);
+    const videoProps = checkVideo(
+      videosElements[i],
+      includeFilters,
+      excludeFilters,
+    );
+
+    if (videoProps) {
+      if (videoProps.exclude) {
+        videosElements[i].style.display = 'none';
+      } else {
+        videosElements[i].style.display = 'block';
+      }
+    }
   }
 
   lastFilteredVideo = videosElements.length - 1;

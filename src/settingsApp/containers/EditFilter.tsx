@@ -1,33 +1,27 @@
 import styled from '@emotion/styled';
+import React, { useEffect, useState } from 'react';
+import AutosizeInput from 'react-input-autosize';
 import Button from 'settingsApp/components/Button';
 import { ContentWrapper } from 'settingsApp/components/ContentWrapper';
+import DayOfWeekSelector from 'settingsApp/components/DayOfWeekSelector';
+import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
 import HeaderStyle from 'settingsApp/components/HeaderStyle';
 import Icon from 'settingsApp/components/Icon';
+import TabSelector from 'settingsApp/components/TabSelector';
+import TextField from 'settingsApp/components/TextField';
 import {
   CloseButton,
   EditPageContainer,
   tabNameInputClassname,
 } from 'settingsApp/containers/EditTab';
-import { debounce, filter } from 'lodash-es';
-import React, { useEffect, useState } from 'react';
-import AutosizeInput from 'react-input-autosize';
-import { PartialKey } from 'src/typings/utils';
 import appState from 'settingsApp/state/appState';
-import tabsState, {
-  changeTabName,
-  TabProps,
-} from 'settingsApp/state/tabsState';
-import { centerContent } from 'settingsApp/style/modifiers';
 import filtersState, {
-  FilterProps,
   ExclusiveFilterProps,
+  FilterProps,
 } from 'settingsApp/state/filtersState';
-import TextField from 'settingsApp/components/TextField';
+import { centerContent } from 'settingsApp/style/modifiers';
+import { colorBg, colorError } from 'settingsApp/style/theme';
 import { getUniqueId } from 'utils/getUniqueId';
-import DayOfWeekSelector from 'settingsApp/components/DayOfWeekSelector';
-import FilterTypeSelector from 'settingsApp/components/FilterTypeSelector';
-import { colorError, colorBg } from 'settingsApp/style/theme';
-import TabSelector from 'settingsApp/components/TabSelector';
 
 const Row = styled.div`
   ${centerContent};
@@ -38,13 +32,14 @@ const Row = styled.div`
 
 type EditFilterProps = Omit<
   ExclusiveFilterProps,
-  'userRegex' | 'videoNameRegex' | 'tab' | 'type'
+  'userRegex' | 'videoNameRegex' | 'userNameRegex' | 'tab' | 'type'
 > & {
   name: string;
   tabs: ExclusiveFilterProps['tabs'];
   type: ExclusiveFilterProps['type'];
   textFields: {
     userRegex: { value: string; isValid: boolean };
+    userNameRegex: { value: string; isValid: boolean };
     videoNameRegex: { value: string; isValid: boolean };
   };
 };
@@ -75,9 +70,6 @@ const EditFilter = () => {
   const selectedFilter = filtersState
     .getState()
     .filters.find((item: typeof filters[0]) => item.id === editFilter);
-  const filterTab = tabsState
-    .getState()
-    .tabs.find(item => item.id === (selectedFilter?.tabs ?? editTab));
 
   const show = !!selectedFilter;
 
@@ -98,6 +90,7 @@ const EditFilter = () => {
     if (
       !(
         newFilterProps.textFields.userRegex.isValid &&
+        newFilterProps.textFields.userNameRegex.isValid &&
         newFilterProps.textFields.videoNameRegex.isValid &&
         newFilterProps.tabs.length > 0
       )
@@ -109,6 +102,7 @@ const EditFilter = () => {
     type DiffCheckObject = {
       name: string;
       userRegex: string | null;
+      userNameRegex: string | null;
       videoNameRegex: string | null;
       daysOfWeek: number[];
       tabs: FilterProps['tabs'];
@@ -121,6 +115,7 @@ const EditFilter = () => {
         name: newFilterProps.name,
         tabs: newFilterProps.tabs,
         userRegex: newFilterProps.textFields.userRegex.value,
+        userNameRegex: newFilterProps.textFields.userNameRegex.value,
         videoNameRegex: newFilterProps.textFields.videoNameRegex.value,
         daysOfWeek: newFilterProps.daysOfWeek.sort((a, b) => a - b),
         type: newFilterProps.type,
@@ -128,9 +123,12 @@ const EditFilter = () => {
         === stringify<DiffCheckObject>({
           name: selectedFilter.name,
           tabs: selectedFilter.tabs,
-          userRegex: selectedFilter.userRegex,
+          userRegex: selectedFilter.userId,
+          userNameRegex: selectedFilter.userName,
           videoNameRegex: selectedFilter.videoNameRegex,
-          daysOfWeek: selectedFilter.daysOfWeek.sort((a, b) => a - b),
+          daysOfWeek: selectedFilter.daysOfWeek.sort(
+            (a, b) => a - b,
+          ),
           type: selectedFilter.type,
         })
     ) {
@@ -140,6 +138,7 @@ const EditFilter = () => {
 
     if (
       !newFilterProps.textFields.userRegex.value &&
+      !newFilterProps.textFields.userNameRegex.value &&
       !newFilterProps.textFields.videoNameRegex.value
     ) {
       console.log('at least one filte must be defined');
@@ -160,10 +159,11 @@ const EditFilter = () => {
       name: newFilterProps.name,
       tabs: newFilterProps.tabs,
       type: newFilterProps.type,
-      userRegex: newFilterProps.textFields.userRegex.value.replace(
+      userId: newFilterProps.textFields.userRegex.value.replace(
         /https:\/\/www.youtube.com\/(user|channel)\//,
         '',
       ),
+      userName: newFilterProps.textFields.userNameRegex.value,
       videoNameRegex: newFilterProps.textFields.videoNameRegex.value,
     };
 
@@ -222,9 +222,13 @@ const EditFilter = () => {
       setNewFilterProps({
         name: selectedFilter.name,
         textFields: {
-          userRegex: { value: selectedFilter.userRegex, isValid: true },
+          userRegex: { value: selectedFilter.userId, isValid: true },
           videoNameRegex: {
             value: selectedFilter.videoNameRegex,
+            isValid: true,
+          },
+          userNameRegex: {
+            value: selectedFilter.userName,
             isValid: true,
           },
         },
@@ -238,105 +242,116 @@ const EditFilter = () => {
   }, [selectedFilter?.id]);
 
   return (
-    <EditPageContainer
-      css={{
-        visibility: show ? 'visible' : 'hidden',
-        opacity: show ? 1 : 0,
-        transform: `scale(${show ? 1 : 1.1})`,
-      }}
-    >
-      <CloseButton onClick={() => setEditFilter(null)}>
+    <>
+      <EditPageContainer
+        css={{
+          visibility: show ? 'visible' : 'hidden',
+          opacity: show ? 1 : 0,
+          transform: `scale(${show ? 1 : 1.1})`,
+        }}
+      >
+        <ContentWrapper>
+          <HeaderStyle>
+            Filter ·
+            <AutosizeInput
+              type="text"
+              inputClassName={tabNameInputClassname}
+              onChange={onChangeName}
+              placeholder="Filter Name"
+              value={newFilterProps?.name}
+            />
+          </HeaderStyle>
+
+          <FilterTypeSelector
+            selected={newFilterProps?.type ?? null}
+            onChange={onTypeChange}
+          />
+
+          <TabSelector
+            selectedTabsId={newFilterProps?.tabs}
+            onChange={onTabsChange}
+          />
+
+          <TextField
+            value={newFilterProps?.textFields.userNameRegex.value ?? ''}
+            id="userNameRegex"
+            label="User Name"
+            css={{ marginTop: 24 }}
+            handleChange={handleTextFieldsChange}
+            disableLabelAnimation
+          />
+
+          <TextField
+            value={newFilterProps?.textFields.userRegex.value ?? ''}
+            id="userRegex"
+            label="User ID"
+            css={{ marginTop: 24 }}
+            handleChange={handleTextFieldsChange}
+            disableLabelAnimation
+            validations={[regexValidator]}
+          />
+
+          <TextField
+            value={newFilterProps?.textFields.videoNameRegex.value ?? ''}
+            id="videoNameRegex"
+            label="Video Name Regex"
+            css={{ marginTop: 24 }}
+            handleChange={handleTextFieldsChange}
+            disableLabelAnimation
+            validations={[regexValidator]}
+          />
+
+          <DayOfWeekSelector
+            days={newFilterProps?.daysOfWeek ?? []}
+            onChange={onDayOfWeekChange}
+          />
+
+          {!newFilterProps?.textFields.userRegex.value &&
+            !newFilterProps?.textFields.userNameRegex.value &&
+            !newFilterProps?.textFields.videoNameRegex.value && (
+              <Row css={{ color: colorError, fontSize: 12, marginBottom: -24 }}>
+                Error: At least one of the regex fields must me defined!
+              </Row>
+          )}
+          <Row
+            css={{
+              marginTop: 40,
+              paddingBottom: 24,
+              position: 'sticky',
+              bottom: 0,
+              zIndex: 20,
+              background: colorBg,
+            }}
+          >
+            <Button
+              label="Delete"
+              small
+              onClick={() => {
+                if (selectedFilter?.id) {
+                  appState.setKey('filterToDelete', selectedFilter.id);
+                }
+              }}
+            />
+            <Button
+              label="Cancel"
+              small
+              css={{ marginLeft: 'auto' }}
+              onClick={() => setEditFilter(null)}
+            />
+            <Button
+              key={selectedFilter?.id}
+              label="Save filter"
+              disabled={!checkIfIsValid()}
+              small
+              onClick={onSaveFilter}
+            />
+          </Row>
+        </ContentWrapper>
+      </EditPageContainer>
+      <CloseButton onClick={() => setEditFilter(null)} show={!!show}>
         <Icon name="close" />
       </CloseButton>
-      <ContentWrapper>
-        <HeaderStyle>
-          Filter ·
-          {/* <span>{filterTab?.name}</span>{' · '} */}
-          <AutosizeInput
-            type="text"
-            inputClassName={tabNameInputClassname}
-            onChange={onChangeName}
-            placeholder="Filter Name"
-            value={newFilterProps?.name}
-          />
-        </HeaderStyle>
-
-        <FilterTypeSelector
-          selected={newFilterProps?.type ?? null}
-          onChange={onTypeChange}
-        />
-
-        <TabSelector
-          selectedTabsId={newFilterProps?.tabs}
-          onChange={onTabsChange}
-        />
-
-        <TextField
-          value={newFilterProps?.textFields.userRegex?.value ?? ''}
-          id="userRegex"
-          label="User Regex"
-          css={{ marginTop: 24 }}
-          handleChange={handleTextFieldsChange}
-          disableLabelAnimation
-          validations={[regexValidator]}
-        />
-
-        <TextField
-          value={newFilterProps?.textFields.videoNameRegex?.value ?? ''}
-          id="videoNameRegex"
-          label="Video Name Regex"
-          css={{ marginTop: 24 }}
-          handleChange={handleTextFieldsChange}
-          disableLabelAnimation
-          validations={[regexValidator]}
-        />
-
-        <DayOfWeekSelector
-          days={newFilterProps?.daysOfWeek ?? []}
-          onChange={onDayOfWeekChange}
-        />
-
-        {!newFilterProps?.textFields.userRegex.value &&
-          !newFilterProps?.textFields.videoNameRegex.value && (
-            <Row css={{ color: colorError, fontSize: 12, marginBottom: -24 }}>
-              Error: At least one of the regex fields must me defined!
-            </Row>
-        )}
-        <Row
-          css={{
-            marginTop: 40,
-            paddingBottom: 24,
-            position: 'sticky',
-            bottom: 0,
-            zIndex: 20,
-            background: colorBg,
-          }}
-        >
-          <Button
-            label="Delete"
-            small
-            onClick={() => {
-              if (selectedFilter?.id) {
-                appState.setKey('filterToDelete', selectedFilter.id);
-              }
-            }}
-          />
-          <Button
-            label="Cancel"
-            small
-            css={{ marginLeft: 'auto' }}
-            onClick={() => setEditFilter(null)}
-          />
-          <Button
-            key={selectedFilter?.id}
-            label="Save filter"
-            disabled={!checkIfIsValid()}
-            small
-            onClick={onSaveFilter}
-          />
-        </Row>
-      </ContentWrapper>
-    </EditPageContainer>
+    </>
   );
 };
 

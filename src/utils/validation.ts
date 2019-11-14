@@ -3,7 +3,7 @@ import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
 
 export function filterIsInvalid(filter: FilterProps) {
-  return filter.videoNameRegex === '' && filter.userRegex === '';
+  return filter.videoNameRegex === '' && filter.userId === '';
 }
 
 export function someFilterIsInvalid(filters: FilterProps[]) {
