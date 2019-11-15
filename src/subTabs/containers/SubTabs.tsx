@@ -29,7 +29,7 @@ const Container = styled.div`
   width: 100%;
   color: #fff;
   padding-top: 24px;
-  padding-bottom: 8px;
+  padding-bottom: 20px;
   background: ${colorYoutubeBg};
   overflow: hidden;
 `;
