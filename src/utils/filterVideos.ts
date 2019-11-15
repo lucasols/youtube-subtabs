@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
 
@@ -19,50 +20,102 @@ export function checkIfExcludeVideo(
   let includeVideo = false;
   let includeBasedOnFilter: number | undefined;
   const includeBasedOnFields: ('userName' | 'userId' | 'videoName')[] = [];
-  let excludeBasedOn: string | undefined;
+  const excludeBasedOnFields: typeof includeBasedOnFields = [];
+  let excludeBasedOnFilter: typeof includeBasedOnFilter;
+
+  function ifMatches(
+    filter: FilterProps,
+    callbacks: Record<'userName' | 'userId' | 'videoName', () => void> & {
+      daysOfWeek?: () => void;
+    },
+  ) {
+    let userMatches = !(filter.userName || filter.userId);
+
+    if (filter.userName && filter.userName === userName) {
+      userMatches = true;
+      callbacks.userName();
+    }
+
+    if (!userMatches && filter.userId && filter.userId === userId) {
+      userMatches = true;
+      callbacks.userId();
+    }
+
+    let videoNameMatches = !filter.videoNameRegex;
+
+    if (
+      userMatches &&
+      filter.videoNameRegex &&
+      new RegExp(filter.videoNameRegex, 'i').test(videoName)
+    ) {
+      videoNameMatches = true;
+      callbacks.videoName();
+    }
+
+    const dayOfWeekMatches =
+      dayOfWeek === null ? true : filter.daysOfWeek.includes(dayOfWeek);
+    if (dayOfWeekMatches) callbacks.daysOfWeek?.();
+
+    return {
+      videoNameMatches,
+      userMatches,
+      dayOfWeekMatches,
+    };
+  }
 
   if (includeFilters.length === 0) {
     includeVideo = true;
   } else {
     for (let i = 0; i < includeFilters.length; i++) {
-      const {
-        userName: filterUserName,
-        userId: filterUserId,
-        daysOfWeek,
-        id,
-        videoNameRegex,
-      } = includeFilters[i];
+      const filter = includeFilters[i];
 
-      let userMatches = !(filterUserName || filterUserId);
+      const { videoNameMatches, userMatches, dayOfWeekMatches } = ifMatches(
+        filter,
+        {
+          userName: () => {
+            includeBasedOnFields.push('userName');
+          },
+          userId: () => {
+            includeBasedOnFields.push('userId');
+          },
+          videoName: () => {
+            includeBasedOnFields.push('videoName');
+          },
+        },
+      );
 
-      if (filterUserName && filterUserName === userName) {
-        userMatches = true;
-        includeBasedOnFilter = id;
-        includeBasedOnFields.push('userName');
+      if (videoNameMatches && userMatches && dayOfWeekMatches) {
+        includeBasedOnFilter = filter.id;
+        includeVideo = true;
+        break;
       }
+    }
+  }
 
-      if (!userMatches && filterUserId && filterUserId === userId) {
-        userMatches = true;
-        includeBasedOnFilter = id;
-        includeBasedOnFields.push('userId');
+  if (includeVideo) {
+    for (let i = 0; i < excludeFilters.length; i++) {
+      const filter = excludeFilters[i];
+
+      const { videoNameMatches, userMatches, dayOfWeekMatches } = ifMatches(
+        filter,
+        {
+          userName: () => {
+            excludeBasedOnFields.push('userName');
+          },
+          userId: () => {
+            excludeBasedOnFields.push('userId');
+          },
+          videoName: () => {
+            excludeBasedOnFields.push('videoName');
+          },
+        },
+      );
+
+      if (videoNameMatches && userMatches && dayOfWeekMatches) {
+        excludeBasedOnFilter = filter.id;
+        includeVideo = false;
+        break;
       }
-
-      let videoNameMatches = !videoNameRegex;
-
-      if (
-        userMatches &&
-        videoNameRegex &&
-        new RegExp(videoNameRegex, 'i').test(videoName)
-      ) {
-        videoNameMatches = true;
-        includeBasedOnFilter = id;
-        includeBasedOnFields.push('videoName');
-      }
-
-      // let dayOfWeekMatches =
-
-      includeVideo = videoNameMatches && userMatches;
-      break;
     }
   }
 
@@ -70,7 +123,8 @@ export function checkIfExcludeVideo(
     excludeVideo: !includeVideo,
     includeBasedOnFilter,
     includeBasedOnFields,
-    excludeBasedOn,
+    excludeBasedOnFilter,
+    excludeBasedOnFields,
   };
 }
 
@@ -124,7 +178,7 @@ function checkVideo(
   );
 
   return {
-    exclude: excludeVideo,
+    ...excludeVideo,
   };
 }
 
@@ -149,14 +203,14 @@ export function filterVideos(
       ...activeFilters,
       ...(activeTab?.includeChildsFilter
         ? tabs
-            .filter(item => item.parent === activeTab.id)
-            .reduce(
-              (prev, curr) => [
-                ...prev,
-                ...filters.filter(item => item.tabs.includes(curr.id)),
-              ],
-              [],
-            )
+          .filter(item => item.parent === activeTab.id)
+          .reduce(
+            (prev, curr) => [
+              ...prev,
+              ...filters.filter(item => item.tabs.includes(curr.id)),
+            ],
+            [],
+          )
         : []),
     ];
   }
@@ -192,13 +246,17 @@ export function filterVideos(
     );
 
     if (videoProps) {
-      if (videoProps.exclude) {
+      // console.log(videoProps);
+      if (videoProps.excludeVideo) {
         videosElements[i].style.display = 'none';
       } else {
         videosElements[i].style.display = 'block';
       }
     }
   }
+
+  window.scrollBy(0, 1);
+  window.scrollBy(0, -1);
 
   lastFilteredVideo = videosElements.length - 1;
 

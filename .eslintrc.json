@@ -175,10 +175,18 @@
     "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/no-non-null-assertion": 0,
 
+    /* jest */
+    "jest/expect-expect": "error",
+
     // delete after update
     "no-restricted-globals": 0,
     "no-unused-expressions": 0,
     "no-undef": 0
   },
-  "extends": ["airbnb", "plugin:@typescript-eslint/recommended"]
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style"
+  ]
 }

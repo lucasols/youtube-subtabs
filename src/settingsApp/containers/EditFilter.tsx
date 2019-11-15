@@ -32,7 +32,7 @@ const Row = styled.div`
 
 type EditFilterProps = Omit<
   ExclusiveFilterProps,
-  'userRegex' | 'videoNameRegex' | 'userNameRegex' | 'tab' | 'type'
+  'userId' | 'videoNameRegex' | 'userName' | 'tab' | 'type'
 > & {
   name: string;
   tabs: ExclusiveFilterProps['tabs'];
