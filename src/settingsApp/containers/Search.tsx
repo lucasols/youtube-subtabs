@@ -11,9 +11,7 @@ import filtersState from 'settingsApp/state/filtersState';
 import { useDebounce } from '@lucasols/utils';
 import { checkIfFieldsMatchesItem, getSearchFields } from 'utils/search';
 
-// show filtering debug
-// add page routing based on hash
-// add new filter duplicating props
+// TODO: add new filter duplicating props
 
 const Header = styled(HeaderStyle)`
   grid-template-columns: 1fr auto;
@@ -37,7 +35,12 @@ const Search = () => {
   const searchResult = useMemo(
     () =>
       (searchFields
-        ? filters.filter(item => checkIfFieldsMatchesItem(searchFields, item).matches)
+        ? filters
+          .map(item => ({
+            ...item,
+            ...checkIfFieldsMatchesItem(searchFields, item),
+          }))
+          .filter(item => item.matches)
         : []),
     [JSON.stringify(searchFields)],
   );

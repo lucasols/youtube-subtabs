@@ -1,10 +1,7 @@
 import { FilterProps } from 'settingsApp/state/filtersState';
 import { forEachMatch } from '@lucasols/utils';
 import { checkIfExcludeVideo } from 'utils/filterVideos';
-
-function stringToNum(string: string) {
-  return !Number.isNaN(+string) ? +string : undefined;
-}
+import { stringToNum } from './stringToNum';
 
 function sanitizeRegex(string: string) {
   return string

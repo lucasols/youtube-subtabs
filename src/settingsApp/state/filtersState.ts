@@ -12,7 +12,7 @@ export type ExclusiveFilterProps = {
   userName: string;
   videoNameRegex: string;
   daysOfWeek: number[];
-}
+};
 
 export type FilterProps = NestableItemBaseProps<ExclusiveFilterProps, number>;
 
@@ -24,7 +24,7 @@ type Reducers = {
   addFilters: FilterProps[];
   updateFilters: FilterProps[];
   deleteFilters: number[];
-}
+};
 
 const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
@@ -38,19 +38,26 @@ const filtersState = createStore<filtersState, Reducers>('filtersState', {
     updateFilters: (state, filtersToUpdate) => ({
       ...state,
       filters: state.filters.map(filter => {
-        const updatedFilter = filtersToUpdate?.find(({ id }) => id === filter.id);
+        const updatedFilter = filtersToUpdate?.find(
+          ({ id }) => id === filter.id,
+        );
 
         return updatedFilter ? { ...filter, ...updatedFilter } : filter;
       }),
     }),
     deleteFilters: (state, ids) => ({
       ...state,
-      filters: state.filters.filter(filter => !ids.includes(filter.id as number)),
+      filters: state.filters.filter(
+        filter => !ids.includes(filter.id as number),
+      ),
     }),
   },
 });
 
-export function getFilterById(id: FilterProps['id'], filters: FilterProps[] = filtersState.getState().filters) {
+export function getFilterById(
+  id: FilterProps['id'],
+  filters: FilterProps[] = filtersState.getState().filters,
+) {
   return filters.find((item: typeof filters[0]) => item.id === id);
 }
 
@@ -58,14 +65,20 @@ export function deleteFilters(ids: number[]) {
   filtersState.dispatch('deleteFilters', ids);
 }
 
-export function setFilterProp<T extends keyof FilterProps>(filterId: FilterProps['id'], prop: T, value: FilterProps[T]) {
+export function setFilterProp<T extends keyof FilterProps>(
+  filterId: FilterProps['id'],
+  prop: T,
+  value: FilterProps[T],
+) {
   const filter = getFilterById(filterId);
 
   if (filter && filter?.[prop] !== value) {
-    filtersState.dispatch('updateFilters', [{
-      ...filter,
-      [prop]: value,
-    }]);
+    filtersState.dispatch('updateFilters', [
+      {
+        ...filter,
+        [prop]: value,
+      },
+    ]);
   }
 }
 
@@ -75,19 +88,26 @@ export function changeFilterName(filterId: number, newName: string) {
   }
 }
 
-export function addFilter(tab: TabProps['id'], type: FilterProps['type']) {
+export function addFilter(props: Partial<FilterProps>) {
   const id = getUniqueId(filtersState.getState().filters);
+  const nonNullProps = Object.entries(props).reduce(
+    (a, [k, v]) => (v ? { ...a, [k]: v } : a),
+    {},
+  );
 
-  filtersState.dispatch('addFilters', [{
-    id,
-    name: '',
-    tabs: [tab],
-    type,
-    userId: '',
-    userName: '',
-    videoNameRegex: '',
-    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-  }]);
+  filtersState.dispatch('addFilters', [
+    {
+      name: '',
+      userId: '',
+      userName: '',
+      tabs: [],
+      videoNameRegex: '',
+      type: 'include',
+      daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+      ...(nonNullProps as FilterProps),
+      id,
+    },
+  ]);
 
   appState.setKey('editFilter', id);
 }

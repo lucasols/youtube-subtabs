@@ -17,7 +17,12 @@ import {
 type Props = {
   item: NestableItemBaseProps<
     Partial<ExclusiveFilterProps> &
-      Partial<ExclusiveTabProps> & { error?: string }
+      Partial<ExclusiveTabProps> & {
+        error?: string;
+        matched?: boolean;
+        matchedOn?: string[];
+        failedOn?: string[];
+      }
   >;
   index: number;
   search?: boolean;
@@ -133,16 +138,23 @@ const CardListItem = ({
   onClick,
 }: Props) => {
   const isIncludeType = item.type === 'include';
+  const isFilter = item.type;
+
   return (
     <Card
       css={{ paddingLeft: !handler ? 16 : undefined }}
       className={className}
-      title={item.isInvalid}
+      title={[
+        item.isInvalid,
+        search && isFilter && `Matched on: ${item.matchedOn?.join(', ')}`,
+      ]
+        .filter(Boolean)
+        .join('\n')}
     >
       {handler}
       {collapseIcon}
       <ListLabel onClick={() => onClick(item)}>
-        {search && (
+        {isFilter && search && (
           <span
             css={{
               color: isIncludeType ? colorGreen : colorError,
@@ -161,7 +173,7 @@ const CardListItem = ({
                 }`
                 : 'Invalid Filter')
             : `${item.name} ${item.id === 'all' ? '🌐' : ''}`}
-        </span>{' '}
+        </span>
         {item.isInvalid && (
           <Icon name="warn" size={16} css={{ marginLeft: 4 }} />
         )}

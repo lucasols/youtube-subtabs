@@ -173,7 +173,9 @@ const EditTab = () => {
           <HeaderRight>
             <HeaderButton
               icon="search"
-              onClick={() => appState.setKey('search', `(tabs:${selectedTab?.id})`)}
+              onClick={() =>
+                appState.setKey('search', `(tabs:${selectedTab?.id})`)
+              }
             />
           </HeaderRight>
           <HeaderContent>
@@ -216,7 +218,10 @@ const EditTab = () => {
             label="Add"
             icon="add"
             small
-            onClick={() => selectedTab && addFilter(selectedTab.id, 'include')}
+            onClick={() =>
+              selectedTab &&
+              addFilter({ tabs: [selectedTab.id], type: 'include' })
+            }
           />
         </Row>
         <FiltersList items={includeFilters} />
@@ -227,7 +232,10 @@ const EditTab = () => {
             label="Add"
             icon="add"
             small
-            onClick={() => selectedTab && addFilter(selectedTab.id, 'exclude')}
+            onClick={() =>
+              selectedTab &&
+              addFilter({ tabs: [selectedTab.id], type: 'exclude' })
+            }
           />
         </Row>
         <FiltersList items={excludeFilters} />

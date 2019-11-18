@@ -14,6 +14,7 @@ import { TabsValidator, FiltersValidator } from 'settingsApp/containers/ExportIm
 import { download } from 'utils/download';
 import * as t from 'io-ts';
 import Search from 'settingsApp/containers/Search';
+import { getFilterFromUrl } from 'settingsApp/state/appState';
 
 const AppContainer = styled.div`
   position: absolute;
@@ -30,6 +31,8 @@ const ChromeStorageValidator: t.Type<ChromeStorage> = t.type({
 
 const App = () => {
   useEffect(() => {
+    getFilterFromUrl();
+
     if (module.hot) return;
 
     chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {

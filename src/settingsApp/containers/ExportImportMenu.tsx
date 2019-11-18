@@ -75,18 +75,18 @@ export const TabsValidator = t.array(
   }),
 );
 
-export const FiltersValidator = t.array(
-  t.type({
-    id: t.number,
-    name: t.string,
-    type: t.union([t.literal('include'), t.literal('exclude')]),
-    userId: t.string,
-    userName: t.string,
-    tabs: t.array(t.union([t.number, t.literal('all')])),
-    videoNameRegex: t.string,
-    daysOfWeek: t.array(t.number),
-  }),
-);
+export const FilterPropsValidator = t.type({
+  id: t.number,
+  name: t.string,
+  type: t.union([t.literal('include'), t.literal('exclude')]),
+  userId: t.string,
+  userName: t.string,
+  tabs: t.array(t.union([t.number, t.literal('all')])),
+  videoNameRegex: t.string,
+  daysOfWeek: t.array(t.number),
+});
+
+export const FiltersValidator = t.array(FilterPropsValidator);
 
 const ImportDataValidator: t.Type<ImportData, ImportData> = t.type({
   tabs: TabsValidator,
@@ -183,11 +183,11 @@ const ExportImportMenu = () => {
 
   const importInfo = importData
     ? `Tabs (${importData.tabs.length}): ${(importData.tabs.length > 20
-      ? [...importData.tabs.slice(0, 20), { name: '...' }]
-      : importData.tabs
-    )
-      .map(tab => tab.name)
-      .join(', ')}
+        ? [...importData.tabs.slice(0, 20), { name: '...' }]
+        : importData.tabs
+      )
+        .map(tab => tab.name)
+        .join(', ')}
       Filters: ${importData.filters.length}`
     : importError;
 
