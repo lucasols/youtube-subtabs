@@ -260,6 +260,16 @@ describe('check if query matches item', () => {
     });
   });
 
+  test('generic accent insensitive', () => {
+    expect(checkFilter('mauricio', 13)).toMatchObject({
+      matches: true,
+    });
+
+    expect(checkFilter('maurício', 13)).toMatchObject({
+      matches: true,
+    });
+  });
+
   test('no results', () => {
     expect(checkFilter('', 3)).toEqual({
       matches: false,
