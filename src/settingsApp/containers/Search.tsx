@@ -7,14 +7,29 @@ import appState from 'settingsApp/state/appState';
 import TextField, { TextFieldRef } from 'settingsApp/components/TextField';
 import styled from '@emotion/styled';
 import FiltersList from 'settingsApp/components/CardList';
-import filtersState from 'settingsApp/state/filtersState';
-import { useDebounce } from '@lucasols/utils';
+import filtersState, { addFilter } from 'settingsApp/state/filtersState';
+import { useDebounce, rgba } from '@lucasols/utils';
 import { checkIfFieldsMatchesItem, getSearchFields } from 'utils/search';
-
-// TODO: add new filter duplicating props
+import { colorSecondary, colorGreen } from 'settingsApp/style/theme';
 
 const Header = styled(HeaderStyle)`
   grid-template-columns: 1fr auto;
+`;
+
+const AddBasedOnSearchButton = styled.button`
+  margin-bottom: 20px;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #fff;
+  /* width: 100%; */
+  border: 1.5px solid ${rgba(colorGreen, 0.4)};
+  opacity: 0.8;
+  transition: opacity 160ms;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Search = () => {
@@ -45,6 +60,20 @@ const Search = () => {
     [JSON.stringify(searchFields)],
   );
 
+  function addFilterBasedOnQuery() {
+    if (searchFields) {
+      const { name, tabs, type, userId, videoName } = searchFields;
+
+      addFilter({
+        name,
+        tabs,
+        userId,
+        videoNameRegex: videoName,
+        type: type === 'include' || type === 'exclude' ? type : undefined,
+      });
+    }
+  }
+
   return (
     <EditPageContainer
       css={{
@@ -70,6 +99,17 @@ const Search = () => {
           />
         </Header>
         <FiltersList items={searchResult} disableSort search />
+        {searchFields &&
+          (searchFields.name
+            || searchFields.userName
+            || searchFields.tabs
+            || searchFields.userId
+            || searchFields.videoName
+            || searchFields.type) && (
+            <AddBasedOnSearchButton onClick={addFilterBasedOnQuery}>
+              Add based on search
+            </AddBasedOnSearchButton>
+        )}
       </ContentWrapper>
     </EditPageContainer>
   );

@@ -26,7 +26,7 @@ const Container = styled.div`
 const ZeroResults = styled.div`
   font-size: 12px;
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-top: 8px;
   color: #aaa;
   border: 1.5px solid ${colorSecondary};
