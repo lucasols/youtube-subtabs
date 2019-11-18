@@ -13,6 +13,7 @@ import { validate } from 'utils/ioTsValidate';
 import { TabsValidator, FiltersValidator } from 'settingsApp/containers/ExportImportMenu';
 import { download } from 'utils/download';
 import * as t from 'io-ts';
+import Search from 'settingsApp/containers/Search';
 
 const AppContainer = styled.div`
   position: absolute;
@@ -99,6 +100,7 @@ const App = () => {
       {/* {!!module.hot && <TestSubTabs />} */}
       <Home />
       <EditTab />
+      <Search />
       <EditFilter />
       <DeleteTabModal />
       <DeleteFilterModal />

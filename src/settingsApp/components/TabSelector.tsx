@@ -9,7 +9,7 @@ import Modal from 'settingsApp/components/Modal';
 import { flatToNested } from 'utils/flatToNested';
 
 type Props = {
-  selectedTabsId?: FilterProps['tabs'];
+  selectedTabsId: FilterProps['tabs'];
   onChange: (selected: Props['selectedTabsId']) => void;
 };
 
@@ -76,8 +76,6 @@ const TabSelector = ({ selectedTabsId, onChange }: Props) => {
   const [tabs] = tabsState.useStore('tabs');
   const [showModal, setShowModal] = useState(false);
   const nestedTabs = flatToNested(tabs);
-
-  if (!selectedTabsId) return null;
 
   const selectedTabs = tabs.filter(item => selectedTabsId.includes(item.id));
 

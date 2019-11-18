@@ -3,6 +3,7 @@ import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
 import { TabProps } from 'settingsApp/state/tabsState';
 import { getUniqueId } from 'utils/getUniqueId';
 import appState from 'settingsApp/state/appState';
+import data from '../../../test/testData';
 
 export type ExclusiveFilterProps = {
   tabs: TabProps['id'][];
@@ -27,20 +28,7 @@ type Reducers = {
 
 const filtersState = createStore<filtersState, Reducers>('filtersState', {
   state: {
-    filters: module.hot ? [
-      {
-        id: 1, name: 'test', daysOfWeek: [], tabs: [1], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
-      },
-      {
-        id: 2, name: 'test2', daysOfWeek: [], tabs: [3], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
-      },
-      {
-        id: 3, name: 'test3', daysOfWeek: [], tabs: [3], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
-      },
-      {
-        id: 4, name: 'test4', daysOfWeek: [], tabs: [4], type: 'include', userId: 'a', userName: '', videoNameRegex: 'a',
-      },
-    ] : [],
+    filters: module.hot ? data.filters || [] : [],
   },
   reducers: {
     addFilters: (state, newfilters) => ({

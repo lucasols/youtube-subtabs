@@ -1,138 +1,77 @@
-import css from '@emotion/css';
-import { rgba } from '@lucasols/utils';
-import CardListItem, {
-  CollapseIcon,
-  Handler,
-} from 'settingsApp/components/CardListItem';
-import Nestable, {
-  NestableItemBaseProps,
-} from 'settingsApp/lib/react-nestable';
-import React, { useRef, useEffect } from 'react';
-import { colorPrimary, colorSecondary } from 'settingsApp/style/theme';
-import { anyObj } from '@lucasols/utils/dist/typings/utils';
+import styled from '@emotion/styled';
+import React from 'react';
+import CardListItem from 'settingsApp/components/CardListItem';
+import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
+import {
+  FilterProps,
+  ExclusiveFilterProps,
+} from 'settingsApp/state/filtersState';
+import appState from 'settingsApp/state/appState';
+import { colorSecondary } from 'settingsApp/style/theme';
 
-type Props<T extends anyObj> = {
-  items: NestableItemBaseProps<T>[];
-  maxDepth: number;
-  confirmChange?: (
-    dragItem: NestableItemBaseProps<T>,
-    destinationParent: NestableItemBaseProps<T> | null,
-  ) => boolean;
-  onClick: (item: NestableItemBaseProps<T>) => any;
-  setItems: (items: NestableItemBaseProps<T>[]) => any;
-  collapse?: 'ALL' | 'NONE';
+type Props = {
+  items: NestableItemBaseProps<ExclusiveFilterProps, number>[];
+  disableSort?: boolean;
 };
 
-const styleWrapper = css`
+const Container = styled.div`
   margin-top: 8px;
   margin-bottom: 20px;
   position: relative;
   width: 100%;
-
-  .nestable-list {
-    margin: 0;
-    padding: 0 0 0 20px;
-    list-style-type: none;
-  }
-
-  .nestable-item {
-    position: relative;
-  }
-
-  > .nestable-list {
-    padding: 0;
-  }
-
-  .nestable-item,
-  .nestable-item-copy {
-    margin: 8px 0 0;
-  }
-
-  .nestable-item:first-of-type,
-  .nestable-item-copy:first-of-type {
-    margin-top: 0;
-  }
-
-  .nestable-item .nestable-list,
-  .nestable-item-copy .nestable-list {
-    margin-top: 10px;
-  }
-
-  .nestable-item.is-dragging .nestable-list {
-    pointer-events: none;
-  }
-
-  .nestable-item.is-dragging * {
-    opacity: 0;
-  }
-
-  .nestable-item.is-dragging:before {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${rgba(colorSecondary, 0.4)};
-    border: 1px dashed ${colorPrimary};
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-  }
-
-  .nestable-item-icon {
-    margin-right: 5px;
-    cursor: pointer;
-  }
-
-  .nestable-drag-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    pointer-events: none;
-  }
-
-  .nestable-drag-layer > .nestable-list {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0;
-  }
+  text-align: center;
 `;
 
-function CardList<T extends anyObj = {}>({
-  items,
-  setItems,
-  confirmChange,
-  maxDepth,
-  onClick,
-  collapse,
-}: Props<T>) {
-  const nestableRef = useRef<Nestable<T>>(null);
+const ZeroResults = styled.div`
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  color: #aaa;
+  border: 1.5px solid ${colorSecondary};
+`;
 
-  function onChange(newItems: NestableItemBaseProps<T>[]) {
-    setItems(newItems);
+function FiltersList({ items, disableSort }: Props) {
+  function onClick(item: Props['items'][0]) {
+    appState.setKey('editFilter', item.id);
   }
 
-  useEffect(() => {
-    if (collapse) nestableRef.current?.collapse(collapse);
-  }, [collapse]);
-
   return (
-    <Nestable<T>
-      css={styleWrapper}
-      items={items}
-      onChange={onChange}
-      onClick={onClick}
-      maxDepth={maxDepth}
-      collapsed
-      confirmChange={confirmChange}
-      renderCollapseIcon={CollapseIcon}
-      renderItem={CardListItem}
-      handler={Handler}
-      ref={nestableRef}
-    />
+    <Container>
+      {items.length > 0 ? (
+        (!disableSort
+          ? items.sort((a, b) => {
+            const nameA =
+                a.name || a.userName || a.userId || a.videoNameRegex;
+            const nameB =
+                b.name || b.userName || b.userId || b.videoNameRegex;
+
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            return 0;
+          })
+          : items
+        ).map(item => (
+          <CardListItem
+            key={item.id}
+            item={item}
+            css={{ marginTop: 8 }}
+            index={1}
+            search
+            maxDepth={1}
+            onClick={onClick}
+          />
+        ))
+      ) : (
+        <ZeroResults>No filters to show</ZeroResults>
+      )}
+    </Container>
   );
 }
 
-export default CardList;
+export default FiltersList;

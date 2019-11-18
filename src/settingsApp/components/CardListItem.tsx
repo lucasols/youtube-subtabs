@@ -15,9 +15,11 @@ type Props = {
       Partial<ExclusiveTabProps> & { error?: string }
   >;
   index: number;
+  search?: boolean;
   maxDepth: number;
   handler?: JSX.Element;
   collapseIcon?: JSX.Element;
+  className?: string;
   onClick: (item: NestableItemBaseProps<{}>) => any;
 };
 
@@ -120,10 +122,11 @@ const CardListItem = ({
   item,
   handler,
   collapseIcon,
+  className,
   maxDepth,
   onClick,
 }: Props) => (
-  <Card title={item.isInvalid}>
+  <Card css={{ paddingLeft: !handler ? 16 : undefined }} className={className} title={item.isInvalid}>
     {handler}
     {collapseIcon}
     <ListLabel onClick={() => onClick(item)}>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { rgba } from '@lucasols/utils';
+import { rgba, useOnClickOutside } from '@lucasols/utils';
 import * as t from 'io-ts';
 import { reporter } from 'io-ts-reporters';
 import React, { ChangeEvent, useRef, useState } from 'react';
@@ -8,39 +8,29 @@ import Icon from 'settingsApp/components/Icon';
 import Modal from 'settingsApp/components/Modal';
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
 import tabsState, { TabProps } from 'settingsApp/state/tabsState';
-import { circle } from 'settingsApp/style/helpers';
-import { centerContent, centerContentCollum, hide, show } from 'settingsApp/style/modifiers';
+import { circle, rectSize } from 'settingsApp/style/helpers';
+import {
+  centerContent,
+  centerContentCollum,
+  hide,
+  show,
+} from 'settingsApp/style/modifiers';
 import { colorBg, colorError, colorSecondary } from 'settingsApp/style/theme';
 import { validate } from 'utils/ioTsValidate';
 import { download } from '../../utils/download';
 
-const MenuButton = styled.button`
-  ${centerContent};
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  ${circle(32)};
-
-  &::before {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    ${circle(32)};
-    background: ${colorSecondary};
-    opacity: 0;
-    transition: 160ms;
-  }
-
-  &:hover::before {
-    opacity: 0.6;
-  }
+const MenuWrapper = styled.div`
+  ${rectSize(32)};
+  display: inline-flex;
+  position: relative;
 `;
 
 const Options = styled.div`
   ${hide};
-  position: fixed;
-  top: ${16 + 32}px;
-  right: 16px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: max-content;
   background: ${colorSecondary};
   padding: 4px 0;
   border-radius: 4px;
@@ -74,25 +64,29 @@ const ImportDataInfo = styled.div`
 type ImportData = {
   tabs: Omit<TabProps, 'children' | 'isInvalid'>[];
   filters: Omit<FilterProps, 'children' | 'isInvalid'>[];
-}
+};
 
-export const TabsValidator = t.array(t.type({
-  id: t.union([t.number, t.literal('all')]),
-  name: t.string,
-  includeChildsFilter: t.boolean,
-  parent: t.union([t.null, t.union([t.number, t.literal('all')])]),
-}));
+export const TabsValidator = t.array(
+  t.type({
+    id: t.union([t.number, t.literal('all')]),
+    name: t.string,
+    includeChildsFilter: t.boolean,
+    parent: t.union([t.null, t.union([t.number, t.literal('all')])]),
+  }),
+);
 
-export const FiltersValidator = t.array(t.type({
-  id: t.number,
-  name: t.string,
-  type: t.union([t.literal('include'), t.literal('exclude')]),
-  userId: t.string,
-  userName: t.string,
-  tabs: t.array(t.union([t.number, t.literal('all')])),
-  videoNameRegex: t.string,
-  daysOfWeek: t.array(t.number),
-}));
+export const FiltersValidator = t.array(
+  t.type({
+    id: t.number,
+    name: t.string,
+    type: t.union([t.literal('include'), t.literal('exclude')]),
+    userId: t.string,
+    userName: t.string,
+    tabs: t.array(t.union([t.number, t.literal('all')])),
+    videoNameRegex: t.string,
+    daysOfWeek: t.array(t.number),
+  }),
+);
 
 const ImportDataValidator: t.Type<ImportData, ImportData> = t.type({
   tabs: TabsValidator,
@@ -162,21 +156,24 @@ const ExportImportMenu = () => {
         validate(
           data,
           ImportDataValidator,
-          (value) => {
-            const globalTabs = value.tabs.filter(tab => tab.id === 'all').length;
+          value => {
+            const globalTabs = value.tabs.filter(tab => tab.id === 'all')
+              .length;
 
             if (globalTabs === 1) {
               setImportData(value);
               setImportError('');
             } else {
-              setImportError(`${globalTabs} global tabs in file, expected 1 global tab`);
+              setImportError(
+                `${globalTabs} global tabs in file, expected 1 global tab`,
+              );
               setImportData(undefined);
             }
           },
           (err, result) => {
             setImportError(reporter<ImportData>(result).join('\n'));
             setImportData(undefined);
-          }
+          },
         );
       }
     };
@@ -185,27 +182,40 @@ const ExportImportMenu = () => {
   }
 
   const importInfo = importData
-    ? `Tabs (${importData.tabs.length}): ${(importData.tabs.length > 20 ? [...importData.tabs.slice(0, 20), { name: '...' }] : importData.tabs).map(tab => tab.name).join(', ')}
+    ? `Tabs (${importData.tabs.length}): ${(importData.tabs.length > 20
+      ? [...importData.tabs.slice(0, 20), { name: '...' }]
+      : importData.tabs
+    )
+      .map(tab => tab.name)
+      .join(', ')}
       Filters: ${importData.filters.length}`
     : importError;
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(menuRef, () => setShowOptions(false));
+
   return (
     <>
-      <MenuButton onClick={() => setShowOptions(!showOptions)}>
-        <Icon name="more-vert" />
-      </MenuButton>
-      <Options css={showOptions && show}>
-        <Option onClick={onClickExport}>Export app data</Option>
-        <Option onClick={() => setShowImportDialog(true)}>
-          Import app data
-        </Option>
-      </Options>
+      <MenuWrapper ref={menuRef}>
+        <Button onClick={() => setShowOptions(!showOptions)} icon="settings" />
+        <Options css={showOptions && show}>
+          <Option onClick={onClickExport}>Export app data</Option>
+          <Option onClick={() => setShowImportDialog(true)}>
+            Import app data
+          </Option>
+        </Options>
+      </MenuWrapper>
       <ImportDataModal
         title="Import data"
         show={showImportDialog}
         onClose={() => setShowImportDialog(false)}
       >
-        <input type="file" css={{ width: '100%' }} ref={importInputRef} onChange={onFileChange} />
+        <input
+          type="file"
+          css={{ width: '100%' }}
+          ref={importInputRef}
+          onChange={onFileChange}
+        />
         <ImportDataInfo css={{ color: !importData ? colorError : undefined }}>
           {importInfo}
         </ImportDataInfo>

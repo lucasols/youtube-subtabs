@@ -4,6 +4,9 @@ import React, {
   ChangeEvent,
   FunctionComponent,
   useEffect,
+  useImperativeHandle,
+  forwardRef,
+  RefForwardingComponent,
 } from 'react';
 import styled from '@emotion/styled';
 import { ellipsis } from 'polished';
@@ -63,6 +66,10 @@ type Props = {
   minErrorMsg?: string;
   maxErrorMsg?: string;
 };
+
+export type TextFieldRef = {
+  focus: () => void;
+}
 
 const Container = styled.div`
   width: 140px;
@@ -147,7 +154,7 @@ const ValidationError = styled.div`
   letter-spacing: 0.0125em;
 `;
 
-const TextField: FunctionComponent<Props> = ({
+const TextField: RefForwardingComponent<TextFieldRef, Props> = ({
   label,
   max,
   id,
@@ -171,11 +178,12 @@ const TextField: FunctionComponent<Props> = ({
   requiredErrorMsg = `This field can't be blank!`,
   minErrorMsg = 'The value must be higher than',
   maxErrorMsg = 'The value must be less than',
-}) => {
+}, ref) => {
   const [isValid, setIsValid] = useState(true);
   const [displayError, setDisplayError] = useState<string[]>([]);
   const inputId = useRef(`${Date.now() + Math.random()}`);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // const debouncedHandleChange = debounce<HandleChange>((...args) => {
   //   handleChange(...args);
@@ -233,6 +241,13 @@ const TextField: FunctionComponent<Props> = ({
     }
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current?.focus();
+      textareaRef.current?.focus();
+    },
+  }));
+
   const errors = [
     ...displayError,
     ...(forceRequiredErrorMsg && !displayError.includes(requiredErrorMsg)
@@ -258,7 +273,7 @@ const TextField: FunctionComponent<Props> = ({
     <Container css={{ width }} className={className}>
       <div css={{ position: 'relative', zIndex: 5 }}>
         {!multiline ? (
-          <input css={inputStyle} {...inputProps} />
+          <input css={inputStyle} {...inputProps} ref={inputRef} />
         ) : (
           <TextArea {...inputProps} ref={textareaRef} />
         )}
@@ -272,18 +287,20 @@ const TextField: FunctionComponent<Props> = ({
           </Label>
         )}
       </div>
-      <ValidationError
-        css={!hideErrors && (forceRequiredErrorMsg || !isValid) && show}
-      >
-        {errors
-          ? errors.map((error, i) => [
-            <span key={i}>{error}</span>,
-            i < errors.length ? <br key={`br-${i}`} /> : undefined,
-          ])
-          : undefined}
-      </ValidationError>
+      {(required || min || max || validations) && (
+        <ValidationError
+          css={!hideErrors && (forceRequiredErrorMsg || !isValid) && show}
+        >
+          {errors
+            ? errors.map((error, i) => [
+              <span key={i}>{error}</span>,
+              i < errors.length ? <br key={`br-${i}`} /> : undefined,
+            ])
+            : undefined}
+        </ValidationError>
+      )}
     </Container>
   );
 };
 
-export default TextField;
+export default forwardRef(TextField);

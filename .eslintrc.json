@@ -114,6 +114,7 @@
     ],
     "no-trailing-spaces": 0,
     "eol-last": 0,
+    "no-unused-expressions": 0,
 
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
@@ -176,12 +177,7 @@
     "@typescript-eslint/no-non-null-assertion": 0,
 
     /* jest */
-    "jest/expect-expect": "error",
-
-    // delete after update
-    "no-restricted-globals": 0,
-    "no-unused-expressions": 0,
-    "no-undef": 0
+    "jest/expect-expect": "error"
   },
   "extends": [
     "airbnb",

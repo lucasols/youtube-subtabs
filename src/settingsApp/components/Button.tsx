@@ -74,7 +74,7 @@ const Button = ({
   icon,
   disabled,
   noNewTab,
-  iconSize = 20,
+  iconSize = 16,
   small,
 }: Props) => (
   <Container
@@ -84,13 +84,21 @@ const Button = ({
     href={href}
     onClick={onClick}
     disabled={disabled}
-    css={[small && smallStyle]}
+    css={[small && smallStyle, icon && !label && iconOnlyStyle]}
     target={!href || noNewTab ? undefined : '_blank'}
   >
     {icon && (
       <Icon
         size={iconSize}
-        css={label && { marginRight: small ? 4 : 16, marginLeft: small ? -5 : undefined }}
+        css={[
+          label && {
+            marginRight: small ? 4 : 16,
+            marginLeft: small ? -5 : undefined,
+          },
+          icon && !label && {
+            margin: 0,
+          },
+        ]}
         name={icon}
         color="#fff"
       />

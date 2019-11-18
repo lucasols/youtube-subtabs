@@ -1,6 +1,5 @@
 import { checkIfExcludeVideo } from 'utils/filterVideos';
 import { FilterProps } from 'settingsApp/state/filtersState';
-import testData from './testData.json';
 
 const testVideo = {
   userName: 'Kurzgesagt – In a Nutshell',

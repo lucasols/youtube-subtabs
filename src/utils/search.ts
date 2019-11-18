@@ -1,18 +1,22 @@
 import { FilterProps } from 'settingsApp/state/filtersState';
 import { forEachMatch } from '@lucasols/utils';
-import { any } from 'io-ts';
+import { checkIfExcludeVideo } from 'utils/filterVideos';
 
 function stringToNum(string: string) {
   return !Number.isNaN(+string) ? +string : undefined;
 }
 
+function removeAccents(string: string) {
+  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 const fieldsParsers = {
   string: (value: string) => value.trim().replace(/\\/g, ''),
-  numArray: (value: string) => {
+  numOrAllArray: (value: string) => {
     const array = value
       .split(',')
-      .map(num => stringToNum(num))
-      .filter(Boolean) as number[];
+      .map(item => (item.trim() === 'all' ? item.trim() : stringToNum(item)))
+      .filter(Boolean) as (number | 'all')[];
 
     return array.length > 0 ? array : undefined;
   },
@@ -23,12 +27,19 @@ type Fields = {
   [name: string]: keyof typeof fieldsParsers;
 };
 
-export function getQueryFields<T extends Fields>(query: string, fields: T) {
+export function getQueryFields<T extends Fields>(
+  query: string,
+  fields: T,
+):
+  | false
+  | ({ generic?: string } & {
+      [K in keyof T]?: ReturnType<typeof fieldsParsers[T[K]]>;
+    }) {
+  if (!query) return false;
+
   const fieldsResult: {
     [K in keyof T]?: ReturnType<typeof fieldsParsers[T[K]]>;
   } = {};
-
-  if (!query) return fieldsResult;
 
   const fieldsNameString = Object.keys(fields).join('|');
   let genericSearch = '';
@@ -71,17 +82,102 @@ export function getQueryFields<T extends Fields>(query: string, fields: T) {
 export const getSearchFields = (query: string) =>
   getQueryFields(query, {
     name: 'string',
-    videoNameRegex: 'string',
-    tabs: 'numArray',
-    type: 'string',
     userName: 'string',
     userId: 'string',
+    videoName: 'string',
+    tabs: 'numOrAllArray',
+    type: 'string',
     id: 'number',
   });
 
 export function checkIfFieldsMatchesItem(
-  query: ReturnType<typeof getSearchFields>,
-  item: FilterProps,
+  fields: ReturnType<typeof getSearchFields>,
+  filter: FilterProps,
 ) {
+  if (!fields) return { matches: false, matchedOn: [], failedOn: [] };
 
+  const failures: string[] = [];
+  const matches: string[] = [];
+  const {
+    generic, tabs, name, userId, userName, type, id, videoName,
+  } = fields;
+
+  const fieldMatchState: {
+    [k in keyof typeof fields | 'filterTest']: null | boolean;
+  } = {
+    id: null,
+    filterTest: null,
+    name: null,
+    userId: null,
+    userName: null,
+    videoName: null,
+    tabs: null,
+    generic: null,
+    type: null,
+  };
+
+  if (id) {
+    fieldMatchState.id = id === filter.id;
+  } else {
+    if (name) {
+      fieldMatchState.name = name === filter.name;
+    }
+
+    if (type) {
+      fieldMatchState.type = type === filter.type;
+    }
+
+    if (tabs) {
+      fieldMatchState.tabs = tabs.some(tab => filter.tabs.includes(tab));
+    }
+
+    if (userId || userName || videoName) {
+      const checkResult = checkIfExcludeVideo(
+        {
+          userId: userId ?? '',
+          userName: userName ?? '',
+          videoName: videoName ?? '',
+          dayOfWeek: null,
+        },
+        [filter],
+        [],
+      );
+
+      fieldMatchState.filterTest = !checkResult.excludeVideo;
+      if (!checkResult.excludeVideo) {
+        checkResult.includeBasedOnFields.forEach(fieldName => {
+          fieldMatchState[fieldName] = true;
+        });
+      }
+    }
+  }
+
+  if (generic) {
+    fieldMatchState.generic =
+      generic === '*'
+      || new RegExp(removeAccents(generic), 'iu').test(
+        removeAccents(
+          [
+            fieldMatchState.name === null ? filter.name : '',
+            fieldMatchState.userName === null ? filter.userName : '',
+            fieldMatchState.userId === null ? filter.userId : '',
+            fieldMatchState.videoName === null ? filter.videoNameRegex : '',
+          ].join(' '),
+        ),
+      );
+  }
+
+  Object.entries(fieldMatchState).forEach(([fieldName, matchResult]) => {
+    if (matchResult === true) {
+      matches.push(fieldName);
+    } else if (matchResult === false) {
+      failures.push(fieldName);
+    }
+  });
+
+  return {
+    matches: matches.length > 0 && failures.length === 0,
+    matchedOn: matches,
+    failedOn: failures,
+  };
 }
