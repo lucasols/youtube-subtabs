@@ -40,6 +40,10 @@ describe('get query fields', () => {
       expect(getSearchFields('(tabs: 14, all )')).toEqual({
         tabs: [14, 'all'],
       });
+
+      expect(getSearchFields('(tabs: empty)')).toEqual({
+        tabs: [],
+      });
     });
 
     test('type', () => {
@@ -284,5 +288,9 @@ describe('check if query matches item', () => {
       matchedOn: ['generic'],
       failedOn: ['type'],
     });
+  });
+
+  test('not throw invalid regex error', () => {
+    expect(() => checkFilter('(', 3)).not.toThrow();
   });
 });

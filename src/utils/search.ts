@@ -6,13 +6,18 @@ function stringToNum(string: string) {
   return !Number.isNaN(+string) ? +string : undefined;
 }
 
-function removeAccents(string: string) {
-  return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function sanitizeRegex(string: string) {
+  return string
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 const fieldsParsers = {
   string: (value: string) => value.trim().replace(/\\/g, ''),
-  numOrAllArray: (value: string) => {
+  numOrAllOrEmptyArray: (value: string) => {
+    if (value.trim() === 'empty') return [];
+
     const array = value
       .split(',')
       .map(item => (item.trim() === 'all' ? item.trim() : stringToNum(item)))
@@ -85,7 +90,7 @@ export const getSearchFields = (query: string) =>
     userName: 'string',
     userId: 'string',
     videoName: 'string',
-    tabs: 'numOrAllArray',
+    tabs: 'numOrAllOrEmptyArray',
     type: 'string',
     id: 'number',
   });
@@ -128,7 +133,10 @@ export function checkIfFieldsMatchesItem(
     }
 
     if (tabs) {
-      fieldMatchState.tabs = tabs.some(tab => filter.tabs.includes(tab));
+      fieldMatchState.tabs =
+        tabs.length === 0
+          ? filter.tabs.length === 0
+          : tabs.some(tab => filter.tabs.includes(tab));
     }
 
     if (userId || userName || videoName) {
@@ -155,8 +163,8 @@ export function checkIfFieldsMatchesItem(
   if (generic) {
     fieldMatchState.generic =
       generic === '*'
-      || new RegExp(removeAccents(generic), 'iu').test(
-        removeAccents(
+      || new RegExp(sanitizeRegex(generic), 'iu').test(
+        sanitizeRegex(
           [
             fieldMatchState.name === null ? filter.name : '',
             fieldMatchState.userName === null ? filter.userName : '',

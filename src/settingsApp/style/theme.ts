@@ -7,6 +7,7 @@ export const colorSecondary = '#2B2934';
 export const colorBg = '#222029';
 export const colorError = '#DA1E28';
 export const colorWarning = '#FDD13A';
+export const colorGreen = '#1db954';
 
 /* gradients */
 export const colorGradient = (

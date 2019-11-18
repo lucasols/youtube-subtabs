@@ -12,6 +12,7 @@ import { colorSecondary } from 'settingsApp/style/theme';
 type Props = {
   items: NestableItemBaseProps<ExclusiveFilterProps, number>[];
   disableSort?: boolean;
+  search?: boolean;
 };
 
 const Container = styled.div`
@@ -31,7 +32,7 @@ const ZeroResults = styled.div`
   border: 1.5px solid ${colorSecondary};
 `;
 
-function FiltersList({ items, disableSort }: Props) {
+function FiltersList({ items, disableSort, search }: Props) {
   function onClick(item: Props['items'][0]) {
     appState.setKey('editFilter', item.id);
   }
@@ -62,9 +63,9 @@ function FiltersList({ items, disableSort }: Props) {
             item={item}
             css={{ marginTop: 8 }}
             index={1}
-            search
             maxDepth={1}
             onClick={onClick}
+            search={search}
           />
         ))
       ) : (

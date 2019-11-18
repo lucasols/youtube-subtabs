@@ -67,7 +67,6 @@ function stringify<T>(value: T) {
 
 const EditFilter = () => {
   const [editFilter, setEditFilter] = appState.useStore('editFilter');
-  const [editTab] = appState.useStore('editTab');
   const [newFilterProps, setNewFilterProps] = useState<EditFilterProps>();
   const [filters] = filtersState.useStore('filters');
 
@@ -218,8 +217,6 @@ const EditFilter = () => {
   }
 
   useEffect(() => {
-    if (!editTab) return;
-
     if (selectedFilter) {
       setNewFilterProps({
         name: selectedFilter.name,

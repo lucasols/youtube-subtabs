@@ -66,7 +66,7 @@ const Search = () => {
             icon="close"
           />
         </Header>
-        <FiltersList items={searchResult} disableSort />
+        <FiltersList items={searchResult} disableSort search />
       </ContentWrapper>
     </EditPageContainer>
   );

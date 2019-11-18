@@ -943,6 +943,16 @@ const data: {
       userId: 'JovemNerd',
       videoNameRegex: 'NerdTrader',
     },
+    {
+      daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+      id: 87,
+      name: '',
+      tabs: [],
+      type: 'include',
+      userName: '',
+      userId: 'Gameplayrj',
+      videoNameRegex: '',
+    },
   ],
 };
 
