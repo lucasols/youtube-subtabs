@@ -18,6 +18,7 @@ chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
   if (result.filters) filtersState.setKey('filters', result.filters);
 
   injectChannelButtons();
+  injectSubTab();
 
   filtersState.subscribe((prev, current) => {
     if (prev === current) return;
@@ -27,7 +28,6 @@ chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
 
 listenToChromeStorageChanges();
 injectModals();
-injectSubTab();
 
 subscribeToPageChange(/feed\/subscriptions/, () => {
   injectSubTab();
