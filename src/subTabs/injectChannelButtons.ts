@@ -2,21 +2,81 @@ import filtersState from 'settingsApp/state/filtersState';
 import { checkIfFieldsMatchesItem } from 'utils/search';
 import { genericFunction } from 'typings/utils';
 import { css } from 'emotion';
+import { openSettingsModal } from 'subTabs/injectSettingsModal';
+import { colorPrimary, colorSecondary, colorGreen } from 'settingsApp/style/theme';
+import { circle } from 'settingsApp/style/helpers';
+import { centerContent } from 'settingsApp/style/modifiers';
 
-const buttonStyle = css``;
+const buttonStyle = css`
+  ${circle(36)};
+  ${centerContent};
+  position: relative;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-top: 1.5px;
+  margin-right: 8px;
 
-function createButton(innerHTML: string, onClick: (e: MouseEvent) => any) {
-  const button = document.createElement('button');
-  button.className = buttonStyle;
+  &:focus {
+    outline: 0;
+  }
 
-  button.innerHTML = innerHTML;
-  button.addEventListener('click', onClick);
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    ${circle(32)};
+    background: ${colorPrimary};
+    opacity: 0.8;
+    transition: 160ms;
+  }
 
-  return button;
+  .filters-number {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    ${circle(14)};
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 14px;
+    text-align: center;
+    color: ${colorGreen};
+    background: ${colorSecondary};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+
+    path {
+      fill: #fff;
+    }
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+`;
+
+function createButton(id: string, innerHTML: string, parent: HTMLElement, onClick: (e: MouseEvent) => any) {
+  const oldButton = document.getElementById(id);
+
+  if (oldButton) {
+    oldButton.innerHTML = innerHTML;
+  } else {
+    const button = document.createElement('button');
+    button.className = buttonStyle;
+    button.id = id;
+
+    button.innerHTML = innerHTML;
+    button.addEventListener('click', onClick);
+
+    parent.insertBefore(button, parent.firstChild);
+  }
 }
 
 export function injectChannelButtons() {
-  const buttonsWrapper = document.querySelector(
+  const buttonsWrapper = document.querySelector<HTMLElement>(
     '#buttons.ytd-c4-tabbed-header-renderer',
   );
 
@@ -52,13 +112,24 @@ export function injectChannelButtons() {
     }))
     .filter(item => item.matches);
 
-  const editFiltersButton = createButton(
+  createButton(
+    `editFiltersButton${userId}`,
     `
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" aria-hidden="true" viewBox="0 0 32 32" style="will-change:transform"><path d="M18 28h-4a2 2 0 0 1-2-2v-7.59L4.59 11A2 2 0 0 1 4 9.59V6a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v3.59a2 2 0 0 1-.59 1.41L20 18.41V26a2 2 0 0 1-2 2zM6 6v3.59l8 8V26h4v-8.41l8-8V6z"/></svg>
-      <div>${userFilters.length}</div>
+      <svg viewBox="0 0 24 24">
+        <path fill="#000000" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" />
+      </svg>
+      <div class="filters-number">${userFilters.length}</div>
     `,
-    () => {
-      openSettingsModal('search=()')
-    },
+    buttonsWrapper,
+    () => openSettingsModal(`search=(userName:${userName}) (userId:${userId})`),
+  );
+
+  createButton(
+    `addFilterButton${userId}`,
+    `
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" aria-hidden="true" viewBox="0 0 32 32" style="will-change:transform"><path d="M17 15V7h-2v8H7v2h8v8h2v-8h8v-2h-8z"/></svg>
+    `,
+    buttonsWrapper,
+    () => openSettingsModal(`filter=new&fields=${JSON.stringify({ userName, userId })}`),
   );
 }

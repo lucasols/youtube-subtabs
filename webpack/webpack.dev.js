@@ -11,7 +11,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
   mode: 'development',
   watch: true,
 
-  devtool: false,
+  devtool: 'cheap-module-source-map',
 
   entry: {
     'content-script': './src/subTabs/index.tsx',

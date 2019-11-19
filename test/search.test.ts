@@ -1,6 +1,10 @@
 import testData from './testData';
 import { getSearchFields, checkIfFieldsMatchesItem } from 'utils/search';
-import { getFilterById } from 'settingsApp/state/filtersState';
+import { FilterProps } from 'settingsApp/state/filtersState';
+
+function getFilterById(id: FilterProps['id'], filters: FilterProps[]) {
+  return filters.find((item: typeof filters[0]) => item.id === id);
+}
 
 describe('get query fields', () => {
   describe('test fields', () => {
@@ -220,6 +224,17 @@ describe('check if query matches item', () => {
     ).toEqual({
       matches: true,
       matchedOn: ['filterTest', 'userName'],
+      failedOn: [],
+    });
+
+    expect(
+      checkFilter(
+        '(userName:Varanda Gourmet) (userId:UCkI99TG1VfkUCS6HAtLj4cg)',
+        48,
+      ),
+    ).toEqual({
+      matches: true,
+      matchedOn: ['filterTest', 'userId'],
       failedOn: [],
     });
   });

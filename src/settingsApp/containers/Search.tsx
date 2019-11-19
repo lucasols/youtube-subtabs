@@ -46,23 +46,28 @@ const Search = () => {
     }
   }, [show]);
 
-  const searchFields = useDebounce(getSearchFields(query ?? ''), 500);
-  const searchResult = useMemo(
-    () =>
-      (searchFields
+  const debouncedQuery = useDebounce(query, 500);
+  const searchResult = useMemo(() => {
+    const searchFields = getSearchFields(debouncedQuery ?? '');
+
+    return {
+      filters: searchFields
         ? filters
           .map(item => ({
             ...item,
             ...checkIfFieldsMatchesItem(searchFields, item),
           }))
           .filter(item => item.matches)
-        : []),
-    [JSON.stringify(searchFields)],
-  );
+        : [],
+      fields: searchFields,
+    };
+  }, [debouncedQuery, filters]);
 
   function addFilterBasedOnQuery() {
-    if (searchFields) {
-      const { name, tabs, type, userId, videoName } = searchFields;
+    // const searchFields = getSearchFields(debouncedQuery ?? '');
+
+    if (searchResult.fields) {
+      const { name, tabs, type, userId, videoName } = searchResult.fields;
 
       addFilter({
         name,
@@ -98,14 +103,14 @@ const Search = () => {
             icon="close"
           />
         </Header>
-        <FiltersList items={searchResult} disableSort search />
-        {searchFields &&
-          (searchFields.name
-            || searchFields.userName
-            || searchFields.tabs
-            || searchFields.userId
-            || searchFields.videoName
-            || searchFields.type) && (
+        <FiltersList items={searchResult.filters} disableSort search />
+        {searchResult.fields &&
+          (searchResult.fields.name
+            || searchResult.fields.userName
+            || searchResult.fields.tabs
+            || searchResult.fields.userId
+            || searchResult.fields.videoName
+            || searchResult.fields.type) && (
             <AddBasedOnSearchButton onClick={addFilterBasedOnQuery}>
               Add based on search
             </AddBasedOnSearchButton>
