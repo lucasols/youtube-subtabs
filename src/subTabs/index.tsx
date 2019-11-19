@@ -1,37 +1,33 @@
-import { injectModals } from 'subTabs/injectModals';
+import { injectModals } from 'subTabs/injectSettingsModal';
 import { name, version } from '../../package.json';
 import { injectSubTab } from './injectSubTab';
+import { initializeOnPageChangeListener, addPageChangeSubscriber as subscribeToPageChange } from './onPageChangeListener';
+import { listenToChromeStorageChanges, initializeFiltersSubscriber, initializeTabsSubscriber, ChromeStorage } from 'utils/chromeStorage';
+import tabsState from 'settingsApp/state/tabsState';
+import filtersState from 'settingsApp/state/filtersState';
+import { injectChannelButtons } from 'subTabs/injectChannelButtons';
 
 if (__PROD__) {
   console.log(`${name} v${version}`);
 }
 
-injectModals();
-injectSubTab();
+initializeOnPageChangeListener();
 
-const observer = new MutationObserver(mutations => {
-  mutations.forEach(mutation => {
-    if (
-      mutation.attributeName === 'aria-selected' &&
-      (mutation.target as HTMLElement).getAttribute('aria-selected') === 'true'
-    ) {
-      setTimeout(injectSubTab, 400);
-    }
-  });
+chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
+  if (result.tabs) tabsState.setKey('tabs', result.tabs);
+  if (result.filters) filtersState.setKey('filters', result.filters);
 });
 
-function addObserver() {
-  const subscriptionButton = document.querySelector(
-    'a[href="/feed/subscriptions"] paper-item',
-  );
-  if (subscriptionButton) {
-    observer.observe(subscriptionButton, {
-      attributes: true,
-      attributeFilter: ['aria-selected'],
-    });
-  } else {
-    setTimeout(addObserver, 400);
-  }
-}
+listenToChromeStorageChanges();
 
-setTimeout(addObserver, 400);
+injectModals();
+injectSubTab();
+injectChannelButtons();
+
+subscribeToPageChange(/feed\/subscriptions/, () => {
+  injectSubTab();
+});
+
+subscribeToPageChange(/(?:channel|user)\//, () => {
+  injectChannelButtons();
+});

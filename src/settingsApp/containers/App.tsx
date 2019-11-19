@@ -8,13 +8,14 @@ import Home from 'settingsApp/containers/Home';
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
 import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 import { colorBg } from 'settingsApp/style/theme';
-import { ChromeStorage, initializeFiltersSubscriber, initializeTabsSubscriber } from 'utils/chromeStorage';
+import { ChromeStorage, initializeFiltersSubscriber, initializeTabsSubscriber, listenToChromeStorageChanges } from 'utils/chromeStorage';
 import { validate } from 'utils/ioTsValidate';
 import { TabsValidator, FiltersValidator } from 'settingsApp/containers/ExportImportMenu';
 import { download } from 'utils/download';
 import * as t from 'io-ts';
 import Search from 'settingsApp/containers/Search';
 import { getFilterFromUrl } from 'settingsApp/state/appState';
+import { deepEqual } from '../../utils/deepEqual';
 
 const AppContainer = styled.div`
   position: absolute;
@@ -79,23 +80,7 @@ const App = () => {
       initializeFiltersSubscriber();
     });
 
-    function deepEqual<T, I>(v1: T, v2: I, callback: (v1: T, v2: I) => void) {
-      if (JSON.stringify(v1) !== JSON.stringify(v2)) {
-        callback(v1, v2);
-      }
-    }
-
-    chrome.storage.onChanged.addListener((changes) => {
-      if (changes.tabs) {
-        deepEqual(changes.tabs.newValue, tabsState.getState().tabs, (value) => {
-          tabsState.setKey('tabs', value);
-        });
-      } else if (changes.filters) {
-        deepEqual(changes.filters.newValue, tabsState.getState().tabs, (value) => {
-          filtersState.setKey('filters', value);
-        });
-      }
-    });
+    listenToChromeStorageChanges();
   }, []);
 
   return (

@@ -1,5 +1,6 @@
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
 import tabsState, { TabProps } from 'settingsApp/state/tabsState';
+import { deepEqual } from 'utils/deepEqual';
 
 export type ChromeStorage = {
   tabs?: Omit<TabProps, 'children' | 'isInvalid'>[];
@@ -39,5 +40,19 @@ export function initializeFiltersSubscriber() {
     chrome.storage.local.set(chromeSet, () => {
       console.log('filter local settings updated!');
     });
+  });
+}
+
+export function listenToChromeStorageChanges() {
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.tabs) {
+      deepEqual(changes.tabs.newValue, tabsState.getState().tabs, (value) => {
+        tabsState.setKey('tabs', value);
+      });
+    } else if (changes.filters) {
+      deepEqual(changes.filters.newValue, tabsState.getState().tabs, (value) => {
+        filtersState.setKey('filters', value);
+      });
+    }
   });
 }

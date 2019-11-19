@@ -16,7 +16,6 @@ type tabsState = {
   tabs: TabProps[];
 };
 
-
 type Reducers = {
   addTabs: tabsState['tabs'];
   updateTabs: tabsState['tabs'];
