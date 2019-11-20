@@ -1,6 +1,6 @@
 {
   "name": "Youtube SubTabs",
-  "version": "1.6.0",
+  "version": "1.5.1",
   "description": "Group and filter your youtube subscriptions",
   "manifest_version": 2,
   "incognito": "split",
@@ -10,15 +10,9 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://*.youtube.com/*"
-      ],
-      "js": [
-        "content-script.js"
-      ],
-      "css": [
-        "override.css"
-      ]
+      "matches": ["https://*.youtube.com/*"],
+      "js": ["content-script.js"],
+      "css": ["override.css"]
     }
   ],
   "permissions": [
@@ -28,7 +22,5 @@
   "icons": {
     "256": "assets/icon.png"
   },
-  "web_accessible_resources": [
-    "*.html"
-  ]
+  "web_accessible_resources": ["*.html"]
 }

@@ -8,6 +8,10 @@ const commonConfig = require('./webpack.common');
 const merge = require('webpack-merge');
 const Crx3 = require("crx3-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
+
+const pkg = require('../package.json');
+const baseManifest = require('../src/manifest.json');
 
 module.exports = merge(commonConfig, /** @type { import('webpack').Configuration } */ {
   mode: 'production',
@@ -81,6 +85,12 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.HashedModuleIdsPlugin(),
+    new WebpackExtensionManifestPlugin({
+      config: {
+        base: baseManifest,
+        extend: { version: pkg.version },
+      },
+    }),
     new HtmlWebpackPlugin({
       template: 'src/settingsApp/index.ejs',
       chunks: ['popup'],

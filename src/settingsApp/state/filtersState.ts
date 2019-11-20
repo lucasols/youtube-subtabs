@@ -110,6 +110,8 @@ export function addFilter(props: Partial<FilterProps>) {
   ]);
 
   appState.setKey('editFilter', id);
+
+  console.log('added filter', id);
 }
 
 export default filtersState;

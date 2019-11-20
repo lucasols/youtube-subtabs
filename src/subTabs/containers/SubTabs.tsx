@@ -11,6 +11,7 @@ import Tab from 'subTabs/components/Tab';
 import { colorYoutubeBg, colorYoutubePrimary } from 'subTabs/theme';
 import { filterVideos } from 'utils/filterVideos';
 import { flatToNested } from 'utils/flatToNested';
+import { createStore } from 'hookstated/dist';
 
 const FixedContainer = styled.div`
   position: fixed;
@@ -85,6 +86,10 @@ function getActiveTabFromUrl(tabs: TabProps[]) {
 
 const debouncedFilterVideos = debounce(filterVideos, 500);
 
+export const activeTabState = createStore('activeTab', {
+  state: { id: getActiveTabFromUrl(tabsState.getState().tabs) },
+});
+
 const App = () => {
   const [tabs] = tabsState.useStore('tabs');
   const [filters] = filtersState.useStore('filters');
@@ -93,14 +98,10 @@ const App = () => {
   const [rootRect, setRootRect] = useState<DOMRect>();
   const tabsWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeTabId, setActiveTabId] = useState<number | 'all' | false>(
-    getActiveTabFromUrl(tabs),
-  );
+  const [activeTabId, setActiveTabId] = activeTabState.useStore('id');
   const containerWidth = rootRect?.width || 0;
 
-  const activeTab =
-    tabs.find(tab => tab.id === activeTabId)
-    || tabs[0];
+  const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
 
   const parentTabs = flatToNested(tabs);
 

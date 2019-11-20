@@ -3,7 +3,7 @@ import Icon from 'settingsApp/components/Icon';
 import { NestableItemBaseProps } from 'settingsApp/lib/react-nestable';
 import React from 'react';
 import appState from 'settingsApp/state/appState';
-import { ExclusiveFilterProps } from 'settingsApp/state/filtersState';
+import { ExclusiveFilterProps, FilterProps } from 'settingsApp/state/filtersState';
 import { addTab, ExclusiveTabProps } from 'settingsApp/state/tabsState';
 import { circle } from 'settingsApp/style/helpers';
 import { centerContent } from 'settingsApp/style/modifiers';
@@ -13,6 +13,7 @@ import {
   colorError,
   colorGreen,
 } from 'settingsApp/style/theme';
+import { getFilterName } from 'utils/getFilterName';
 
 type Props = {
   item: NestableItemBaseProps<
@@ -166,12 +167,7 @@ const CardListItem = ({
         )}
         <span>
           {item.tabs
-            ? item.name
-              || (item.userId || item.videoNameRegex
-                ? `${item.userId ? `user: "${item.userId}"` : ''} ${
-                  item.videoNameRegex ? `video: "${item.videoNameRegex}"` : ''
-                }`
-                : 'Invalid Filter')
+            ? getFilterName(item as FilterProps)
             : `${item.name} ${item.id === 'all' ? '🌐' : ''}`}
         </span>
         {item.isInvalid && (

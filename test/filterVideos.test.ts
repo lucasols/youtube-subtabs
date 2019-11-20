@@ -1,5 +1,15 @@
 import { checkIfExcludeVideo } from 'utils/filterVideos';
 import { FilterProps } from 'settingsApp/state/filtersState';
+import testData from './testData';
+
+function getFilterById(
+  id: FilterProps['id'],
+  filters: FilterProps[] = testData.filters,
+) {
+  return (
+    filters.find((item: typeof filters[0]) => item.id === id) || filters[0]
+  );
+}
 
 const testVideo = {
   userName: 'Kurzgesagt – In a Nutshell',
@@ -223,6 +233,27 @@ describe('checkIfExcludeVideo', () => {
         expect(result).toMatchObject({
           excludeVideo: true,
           includeBasedOnFilter: undefined,
+        });
+      });
+
+      test('channel only not fails on videoNameRegex only filters', () => {
+        const result = checkIfExcludeVideo(
+          {
+            userName: 'Coisa Nossa',
+            userId: 'UCbtlMIfdRVxPXZ1nI8NBN2A',
+            videoName: '',
+            dayOfWeek: 4,
+          },
+          [getFilterById(29)],
+          [],
+        );
+
+        expect(result).toEqual({
+          excludeVideo: true,
+          includeBasedOnFilter: undefined,
+          includeBasedOnFields: [],
+          excludeBasedOnFilter: undefined,
+          excludeBasedOnFields: [],
         });
       });
     });

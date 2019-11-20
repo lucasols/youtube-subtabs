@@ -32,9 +32,10 @@ const ChromeStorageValidator: t.Type<ChromeStorage> = t.type({
 
 const App = () => {
   useEffect(() => {
-    getFilterFromUrl();
-
-    if (module.hot) return;
+    if (module.hot) {
+      getFilterFromUrl();
+      return;
+    }
 
     chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
       const globalTab: TabProps = { id: 'all', name: 'All', parent: null, includeChildsFilter: false };
@@ -78,6 +79,7 @@ const App = () => {
       });
 
       initializeFiltersSubscriber();
+      getFilterFromUrl();
     });
 
     listenToChromeStorageChanges();

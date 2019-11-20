@@ -70,9 +70,7 @@ const EditFilter = () => {
   const [newFilterProps, setNewFilterProps] = useState<EditFilterProps>();
   const [filters] = filtersState.useStore('filters');
 
-  const selectedFilter = filtersState
-    .getState()
-    .filters.find((item: typeof filters[0]) => item.id === editFilter);
+  const selectedFilter = filters.find((item: typeof filters[0]) => item.id === editFilter);
 
   const show = !!selectedFilter;
 
@@ -94,8 +92,7 @@ const EditFilter = () => {
       !(
         newFilterProps.textFields.userRegex.isValid &&
         newFilterProps.textFields.userNameRegex.isValid &&
-        newFilterProps.textFields.videoNameRegex.isValid &&
-        newFilterProps.tabs.length > 0
+        newFilterProps.textFields.videoNameRegex.isValid
       )
     ) {
       console.log('invalid props');

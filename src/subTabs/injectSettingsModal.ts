@@ -3,6 +3,7 @@ import { css } from 'emotion';
 import { colorBg, colorSecondary, colorPrimary } from 'settingsApp/style/theme';
 import { centerContent } from 'settingsApp/style/modifiers';
 import { circle } from 'settingsApp/style/helpers';
+import { genericFunction, obj } from 'typings/utils';
 
 const style = css`
   ${centerContent};
@@ -111,12 +112,18 @@ function showModal() {
   }
 }
 
-export function openSettingsModal(params?: string) {
+export function openSettingsModal(params?: obj<string>) {
   const iframe = settingsModalWrapper.querySelector('iframe');
   if (iframe) {
     iframe.addEventListener('load', showModal);
+
+    const url = new URLSearchParams();
+    Object.entries(params || {}).forEach(([name, value]) => {
+      url.append(name, value);
+    });
+
     iframe.src = `${chrome.extension.getURL('index.html')}${
-      params ? `?${encodeURI(params)}` : ''
+      params ? `?${url.toString()}` : ''
     }`;
   }
 }

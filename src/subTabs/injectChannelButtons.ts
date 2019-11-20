@@ -3,7 +3,11 @@ import { checkIfFieldsMatchesItem } from 'utils/search';
 import { genericFunction } from 'typings/utils';
 import { css } from 'emotion';
 import { openSettingsModal } from 'subTabs/injectSettingsModal';
-import { colorPrimary, colorSecondary, colorGreen } from 'settingsApp/style/theme';
+import {
+  colorPrimary,
+  colorSecondary,
+  colorGreen,
+} from 'settingsApp/style/theme';
 import { circle } from 'settingsApp/style/helpers';
 import { centerContent } from 'settingsApp/style/modifiers';
 
@@ -58,15 +62,25 @@ const buttonStyle = css`
   }
 `;
 
-function createButton(id: string, innerHTML: string, parent: HTMLElement, onClick: (e: MouseEvent) => any) {
+function createButton(
+  id: string,
+  innerHTML: string,
+  parent: HTMLElement,
+  title: string,
+  onClick: (e: MouseEvent) => any,
+) {
   const oldButton = document.getElementById(id);
 
   if (oldButton) {
-    oldButton.innerHTML = innerHTML;
+    const newButton = oldButton.cloneNode(true) as HTMLElement;
+    newButton.innerHTML = innerHTML;
+    newButton.addEventListener('click', onClick);
+    parent.replaceChild(newButton, oldButton);
   } else {
     const button = document.createElement('button');
     button.className = buttonStyle;
     button.id = id;
+    button.title = title;
 
     button.innerHTML = innerHTML;
     button.addEventListener('click', onClick);
@@ -113,7 +127,7 @@ export function injectChannelButtons() {
     .filter(item => item.matches);
 
   createButton(
-    `editFiltersButton${userId}`,
+    `editFiltersButton`,
     `
       <svg viewBox="0 0 24 24">
         <path fill="#000000" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" />
@@ -121,15 +135,24 @@ export function injectChannelButtons() {
       <div class="filters-number">${userFilters.length}</div>
     `,
     buttonsWrapper,
-    () => openSettingsModal(`search=(userName:${userName}) (userId:${userId})`),
+    'Edit channel filters',
+    () =>
+      openSettingsModal({
+        search: `(userName:${userName}) (userId:${userId})`,
+      }),
   );
 
   createButton(
-    `addFilterButton${userId}`,
+    `addFilterButton`,
     `
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" aria-hidden="true" viewBox="0 0 32 32" style="will-change:transform"><path d="M17 15V7h-2v8H7v2h8v8h2v-8h8v-2h-8z"/></svg>
     `,
     buttonsWrapper,
-    () => openSettingsModal(`filter=new&fields=${JSON.stringify({ userName, userId })}`),
+    'Add filter',
+    () =>
+      openSettingsModal({
+        filter: 'new',
+        fields: JSON.stringify({ userName, userId }),
+      }),
   );
 }

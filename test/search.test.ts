@@ -1,6 +1,6 @@
-import testData from './testData';
 import { getSearchFields, checkIfFieldsMatchesItem } from 'utils/search';
 import { FilterProps } from 'settingsApp/state/filtersState';
+import testData from './testData';
 
 function getFilterById(id: FilterProps['id'], filters: FilterProps[]) {
   return filters.find((item: typeof filters[0]) => item.id === id);
@@ -236,6 +236,32 @@ describe('check if query matches item', () => {
       matches: true,
       matchedOn: ['filterTest', 'userId'],
       failedOn: [],
+    });
+  });
+
+  test('search channel only on filter with videoNameRegex', () => {
+    expect(
+      checkFilter(
+        '(userName:Coisa Nossa) (userId:UCbtlMIfdRVxPXZ1nI8NBN2A)',
+        55,
+      ),
+    ).toEqual({
+      matches: true,
+      matchedOn: ['filterTest', 'userId'],
+      failedOn: [],
+    });
+  });
+
+  test('search channel only not fails on videoNameRegex only filters', () => {
+    expect(
+      checkFilter(
+        '(userName:Coisa Nossa) (userId:UCbtlMIfdRVxPXZ1nI8NBN2A)',
+        29,
+      ),
+    ).toEqual({
+      matches: false,
+      matchedOn: [],
+      failedOn: ['filterTest'],
     });
   });
 

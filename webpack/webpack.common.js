@@ -52,6 +52,13 @@ module.exports = /** @type { import('webpack').Configuration } */ {
         loader: 'file-loader',
         options: fileLoaderOptions,
       },
+      {
+        test: /\.css$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        },
+      },
     ],
   },
   resolve: {

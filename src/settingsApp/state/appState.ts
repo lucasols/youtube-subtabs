@@ -47,9 +47,16 @@ export function getFilterFromUrl() {
   if (selectedFilter === 'new') {
     const fields = JSON.parse(urlParams.get('fields') || '');
 
-    validate(fields, t.partial(FilterPropsValidator.props), filter => {
-      addFilter(filter);
-    });
+    validate(
+      fields,
+      t.partial(FilterPropsValidator.props),
+      filter => {
+        addFilter(filter);
+      },
+      () => {
+        console.error('invalid new data');
+      },
+    );
   } else {
     appState.setKey('editFilter', stringToNum(selectedFilter) || null);
   }

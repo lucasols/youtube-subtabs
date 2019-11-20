@@ -1,11 +1,21 @@
 import { injectModals } from 'subTabs/injectSettingsModal';
 import { name, version } from '../../package.json';
 import { injectSubTab } from './injectSubTab';
-import { initializeOnPageChangeListener, addPageChangeSubscriber as subscribeToPageChange } from './onPageChangeListener';
-import { listenToChromeStorageChanges, initializeFiltersSubscriber, initializeTabsSubscriber, ChromeStorage } from 'utils/chromeStorage';
+import {
+  initializeOnPageChangeListener,
+  addPageChangeSubscriber as subscribeToPageChange,
+} from './onPageChangeListener';
+import {
+  listenToChromeStorageChanges,
+  initializeFiltersSubscriber,
+  initializeTabsSubscriber,
+  ChromeStorage,
+} from 'utils/chromeStorage';
 import tabsState from 'settingsApp/state/tabsState';
 import filtersState from 'settingsApp/state/filtersState';
 import { injectChannelButtons } from 'subTabs/injectChannelButtons';
+import './override.css';
+import 'subTabs/injectVideoDropdownButtons';
 
 if (__PROD__) {
   console.log(`${name} v${version}`);
@@ -29,10 +39,14 @@ chrome.storage.local.get(['tabs', 'filters'], (result: ChromeStorage) => {
 listenToChromeStorageChanges();
 injectModals();
 
-subscribeToPageChange(/feed\/subscriptions/, () => {
-  injectSubTab();
-});
+subscribeToPageChange(
+  /feed\/subscriptions/,
+  '*[page-subtype="subscriptions"] ytd-shelf-renderer > #dismissable',
+  injectSubTab,
+);
 
-subscribeToPageChange(/(?:channel|user)\//, () => {
-  injectChannelButtons();
-});
+subscribeToPageChange(
+  /(?:channel|user)\//,
+  '#buttons.ytd-c4-tabbed-header-renderer',
+  injectChannelButtons,
+);

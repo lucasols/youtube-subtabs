@@ -29,7 +29,10 @@ export function checkIfExcludeVideo(
       daysOfWeek?: () => void;
     },
   ) {
-    let userMatches = !(filter.userName || filter.userId);
+    let userMatches =
+      !filter.userName && !filter.userId && !videoName
+        ? false
+        : !(filter.userName || filter.userId);
 
     if (filter.userName && filter.userName === userName) {
       userMatches = true;
@@ -41,11 +44,12 @@ export function checkIfExcludeVideo(
       callbacks.userId();
     }
 
-    let videoNameMatches = !filter.videoNameRegex;
+    let videoNameMatches = !videoName || !filter.videoNameRegex;
 
     if (
       userMatches &&
       filter.videoNameRegex &&
+      videoName &&
       new RegExp(filter.videoNameRegex, 'i').test(videoName)
     ) {
       videoNameMatches = true;
@@ -128,8 +132,8 @@ export function checkIfExcludeVideo(
   };
 }
 
-function checkVideo(
-  element: HTMLDivElement,
+export function checkVideoElem(
+  element: HTMLElement,
   includeFilters: FilterProps[],
   excludeFilters: FilterProps[],
 ) {
@@ -179,21 +183,20 @@ function checkVideo(
 
   return {
     ...excludeVideo,
+    videoName,
+    userId,
+    userName,
   };
 }
 
 let lastFilteredVideo = -1;
 let lastRunId = '';
 
-export function filterVideos(
+export function getActiveFilters(
   active: 'all' | number,
   tabs: TabProps[],
   filters: FilterProps[],
 ) {
-  const videosElements = document.querySelectorAll<HTMLDivElement>(
-    '#items > ytd-grid-video-renderer',
-  );
-
   const activeTab = tabs.find(item => item.id === active);
   let activeFilters = filters.filter(item => item.tabs.includes(active));
 
@@ -221,10 +224,27 @@ export function filterVideos(
       index === self.findIndex(t => t.id === filter.id),
   );
 
-  const excludeFilters = activeFilters.filter(item => item.type === 'exclude');
-  const includeFilters = activeFilters.filter(item => item.type === 'include');
+  return {
+    excludeFilters: activeFilters.filter(item => item.type === 'exclude'),
+    includeFilters: activeFilters.filter(item => item.type === 'include'),
+    runId: JSON.stringify([activeTab?.id, activeFilters]),
+  };
+}
 
-  const runId = JSON.stringify([activeTab?.id, activeFilters]);
+export function filterVideos(
+  active: 'all' | number,
+  tabs: TabProps[],
+  filters: FilterProps[],
+) {
+  const videosElements = document.querySelectorAll<HTMLDivElement>(
+    '#items > ytd-grid-video-renderer',
+  );
+
+  const { includeFilters, excludeFilters, runId } = getActiveFilters(
+    active,
+    tabs,
+    filters,
+  );
 
   if (runId !== lastRunId) {
     lastRunId = runId;
@@ -239,7 +259,7 @@ export function filterVideos(
   // console.time(`videos-${videosElements.length}`);
 
   for (let i = lastFilteredVideo + 1; i < videosElements.length; i++) {
-    const videoProps = checkVideo(
+    const videoProps = checkVideoElem(
       videosElements[i],
       includeFilters,
       excludeFilters,
