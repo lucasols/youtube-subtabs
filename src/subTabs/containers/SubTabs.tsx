@@ -120,7 +120,7 @@ const App = () => {
 
     debouncedFilterVideos(activeTab.id, tabs, filters);
 
-    const videoContainer = document.querySelector('ytd-section-list-renderer');
+    const videoContainer = document.querySelector<HTMLElement>('ytd-section-list-renderer');
 
     const observeElemSizes = new ResizeObserver(entries => {
       entries.forEach(entry => {
@@ -130,7 +130,9 @@ const App = () => {
       });
     });
 
-    if (videoContainer) observeElemSizes.observe(videoContainer);
+    if (videoContainer) {
+      observeElemSizes.observe(videoContainer);
+    }
 
     return () => observeElemSizes.disconnect();
   }, [activeTab?.id, tabs, filters]);

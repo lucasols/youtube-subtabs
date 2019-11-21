@@ -70,7 +70,9 @@ const EditFilter = () => {
   const [newFilterProps, setNewFilterProps] = useState<EditFilterProps>();
   const [filters] = filtersState.useStore('filters');
 
-  const selectedFilter = filters.find((item: typeof filters[0]) => item.id === editFilter);
+  const selectedFilter = filters.find(
+    (item: typeof filters[0]) => item.id === editFilter,
+  );
 
   const show = !!selectedFilter;
 
@@ -94,8 +96,16 @@ const EditFilter = () => {
         newFilterProps.textFields.userNameRegex.isValid &&
         newFilterProps.textFields.videoNameRegex.isValid
       )
+      || newFilterProps.tabs.length === 0
     ) {
-      console.log('invalid props');
+      return false;
+    }
+
+    if (
+      !newFilterProps.textFields.userRegex.value &&
+      !newFilterProps.textFields.userNameRegex.value &&
+      !newFilterProps.textFields.videoNameRegex.value
+    ) {
       return false;
     }
 
@@ -130,16 +140,6 @@ const EditFilter = () => {
           type: selectedFilter.type,
         })
     ) {
-      console.log('new props is equal to saved');
-      return false;
-    }
-
-    if (
-      !newFilterProps.textFields.userRegex.value &&
-      !newFilterProps.textFields.userNameRegex.value &&
-      !newFilterProps.textFields.videoNameRegex.value
-    ) {
-      console.log('at least one filte must be defined');
       return false;
     }
 
@@ -248,7 +248,10 @@ const EditFilter = () => {
       <ContentWrapper>
         <HeaderStyle>
           <HeaderLeft>
-            <HeaderButton onClick={() => setEditFilter(null)} icon="chevron-left" />
+            <HeaderButton
+              onClick={() => setEditFilter(null)}
+              icon="chevron-left"
+            />
           </HeaderLeft>
           <HeaderContent>
             Filter ·
@@ -261,17 +264,14 @@ const EditFilter = () => {
             />
           </HeaderContent>
         </HeaderStyle>
-
         <FilterTypeSelector
           selected={newFilterProps?.type ?? null}
           onChange={onTypeChange}
         />
-
         <TabSelector
           selectedTabsId={newFilterProps?.tabs ?? []}
           onChange={onTabsChange}
         />
-
         <TextField
           value={newFilterProps?.textFields.userNameRegex.value ?? ''}
           id="userNameRegex"
@@ -280,7 +280,6 @@ const EditFilter = () => {
           handleChange={handleTextFieldsChange}
           disableLabelAnimation
         />
-
         <TextField
           value={newFilterProps?.textFields.userRegex.value ?? ''}
           id="userRegex"
@@ -290,7 +289,6 @@ const EditFilter = () => {
           disableLabelAnimation
           validations={[regexValidator]}
         />
-
         <TextField
           value={newFilterProps?.textFields.videoNameRegex.value ?? ''}
           id="videoNameRegex"
@@ -300,18 +298,21 @@ const EditFilter = () => {
           disableLabelAnimation
           validations={[regexValidator]}
         />
-
         <DayOfWeekSelector
           days={newFilterProps?.daysOfWeek ?? []}
           onChange={onDayOfWeekChange}
         />
-
         {!newFilterProps?.textFields.userRegex.value &&
           !newFilterProps?.textFields.userNameRegex.value &&
           !newFilterProps?.textFields.videoNameRegex.value && (
             <Row css={{ color: colorError, fontSize: 12, marginBottom: -24 }}>
               Error: At least one of the regex fields must me defined!
             </Row>
+        )}
+        {newFilterProps?.tabs.length === 0 && (
+          <Row css={{ color: colorError, fontSize: 12, marginBottom: -24 }}>
+            Error: No tabs selected!
+          </Row>
         )}
         <Row
           css={{

@@ -1,3 +1,8 @@
-iron-dropdown #items > ytd-menu-service-item-renderer:nth-child(4) {
-  /* display: none; */
+*[page-subtype="subscriptions"] {
+  opacity: 0;
+  transform: opacity 160ms;
+}
+
+ytd-menu-service-item-renderer[has-separator_]:last-of-type::after {
+  display: none !important;
 }

@@ -54,6 +54,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
       config: {
         base: baseManifest,
         extend: {
+          name: 'Youtube SubTabs - Dev',
           version: pkg.version,
           background: {
             scripts: ["background.js"],

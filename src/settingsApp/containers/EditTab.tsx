@@ -33,7 +33,7 @@ import filtersState, {
 } from 'settingsApp/state/filtersState';
 import { filterIsInvalid } from 'utils/validation';
 import HeaderButton from 'settingsApp/components/HeaderButton';
-import FiltersList from 'settingsApp/components/CardList';
+import FiltersList from 'settingsApp/components/FilterList';
 
 export const EditPageContainer = styled.div`
   ${fillContainer};

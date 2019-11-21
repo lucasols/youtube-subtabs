@@ -8,6 +8,7 @@ import {
 } from 'settingsApp/state/filtersState';
 import appState from 'settingsApp/state/appState';
 import { colorSecondary } from 'settingsApp/style/theme';
+import { filterIsInvalid } from 'utils/validation';
 
 type Props = {
   items: NestableItemBaseProps<ExclusiveFilterProps, number>[];
@@ -60,7 +61,12 @@ function FiltersList({ items, disableSort, search }: Props) {
         ).map(item => (
           <CardListItem
             key={item.id}
-            item={item}
+            item={{
+              ...item,
+              isInvalid: filterIsInvalid(item)
+                ? 'Filter is invalid'
+                : undefined,
+            }}
             css={{ marginTop: 8 }}
             index={1}
             maxDepth={1}

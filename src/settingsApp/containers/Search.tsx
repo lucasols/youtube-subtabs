@@ -6,14 +6,14 @@ import { EditPageContainer } from 'settingsApp/containers/EditTab';
 import appState from 'settingsApp/state/appState';
 import TextField, { TextFieldRef } from 'settingsApp/components/TextField';
 import styled from '@emotion/styled';
-import FiltersList from 'settingsApp/components/CardList';
+import FiltersList from 'settingsApp/components/FilterList';
 import filtersState, { addFilter } from 'settingsApp/state/filtersState';
 import { useDebounce, rgba } from '@lucasols/utils';
 import { checkIfFieldsMatchesItem, getSearchFields } from 'utils/search';
 import { colorSecondary, colorGreen } from 'settingsApp/style/theme';
 
 const Header = styled(HeaderStyle)`
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr;
 `;
 
 const AddBasedOnSearchButton = styled.button`
@@ -89,18 +89,18 @@ const Search = () => {
     >
       <ContentWrapper>
         <Header>
+          <HeaderButton
+            onClick={() => setQuery(null)}
+            css={{ marginRight: 8, alignSelf: 'center' }}
+            icon="chevron-left"
+          />
           <TextField
             ref={inputRef}
             value={query ?? ''}
             label="Search"
-            css={{ gridColumn: '1' }}
+            css={{ gridColumn: '2' }}
             handleChange={newValue => setQuery(`${newValue}`)}
             usePlaceholder
-          />
-          <HeaderButton
-            onClick={() => setQuery(null)}
-            css={{ marginLeft: 8, alignSelf: 'center' }}
-            icon="close"
           />
         </Header>
         <FiltersList items={searchResult.filters} disableSort search />

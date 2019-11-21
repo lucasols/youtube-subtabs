@@ -22,5 +22,5 @@
   "icons": {
     "256": "assets/icon.png"
   },
-  "web_accessible_resources": ["*.html"]
+  "web_accessible_resources": ["*.html", "*.css"]
 }

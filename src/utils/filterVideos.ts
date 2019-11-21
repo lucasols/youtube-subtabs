@@ -137,22 +137,28 @@ export function checkVideoElem(
   includeFilters: FilterProps[],
   excludeFilters: FilterProps[],
 ) {
-  const userNameElement = element.querySelector<HTMLAnchorElement>(
-    '#channel-name a',
+  const userIdElement = element.querySelector<HTMLAnchorElement>(
+    'ytd-video-owner-renderer a, #channel-name a',
   );
 
-  const videoName = element.querySelector<HTMLDivElement>('#video-title')
-    ?.innerText;
-  const userId = userNameElement?.href.replace(
+  const videoName = element.querySelector<HTMLDivElement>(
+    '#video-title, h1.title.ytd-video-primary-info-renderer',
+  )?.innerText;
+  const userId = userIdElement?.href.replace(
     /https:\/\/www.youtube.com\/(user|channel)\//,
     '',
   );
-  const userName = userNameElement?.innerText;
+  const userName =
+    userIdElement?.innerText
+    || element.querySelector<HTMLElement>('#channel-name a')?.innerText;
   const timeOfUpload = element.querySelector<HTMLSpanElement>(
     '#metadata-line > span:nth-child(2)',
   )?.innerText;
 
-  if (!videoName || !userId || !userName) return false;
+  if (!videoName || !userId || !userName) {
+    console.error('checkVideoElem failed', { videoName, userId, userName });
+    return false;
+  }
 
   const today = new Date();
   let dayOfWeek: number | null = null;
@@ -274,6 +280,12 @@ export function filterVideos(
       }
     }
   }
+
+  document
+    .querySelectorAll<HTMLElement>('*[page-subtype="subscriptions"]')
+    .forEach(item => {
+      item.style.opacity = '1';
+    });
 
   window.scrollBy(0, 1);
   window.scrollBy(0, -1);

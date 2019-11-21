@@ -14,6 +14,7 @@ import {
   colorGreen,
 } from 'settingsApp/style/theme';
 import { getFilterName } from 'utils/getFilterName';
+import { ellipsis } from 'polished';
 
 type Props = {
   item: NestableItemBaseProps<
@@ -48,6 +49,12 @@ const ListLabel = styled.div`
   flex-grow: 1;
   height: 100%;
   cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
+
+  span.name {
+    ${ellipsis()};
+  }
 `;
 
 const HandlerContainer = styled.button`
@@ -68,6 +75,7 @@ const IconButton = styled.button`
   width: 32px;
   margin-right: 4px;
   z-index: 0;
+  flex-shrink: 0;
   opacity: 0;
   transition: 160ms;
 
@@ -94,6 +102,7 @@ const CollapseIconContainer = styled.button`
   ${centerContent};
   height: 100%;
   width: 24px;
+  flex-shrink: 0;
   margin-left: -4px;
   margin-right: 4px;
 
@@ -165,7 +174,7 @@ const CardListItem = ({
             {isIncludeType ? '+' : '-'}
           </span>
         )}
-        <span>
+        <span className="name">
           {item.tabs
             ? getFilterName(item as FilterProps)
             : `${item.name} ${item.id === 'all' ? '🌐' : ''}`}

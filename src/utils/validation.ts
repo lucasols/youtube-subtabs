@@ -3,16 +3,21 @@ import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
 
 export function filterIsInvalid(filter: FilterProps) {
-  return filter.videoNameRegex === '' && filter.userId === '';
-}
-
-export function someFilterIsInvalid(filters: FilterProps[]) {
-  return filters.some(
-    filter => filterIsInvalid(filter),
+  return (
+    (filter.videoNameRegex === '' && filter.userId === '')
+    || filter.tabs.length === 0
   );
 }
 
-export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs: TabProps[]) {
+export function someFilterIsInvalid(filters: FilterProps[]) {
+  return filters.some(filter => filterIsInvalid(filter));
+}
+
+export function checkIfTabIsInvalid(
+  tab: TabProps,
+  filters: FilterProps[],
+  tabs: TabProps[],
+) {
   const tabFilters = filters.filter(filter => filter.tabs.includes(tab.id));
 
   // if the tab has filters all filters must be valid
@@ -26,9 +31,10 @@ export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs:
       return 'Child tabs must have at least one filter';
     }
 
-  // if tab is parent
+    // if tab is parent
   } else {
-    const tabChilds = tab.children || tabs.filter(tabsItem => tabsItem.parent === tab.id);
+    const tabChilds =
+      tab.children || tabs.filter(tabsItem => tabsItem.parent === tab.id);
 
     // if has not childs
     if (tabChilds.length === 0) {
@@ -36,7 +42,7 @@ export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs:
         return 'Parent tabs without childs must have at least one filter';
       }
 
-    // if has childs
+      // if has childs
     } else {
       if (tabChilds.some(child => checkIfTabIsInvalid(child, filters, tabs))) {
         return 'Some child of this tab is invalid';
@@ -48,5 +54,9 @@ export function checkIfTabIsInvalid(tab: TabProps, filters: FilterProps[], tabs:
 }
 
 export function getValidParentTabs(tabs: TabProps[], filters: FilterProps[]) {
-  return tabs.filter(tab => tab.parent === null && (tab.id === 'all' || !checkIfTabIsInvalid(tab, filters, tabs)));
+  return tabs.filter(
+    tab =>
+      tab.parent === null &&
+      (tab.id === 'all' || !checkIfTabIsInvalid(tab, filters, tabs)),
+  );
 }

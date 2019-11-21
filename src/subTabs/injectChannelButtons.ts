@@ -25,6 +25,10 @@ const buttonStyle = css`
     outline: 0;
   }
 
+  &#editFiltersButton {
+    margin-right: 12px;
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -135,7 +139,7 @@ export function injectChannelButtons() {
       <div class="filters-number">${userFilters.length}</div>
     `,
     buttonsWrapper,
-    'Edit channel filters',
+    'Show channel filters',
     () =>
       openSettingsModal({
         search: `(userName:${userName}) (userId:${userId})`,

@@ -12,16 +12,21 @@ import {
   colorPrimary,
   colorGreen,
   colorSecondary,
+  colorBg,
 } from 'settingsApp/style/theme';
 import { rgba } from '@lucasols/utils';
 import { ellipsis } from 'polished';
+import { checkIfFieldsMatchesItem } from 'utils/search';
 
 const subTabsInfoContainerStyle = css`
   width: 100%;
-  background: #222029;
-  margin: -8px 0;
+  background: ${colorBg};
+  margin-bottom: -8px;
+  margin-top: 8px;
   padding: 12px;
+  max-width: 220px;
   box-sizing: border-box;
+  border-top: 1px solid var(--yt-spec-10-percent-layer);
 
   .block {
     margin-bottom: 14px;
@@ -46,9 +51,14 @@ const subTabsInfoContainerStyle = css`
     height: 24px;
     ${ellipsis()};
     letter-spacing: 0.08em;
+    margin-bottom: 6px;
 
     &:hover {
       background: ${colorPrimary};
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
     }
 
     &.filter {
@@ -82,10 +92,12 @@ const subTabsInfoContainerStyle = css`
 
 function injectDropdownInfo(e: MouseEvent) {
   const menuButton = e.target as HTMLElement;
+  const videoElements =
+    'ytd-grid-video-renderer, ytd-video-renderer, ytd-rich-item-renderer, #primary-inner.ytd-watch-flexy';
 
   if (
     menuButton.matches(
-      ':-webkit-any(ytd-grid-video-renderer, ytd-rich-item-renderer) yt-icon.ytd-menu-renderer',
+      `:-webkit-any(${videoElements}) yt-icon.ytd-menu-renderer`,
     )
   ) {
     const dropDownList = document.querySelector<HTMLElement>(
@@ -102,6 +114,7 @@ function injectDropdownInfo(e: MouseEvent) {
       const button = buttons[i];
 
       if (button.innerText.trim() === 'Hide') {
+        buttons[i - 1].removeAttribute('has-separator_');
         button.style.display = 'none';
         break;
       }
@@ -120,26 +133,21 @@ function injectDropdownInfo(e: MouseEvent) {
     const activeTab =
       /feed\/subscriptions/.test(window.location.pathname) &&
       activeTabState.getState().id;
-    const videoElement = menuButton.closest<HTMLElement>(
-      'ytd-grid-video-renderer, ytd-rich-item-renderer',
-    );
+    const videoElement = menuButton.closest<HTMLElement>(videoElements);
+
+    const { filters } = filtersState.getState();
 
     const activeFilters = activeTab
-      ? getActiveFilters(
-        activeTab,
-        tabsState.getState().tabs,
-        filtersState.getState().filters,
-      )
+      ? getActiveFilters(activeTab, tabsState.getState().tabs, filters)
       : false;
 
-    const videoProps =
-      activeFilters && videoElement
-        ? checkVideoElem(
-          videoElement,
-          activeFilters.includeFilters,
-          activeFilters.excludeFilters,
-        )
-        : undefined;
+    const videoProps = videoElement
+      ? checkVideoElem(
+        videoElement,
+        activeFilters ? activeFilters.includeFilters : [],
+        activeFilters ? activeFilters.excludeFilters : [],
+      )
+      : undefined;
 
     const includeBasedOnFilter =
       videoProps && videoProps.includeBasedOnFilter
@@ -149,6 +157,24 @@ function injectDropdownInfo(e: MouseEvent) {
     const filterName = includeBasedOnFilter
       ? getFilterName(includeBasedOnFilter)
       : undefined;
+
+    if (!videoProps) {
+      console.log('Fail to get video props');
+      return;
+    }
+
+    const userFilters = filters
+      .map(item => ({
+        ...item,
+        ...checkIfFieldsMatchesItem(
+          {
+            userId: videoProps.userId,
+            userName: videoProps.userName,
+          },
+          item,
+        ),
+      }))
+      .filter(item => item.matches);
 
     ReactDOM.render(
       <>
@@ -176,20 +202,43 @@ function injectDropdownInfo(e: MouseEvent) {
             ))}
           </div>
         )}
-        {videoProps && (
-          <div className="block">
-            <button
-              onClick={() => {
-                openSettingsModal({
-                  search: `(userName:${videoProps.userName}) (userId:${videoProps.userId}) (videoName:${videoProps.videoName})`,
-                });
-              }}
-              type="button"
-            >
-              Search video filters
-            </button>
-          </div>
-        )}
+        <div className="block">
+          <button
+            onClick={() => {
+              openSettingsModal({
+                search: `(userName:${videoProps.userName}) (userId:${videoProps.userId}) (videoName:${videoProps.videoName})`,
+              });
+            }}
+            type="button"
+          >
+            Show video filters
+          </button>
+          <button
+            onClick={() => {
+              openSettingsModal({
+                search: `(userName:${videoProps.userName}) (userId:${videoProps.userId})`,
+              });
+            }}
+            type="button"
+          >
+            Show channel filters ({userFilters.length})
+          </button>
+          <button
+            onClick={() => {
+              openSettingsModal({
+                filter: 'new',
+                fields: JSON.stringify({
+                  userName: videoProps.userName,
+                  userId: videoProps.userId,
+                  videoNameRegex: videoProps.videoName,
+                }),
+              });
+            }}
+            type="button"
+          >
+            Add filter
+          </button>
+        </div>
       </>,
       subTabsInfoContainer,
     );
