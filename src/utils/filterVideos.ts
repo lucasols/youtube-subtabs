@@ -1,6 +1,7 @@
 /* eslint-disable no-loop-func */
 import { TabProps } from 'settingsApp/state/tabsState';
 import { FilterProps } from 'settingsApp/state/filtersState';
+import { stringToNum } from 'utils/stringToNum';
 
 export function checkIfExcludeVideo(
   {
@@ -202,9 +203,12 @@ export function getActiveFilters(
   active: 'all' | number,
   tabs: TabProps[],
   filters: FilterProps[],
+  getAllFilters?: boolean,
 ) {
   const activeTab = tabs.find(item => item.id === active);
-  let activeFilters = filters.filter(item => item.tabs.includes(active));
+  let activeFilters = !getAllFilters
+    ? filters.filter(item => item.tabs.includes(active))
+    : filters;
 
   if (active !== 'all') {
     activeFilters = [
@@ -241,6 +245,7 @@ export function filterVideos(
   active: 'all' | number,
   tabs: TabProps[],
   filters: FilterProps[],
+  showUnfiltered?: boolean,
 ) {
   const videosElements = document.querySelectorAll<HTMLDivElement>(
     '#items > ytd-grid-video-renderer',
@@ -250,6 +255,7 @@ export function filterVideos(
     active,
     tabs,
     filters,
+    showUnfiltered,
   );
 
   if (runId !== lastRunId) {
@@ -272,8 +278,7 @@ export function filterVideos(
     );
 
     if (videoProps) {
-      // console.log(videoProps);
-      if (videoProps.excludeVideo) {
+      if (showUnfiltered ? !videoProps.excludeVideo : videoProps.excludeVideo) {
         videosElements[i].style.display = 'none';
       } else {
         videosElements[i].style.display = 'block';

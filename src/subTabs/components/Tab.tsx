@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { rgba } from '@lucasols/utils';
 import React from 'react';
 import { TabProps } from 'settingsApp/state/tabsState';
-import { colorYoutubePrimary, colorYoutubeBg } from 'subTabs/theme';
 import { css } from '@emotion/core';
 import {
   centerContent,
@@ -12,6 +11,7 @@ import {
 } from 'settingsApp/style/modifiers';
 import Icon from 'settingsApp/components/Icon';
 import { ellipsis } from 'polished';
+import { colorPrimary } from 'settingsApp/style/theme';
 
 type Props = {
   data: TabProps;
@@ -43,11 +43,11 @@ const ParentButton = styled.button`
 
   &:focus {
     outline: none;
-    border-color: ${rgba(colorYoutubePrimary, 0.4)};
+    border-color: ${rgba(colorPrimary, 0.4)};
   }
 
   &:hover {
-    border-color: ${rgba(colorYoutubePrimary, 0.4)};
+    border-color: ${rgba(colorPrimary, 0.4)};
   }
 `;
 
@@ -69,10 +69,10 @@ const DropDown = styled.div`
 `;
 
 const activeTabStyle = css`
-  border-color: ${colorYoutubePrimary} !important;
+  border-color: ${colorPrimary} !important;
 
   &:hover {
-    border-color: ${colorYoutubePrimary} !important;
+    border-color: ${colorPrimary} !important;
   }
 `;
 
@@ -88,7 +88,7 @@ const Child = styled.div`
 `;
 
 const activeChildStyle = css`
-  color: ${colorYoutubePrimary};
+  color: ${colorPrimary};
 `;
 
 const Tab = ({ data, activeTab, setActiveTab, parentIsInteractive }: Props) => {

@@ -1,6 +1,6 @@
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
-import { clampMax, clampMin, rgba } from '@lucasols/utils';
+import { clampMax, clampMin, rgba, useShortCut } from '@lucasols/utils';
 import { debounce } from 'lodash-es';
 import React, { useEffect, useRef, useState } from 'react';
 import Icon from 'settingsApp/components/Icon';
@@ -100,10 +100,13 @@ const App = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeTabId, setActiveTabId] = activeTabState.useStore('id');
   const containerWidth = rootRect?.width || 0;
+  const [showUnfiltered, setShowUnfiltered] = useState(false);
 
   const activeTab = tabs.find(tab => tab.id === activeTabId) || tabs[0];
 
   const parentTabs = flatToNested(tabs);
+
+  useShortCut('i', () => setShowUnfiltered(!showUnfiltered), [showUnfiltered]);
 
   useEffect(() => {
     if (activeTab?.id) {
@@ -118,14 +121,16 @@ const App = () => {
   useEffect(() => {
     if (!activeTab?.id) return () => {};
 
-    debouncedFilterVideos(activeTab.id, tabs, filters);
+    debouncedFilterVideos(activeTab.id, tabs, filters, showUnfiltered);
 
-    const videoContainer = document.querySelector<HTMLElement>('ytd-section-list-renderer');
+    const videoContainer = document.querySelector<HTMLElement>(
+      'ytd-section-list-renderer',
+    );
 
     const observeElemSizes = new ResizeObserver(entries => {
       entries.forEach(entry => {
         if (entry.target === videoContainer) {
-          debouncedFilterVideos(activeTab.id, tabs, filters);
+          debouncedFilterVideos(activeTab.id, tabs, filters, showUnfiltered);
         }
       });
     });
@@ -135,7 +140,7 @@ const App = () => {
     }
 
     return () => observeElemSizes.disconnect();
-  }, [activeTab?.id, tabs, filters]);
+  }, [activeTab?.id, tabs, filters, showUnfiltered]);
 
   useEffect(() => {
     const rootElem = document.getElementById('youtube-subtabs');
@@ -179,10 +184,23 @@ const App = () => {
             marginLeft: -scrollX,
           }}
         >
+          {showUnfiltered && (
+            <Tab
+              activeTab={{ ...activeTab, id: -2 }}
+              parentIsInteractive={false}
+              data={{
+                name: 'Unfiltered videos',
+                id: -2,
+                includeChildsFilter: false,
+                parent: null,
+              }}
+              setActiveTab={() => {}}
+            />
+          )}
           {parentTabs.map(tab => (
             <Tab
               key={tab.id}
-              activeTab={activeTab}
+              activeTab={!showUnfiltered ? activeTab : { ...activeTab, id: -2 }}
               parentIsInteractive={
                 tab.id === 'all'
                 || filters.some(filter => filter.tabs.includes(tab.id))

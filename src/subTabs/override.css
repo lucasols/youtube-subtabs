@@ -6,3 +6,7 @@
 ytd-menu-service-item-renderer[has-separator_]:last-of-type::after {
   display: none !important;
 }
+
+*[page-subtype="subscriptions"] ytd-item-section-renderer {
+  min-height: 200px;
+}
