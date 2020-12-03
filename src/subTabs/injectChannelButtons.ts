@@ -1,7 +1,7 @@
 import filtersState from 'settingsApp/state/filtersState';
 import { checkIfFieldsMatchesItem } from 'utils/search';
 import { genericFunction } from 'typings/utils';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { openSettingsModal } from 'subTabs/injectSettingsModal';
 import {
   colorPrimary,

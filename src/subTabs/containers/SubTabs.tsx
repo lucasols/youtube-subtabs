@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { clampMax, clampMin, rgba, useShortCut } from '@lucasols/utils';
 import { debounce } from 'lodash-es';

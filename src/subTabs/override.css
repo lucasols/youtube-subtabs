@@ -8,5 +8,5 @@ ytd-menu-service-item-renderer[has-separator_]:last-of-type::after {
 }
 
 *[page-subtype="subscriptions"] ytd-item-section-renderer {
-  min-height: 200px;
+  min-height: 400px;
 }

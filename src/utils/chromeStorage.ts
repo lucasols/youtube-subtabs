@@ -1,6 +1,7 @@
 import filtersState, { FilterProps } from 'settingsApp/state/filtersState';
 import tabsState, { TabProps } from 'settingsApp/state/tabsState';
 import { deepEqual } from 'utils/deepEqual';
+import { pick } from 'lodash-es';
 
 export type ChromeStorage = {
   tabs?: Omit<TabProps, 'children' | 'isInvalid'>[];

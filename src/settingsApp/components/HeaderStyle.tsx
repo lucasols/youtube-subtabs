@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { colorBg, fontCondensed } from 'settingsApp/style/theme';
 import { centerContent } from 'settingsApp/style/modifiers';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 const HeaderStyle = styled.div`
   top: 0;

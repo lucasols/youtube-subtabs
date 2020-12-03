@@ -7,5 +7,19 @@
   "eslint.enable": true,
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "todo-tree.showTagsFromOpenFilesOnly": false,
-  "todo-tree.tree.showTagsFromOpenFilesOnly": false
+  "todo-tree.tree.showTagsFromOpenFilesOnly": false,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#4d0805",
+    "activityBar.activeBackground": "#4d0805",
+    "activityBar.activeBorder": "#08780c",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#08780c",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "titleBar.activeBackground": "#1d0302",
+    "titleBar.inactiveBackground": "#1d030299",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#1d0302"
 }

@@ -1,4 +1,4 @@
-import { css, Global } from '@emotion/core';
+import { css, Global } from '@emotion/react';
 import { useGetSet } from '@lucasols/utils';
 import hotkey from 'hotkeys-js';
 import React, { useEffect } from 'react';

@@ -1,5 +1,5 @@
 {
-  "name": "Youtube SubTabs",
+  "name": "Youtube SubTabs - Dev",
   "version": "1.6.0",
   "description": "Group and filter your youtube subscriptions",
   "manifest_version": 2,
@@ -21,6 +21,13 @@
       ]
     }
   ],
+  "background": {
+    "scripts": [
+      "background.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
   "permissions": [
     "activeTab",
     "storage"

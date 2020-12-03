@@ -46,7 +46,7 @@ module.exports = merge(commonConfig, /** @type { import('webpack').Configuration
       __PROD__: false,
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
+    // new FriendlyErrorsWebpackPlugin(),
     new ReactRefreshPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/settingsApp/index.ejs',

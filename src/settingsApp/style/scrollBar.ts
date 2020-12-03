@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { rgba } from '@lucasols/utils';
 import { lighten } from 'polished';
 import { colorPrimary, colorBg } from 'settingsApp/style/theme';

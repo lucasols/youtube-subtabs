@@ -1,5 +1,5 @@
 import { rgba } from '@lucasols/utils';
-import css from '@emotion/css';
+import { css } from '@emotion/react';
 
 /* colors hex */
 export const colorPrimary = '#FF1744';

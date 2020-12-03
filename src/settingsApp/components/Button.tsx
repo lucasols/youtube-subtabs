@@ -1,4 +1,4 @@
-import css from '@emotion/css';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Icon, { Icons } from 'settingsApp/components/Icon';
 import React, { FunctionComponent } from 'react';

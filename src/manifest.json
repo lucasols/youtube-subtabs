@@ -15,10 +15,11 @@
       "css": ["override.css"]
     }
   ],
-  "permissions": [
-    "activeTab",
-    "storage"
-  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": ["activeTab", "storage"],
   "icons": {
     "256": "assets/icon.png"
   },

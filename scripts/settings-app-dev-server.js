@@ -16,7 +16,7 @@ const options = {
   hot: true,
   host: 'localhost',
   historyApiFallback: true,
-  quiet: true,
+  quiet: false,
   overlay: true,
   stats: {
     colors: true,

@@ -23,7 +23,7 @@ import {
 } from 'settingsApp/style/modifiers';
 import { colorBg, colorPrimary, colorSecondary } from 'settingsApp/style/theme';
 import AutosizeInput from 'react-input-autosize';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { debounce } from 'lodash-es';
 import Switch from 'settingsApp/components/Switch';
 import { PartialKey } from 'src/typings/utils';

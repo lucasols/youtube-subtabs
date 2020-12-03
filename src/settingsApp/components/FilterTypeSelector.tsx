@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FilterProps } from 'settingsApp/state/filtersState';
 import { fontSecondary, colorPrimary, colorSecondary } from 'settingsApp/style/theme';
 import { centerContent } from 'settingsApp/style/modifiers';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { rgba } from '@lucasols/utils';
 
 type Props = {

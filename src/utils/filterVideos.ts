@@ -146,7 +146,7 @@ export function checkVideoElem(
     '#video-title, h1.title.ytd-video-primary-info-renderer',
   )?.innerText;
   const userId = userIdElement?.href.replace(
-    /https:\/\/www.youtube.com\/(user|channel)\//,
+    /https:\/\/www.youtube.com\/(user|channel|c)\//,
     '',
   );
   const userName =
@@ -262,7 +262,7 @@ export function filterVideos(
     lastRunId = runId;
     lastFilteredVideo = -1;
 
-    if (videosElements.length > 393) {
+    if (videosElements.length > 500) {
       window.location.reload(false);
       return;
     }

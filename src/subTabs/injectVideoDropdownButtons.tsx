@@ -1,7 +1,7 @@
 import Root from 'subTabs/Root';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { getActiveFilters, checkVideoElem } from 'utils/filterVideos';
 import tabsState from 'settingsApp/state/tabsState';
 import filtersState, { getFilterById } from 'settingsApp/state/filtersState';

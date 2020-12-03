@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import styled from '@emotion/styled';
 import { ellipsis } from 'polished';
-import css from '@emotion/css';
+import { css } from '@emotion/react';
 import {
   fontSecondary,
   colorBg,

@@ -1,5 +1,5 @@
 import { rgba } from '@lucasols/utils';
-import { css } from 'emotion';
+import { css } from '@emotion/react';
 import { colorBg, colorSecondary, colorPrimary } from 'settingsApp/style/theme';
 import { centerContent } from 'settingsApp/style/modifiers';
 import { circle } from 'settingsApp/style/helpers';

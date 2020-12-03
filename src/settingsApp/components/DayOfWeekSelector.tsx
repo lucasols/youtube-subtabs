@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { colorPrimary, fontSecondary } from 'settingsApp/style/theme';
 import { rgba } from '@lucasols/utils';
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 
 type Props = {
   days: number[];

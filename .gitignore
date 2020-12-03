@@ -10,6 +10,7 @@ production
 compilation-stats.json
 stats.json
 resources
-dist
+dist/*
+dev/*
+!manifest.json
 *.xml
-dev

@@ -1,4 +1,4 @@
-import css from '@emotion/css';
+import { css } from '@emotion/react';
 import { rgba } from '@lucasols/utils';
 import CardListItem, {
   CollapseIcon,

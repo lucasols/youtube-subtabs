@@ -7,7 +7,7 @@ import {
   hide,
   fillContainer,
 } from 'settingsApp/style/modifiers';
-import css from '@emotion/css';
+import { css } from '@emotion/react';
 import { colorBg, textGradient, colorSecondary } from 'settingsApp/style/theme';
 import { rgba } from '@lucasols/utils';
 import Button from 'settingsApp/components/Button';
